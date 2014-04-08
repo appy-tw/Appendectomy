@@ -1,0 +1,42 @@
+{
+  "name": "angular-bootstrap3-datepicker",
+  "version": "0.1.0",
+  "description": "Angular Boostrap Datepicker based on Eonasdan's date picker",
+  "main": [
+    "dist/angular-bootstrap3-datepicker.js",
+    "dist/angular-bootstrap3-datepicker.min.js",
+    "dist/angular-bootstrap3-datepicker.css"
+  ],
+  "authors": [
+    "Benjamin Dreux"
+  ],
+  "license": "Apache License, Version 2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.0.0",
+    "bootstrap3-datetimepicker": "~2.1.11",
+    "momentjs": "~2.4.0",
+    "font-awesome": "~4.0.3",
+    "angular": "~1.2.1"
+  },
+  "devDependencies": {
+    "jasmine-jquery": "~1.5.91",
+    "angular-mocks": "~1.2.1"
+  },
+  "homepage": "https://github.com/benzen/angular-bootstrap3-datepicker",
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.0",
+    "commit": "66429735d2541d08feeabe2b16d3bb0582c5b79b"
+  },
+  "_source": "git://github.com/benzen/angular-bootstrap3-datepicker.git",
+  "_target": "~0.1.0",
+  "_originalSource": "angular-bootstrap3-datepicker"
+}

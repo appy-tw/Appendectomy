@@ -1,0 +1,18 @@
+.even {
+  background-color: #EEE;
+}
+
+.main-section {
+  border-bottom: dashed 1px #000;
+}
+
+.section {
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+

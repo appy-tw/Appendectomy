@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-tw" ng-app="appyApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>提案書</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="js/font-awesome/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="style/main.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/moment/min/moment.min.js"></script>
+  <script src="js/angular-bootstrap3-datepicker/dist/angular-bootstrap3-datepicker.min.js"></script>
+</head>
+<body>
+
+<div class="container" ng-controller="FormCtrl">
+<h1>填寫連署表單</h1>
+<form class="form-horizontal" role="form" action="proposal.php" method="post">
+  <div class="main-section section">
+    <div class="form-group">
+      <label for="inputEmail" class="col-sm-2 control-label">電子信箱</label>
+      <div class="col-sm-10">
+        <input type="email" name="EMAIL" class="form-control" id="inputEmail" placeholder="Email">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputCount" class="col-sm-2 control-label">填寫份數</label>
+      <div class="col-sm-4">
+        <input type="number" ng-model="count" name="count" class="form-control" id="inputCount">
+      </div>
+      <label for="inputTarget" class="col-sm-2 control-label">罷免對象</label>
+      <div class="col-sm-4">
+        <select name="DISTRICT_ID" ng-model="selectedTarget" class="form-control" ng-options="target.name for target in mly">
+          <option value="">請選擇</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="section" ng-repeat="person in proposers" ng-class-even="'even'">
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="Name_{{$index}}">姓名</label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="Name_{{$index}}" id="Name_{{$index}}">
+      </div>
+      <label for="IDNo_{{$index}}" class="col-sm-2 control-label">身分證字號</label>
+      <div class="col-sm-4">
+        <input type="text" class="form-control" name="IDNo_{{$index}}" id ="IDNo_{{$index}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-2 control-label">性別</div>
+      <div class="col-sm-4">
+        <label class="radio-inline">
+          <input type="radio" name="Sex_{{$index}}" value="M" checked>
+          男
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="Sex_{{$index}}" value="F">
+          女
+        </label>
+      </div>
+      <label for="Birthday_{{$index}}" class="col-sm-2 control-label">生日</label>
+      <div class="col-sm-4">
+        <datepicker name="Birthday_{{$index}}" ng-model="date" language="en" date-format="YYYY-MM-DD">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="Occupation_{{$index}}" class="col-sm-2 control-label">職業</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="Occupation_{{$index}}" placeholder="請勿超過四個字">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="RegAdd_{{$index}}" class="col-sm-2 control-label">戶籍地址</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" name="RegAdd_{{$index}}" placeholder="請完全依身分證背後地址欄內容填寫，鄰里勿漏">
+      </div>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">製作提議書</button>
+    </div>
+  </div>
+</form>
+</div>
+</body>
+</html>
