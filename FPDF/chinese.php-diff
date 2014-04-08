@@ -1,0 +1,66 @@
+--- chinese.php	2004-03-03 23:14:20.000000000 +0800
++++ chinese.php-new	2006-10-21 15:30:02.000000000 +0800
+@@ -165,7 +165,7 @@
+ 		if($c=="\n")
+ 		{
+ 			//Explicit line break
+-			$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
++		        parent::Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+ 			$i++;
+ 			$sep=-1;
+ 			$j=$i;
+@@ -193,11 +193,11 @@
+ 			{
+ 				if($i==$j)
+ 					$i+=$ascii ? 1 : 2;
+-				$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
++				parent::Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+ 			}
+ 			else
+ 			{
+-				$this->Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
++				parent::Cell($w,$h,substr($s,$j,$sep-$j),$b,2,$align,$fill);
+ 				$i=($s[$sep]==' ') ? $sep+1 : $sep;
+ 			}
+ 			$sep=-1;
+@@ -213,7 +213,7 @@
+ 	//Last chunk
+ 	if($border and is_int(strpos($border,'B')))
+ 		$b.='B';
+-	$this->Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
++	parent::Cell($w,$h,substr($s,$j,$i-$j),$b,2,$align,$fill);
+ 	$this->x=$this->lMargin;
+ }
+ 
+@@ -247,7 +247,7 @@
+ 		if($c=="\n")
+ 		{
+ 			//Explicit line break
+-			$this->Cell($w,$h,substr($s,$j,$i-$j),0,2,'',0,$link);
++			parent::Cell($w,$h,substr($s,$j,$i-$j),0,2,'',0,$link);
+ 			$i++;
+ 			$sep=-1;
+ 			$j=$i;
+@@ -282,11 +282,11 @@
+ 				}
+ 				if($i==$j)
+ 					$i+=$ascii ? 1 : 2;
+-				$this->Cell($w,$h,substr($s,$j,$i-$j),0,2,'',0,$link);
++				parent::Cell($w,$h,substr($s,$j,$i-$j),0,2,'',0,$link);
+ 			}
+ 			else
+ 			{
+-				$this->Cell($w,$h,substr($s,$j,$sep-$j),0,2,'',0,$link);
++				parent::Cell($w,$h,substr($s,$j,$sep-$j),0,2,'',0,$link);
+ 				$i=($s[$sep]==' ') ? $sep+1 : $sep;
+ 			}
+ 			$sep=-1;
+@@ -305,7 +305,7 @@
+ 	}
+ 	//Last chunk
+ 	if($i!=$j)
+-		$this->Cell($l/1000*$this->FontSize,$h,substr($s,$j,$i-$j),0,0,'',0,$link);
++		parent::Cell($l/1000*$this->FontSize,$h,substr($s,$j,$i-$j),0,0,'',0,$link);
+ }
+ 
+ function _putfonts()

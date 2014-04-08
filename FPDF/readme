@@ -1,0 +1,23 @@
+PDF_Unicode: the PHP class extends from Olivier's FPDF (PDF_Chinese) class.
+
+If you have used Olivier's FPDF and chinese.zip for years, then you probably would like to try this extented class. This class I wrote for solving the problem in my tasks that many strange Chinese characters couldn't be printed by FPDF. I think it would be helpful to you too. 
+
+After unzip chinese-unicode.zip to the same directory where the fpdf.php lives, try to patch the original chinese.php (by the patch command under Linux/Unix) with chinese.php-diff, e.g.
+
+	patch chinese.php < chinese.php-diff
+
+Or, if you are using Windows system, then replace all $this->Cell with parent::Cell via text editor.
+Alternatively, just rename chinese-patched.php and replace chinese.php.
+
+Then convert the text in your PHP programs that needs Unicode PDF output to be of UTF8 encoded and replace PDF_Chinese with PDF_Unicode. Don't forget to replace the require line to include 'chinese-unicode.php'. That's it.
+
+A simple sample file is included in the zip file, please have a look.
+
+Thanks so much to Olivier for his great FPDF package. (http://www.fpdf.org/).
+
+Enjoy!
+
+James Lee
+cylee@eejj.net
+
+ps. If you want to ask me questions, I probably couldn't reply promptly due to my job. Sorry for that.
