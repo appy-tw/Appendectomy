@@ -26,14 +26,15 @@
 				$USER_ID."','".
 				$_POST[DISTRICT_ID]."','".
 				SUBSTR($_POST["IDNo_".$SEED],5)."','";
-			$QUERY_STRING.=returnValidation();
+			$VCODE=returnValidation();
+			$QUERY_STRING.=$VCODE;
 			$QUERY_STRING.="',NOW())";
 			IF(MYSQL_QUERY($QUERY_STRING))
 			{
 				//建立流水號
 				$_POST["SNo_".$SEED]="AP".SPRINTF("%02d",$_POST[DISTRICT_ID])."2".SPRINTF("%06d",MYSQL_INSERT_ID());
 				//複製 QR Code 檔案
-				copy("http://140.113.207.111:4000/QRCode/".$_POST["SNo_".$SEED],$_POST["SNo_".$SEED].".jpg");
+				copy("http://140.113.207.111:4000/QRCode/".$_POST["SNo_".$SEED]."&VC=".$VCODE,$_POST["SNo_".$SEED].".jpg");
 				//設定 QR Code 檔案路徑
 				$_POST["QRImgPath_".$SEED]=$_POST["SNo_".$SEED].".jpg";
 			}
@@ -307,10 +308,11 @@ function dashLine($pdf,$STARTX,$STARTY,$ENDX,$ENDY,$DASHWIDTH,$SPACING)
 
 function returnValidation()
 {
-	$BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//	$BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$BASESTRING="0123456789";
 	FOR($SEED=0;$SEED<30;$SEED++)
 	{
-		$FINALSTRING.=$BASESTRING[RAND(0,61)];
+		$FINALSTRING.=$BASESTRING[RAND(0,9)];
 	}
 	RETURN $FINALSTRING;
 }
