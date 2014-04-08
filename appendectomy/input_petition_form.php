@@ -1,7 +1,7 @@
 <?php
 	require_once "inc/sql.php";
 	connect_valid();
-	ECHO "<CENTER><FORM NAME=DATAINPUT ACTION=proposal.php METHOD=POST>
+	ECHO "<CENTER><FORM NAME=DATAINPUT ACTION=petitionframe.php METHOD=POST>
 	<TABLE BORDER=0 STYLE='FONT-SIZE:16'>
 	<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫連署表單</TD></TR>
 	<TR><TD><INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
@@ -41,7 +41,7 @@
 			RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);
 			RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1);
 			RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);
-			ECHO "</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20' ALT='必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能提議或連署罷免'></TD></TR>
+			ECHO "</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='必須在 1992 年 1 月 13 日（含）以前才能連署或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能連署罷免'></TD></TR>
 			<TR><TD></TD>
 				<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_0 STYLE='WIDTH:100;FONT-SIZE:16'>（請勿超過４個字）</TD></TR>
 			<TR><TD></TD>
@@ -53,7 +53,7 @@
 		<HR>
 		</TD></TR>
 		</TABLE></TD></TR>
-	<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
+	<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作連署書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
 	</TABLE>
 	</FORM>";
 	
@@ -61,7 +61,7 @@
 	{
 		ECHO "<SELECT NAME='".$NAME."' STYLE='".$STYLE."'>";
 		$START=date('Y');
-		FOR($SEED=20;$SEED<120;$SEED++)
+		FOR($SEED=22;$SEED<120;$SEED++)
 		{
 			ECHO "<OPTION VALUE='".($START-$SEED)."' ";
 			IF($SEED==$DEFAULT)
@@ -137,7 +137,7 @@ function ADDFORM()
 				'<TD>身分證字號</TD><TD><INPUT TYPE=TEXT NAME=IDNo_'+no+' STYLE=\'WIDTH:150;FONT-SIZE:16\'></TD></TR>'+
 			'<TR><TD></TD>'+
 				'<TD>性　　　別</TD><TD><INPUT TYPE=RADIO NAME=Sex_'+no+' VALUE=\'M\' CHECKED>男&nbsp;<INPUT TYPE=RADIO NAME=Sex_'+no+' VALUE=\'F\'>女</TD>'+
-				'<TD>出生年月日</TD><TD>'+returnB_Y(no)+returnB_M(no)+returnB_D(no)+'</TD><TD><IMG SRC=\'info.png\' STYLE=\'WIDTH:20\' ALT=\'必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免\' TITLE=\'必須在 1992 年 1 月 13 日（含）以前出生才能提議或連署罷免\'></TD></TR>'+
+				'<TD>出生年月日</TD><TD>'+returnB_Y(no)+returnB_M(no)+returnB_D(no)+'</TD><TD><IMG SRC=\'info.png\' STYLE=\'WIDTH:20;CURSOR:POINTER\' ALT=\'必須在 1992 年 1 月 13 日（含）以前才能連署罷免\' TITLE=\'必須在 1992 年 1 月 13 日（含）以前出生才能連署或連署罷免\'></TD></TR>'+
 			'<TR><TD></TD>'+
 				'<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_'+no+' STYLE=\'WIDTH:100;FONT-SIZE:16\'>（請勿超過５個字）</TD></TR>'+
 			'<TR><TD><INPUT TYPE=CHECKBOX ID=SAMEADD_'+no+' ONCLICK=filladd('+no+')>同 1</TD>'+
@@ -176,7 +176,7 @@ function returnB_Y(no)
 	var currentYear= new Date().getFullYear();
 	
 	rtnStr='<SELECT NAME=\'Birthday_y_'+no+'\' STYLE=\'WIDTH:80;FONT-SIZE:16\'>';
-	for(i=20;i<120;i++)
+	for(i=22;i<120;i++)
 	{
 		rtnStr+='<OPTION VALUE=\''+parseInt(currentYear-i)+'\'>'+parseInt(currentYear-i)+' 年</OPTION>';
 	}
