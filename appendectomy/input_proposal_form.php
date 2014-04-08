@@ -3,11 +3,18 @@
 	connect_valid();
 	ECHO "<CENTER><FORM NAME=DATAINPUT ACTION=proposal.php METHOD=POST>
 	<TABLE BORDER=0 STYLE='FONT-SIZE:16'>
-	<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫提議表單</TD><TD STYLE='WIDTH:100;TEXT-ALIGN:CENTER;BORDER:2px solid #666666'><SPAN STYLE='CURSOR:POINTER;' ONCLICK=ADDFORM()>增加份數</SPAN></TD></TR>
-	<TR><TD COLSPAN=2><INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
+	<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫提議表單</TD></TR>
+	<TR><TD><INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
 		<TABLE BORDER=0 WIDTH=100%>
-		<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>電子信箱</TD><TD><INPUT TYPE=TEXT NAME=EMAIL STYLE='WIDTH:300;FONT-SIZE:16'></TD></TR>
-		<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>罷免對象</TD><TD>";
+		<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>電子信箱</TD><TD><INPUT TYPE=TEXT NAME=EMAIL STYLE='WIDTH:300;FONT-SIZE:16'></TD>
+			<TD STYLE='WIDTH:100;TEXT-ALIGN:CENTER;BORDER:2px solid #666666'>
+				<SPAN STYLE='CURSOR:POINTER;' ONCLICK=ADDFORM()>增加份數</SPAN>
+			</TD>
+			<TD ALIGN=CENTER>
+				<SPAN STYLE='CURSOR:POINTER;COLOR:BLACK'><IMG SRC='info.png' STYLE='WIDTH:20' ALT='測試' TITLE='測試'></SPAN>
+			</TD>
+		</TR>
+		<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>罷免對象</TD><TD COLSPAN=3>";
 	$QUERY_STRING="SELECT * FROM DISTRICT_DATA";
 	$NO_OF_DATA=MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING));
 	IF($NO_OF_DATA>0)
@@ -21,7 +28,7 @@
 		ECHO "</SELECT>";
 	}
 	ECHO "</TD></TR>
-		<TR><TD COLSPAN=2>
+		<TR><TD COLSPAN=4>
 		<DIV ID=INPUTFORM>
 			<DIV>
 			<TABLE STYLE='BACKGROUND-COLOR:#DDDDDD'>
@@ -34,19 +41,19 @@
 			RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);
 			RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1);
 			RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);
-			ECHO "</TD></TR>
+			ECHO "</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20' ALT='必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能提議或連署罷免'></TD></TR>
 			<TR><TD></TD>
 				<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_0 STYLE='WIDTH:100;FONT-SIZE:16'>（請勿超過４個字）</TD></TR>
 			<TR><TD></TD>
 				<TD>地　　　址</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=RegAdd_0 STYLE='WIDTH:400;FONT-SIZE:16'></TD></TR>
-			<TR><TD></TD><TD></TD><TD COLSPAN=3>（請完全依身分證背後地址欄內容填寫）</TD></TR>
+			<TR><TD></TD><TD></TD><TD COLSPAN=3><IMG SRC='info.png' STYLE='WIDTH:20'><SPAN STYLE='HEIGHT:20;VERTICAL-ALIGN:TOP'>&nbsp;請完全依身分證背後地址欄內容填寫，鄰里勿漏</SPAN></TD></TR>
 			</TABLE>
 			</DIV>
 		</DIV>
 		<HR>
 		</TD></TR>
 		</TABLE></TD></TR>
-	<TR><TD COLSPAN=2 ALIGN=RIGHT><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書'></TD></TR>
+	<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
 	</TABLE>
 	</FORM>";
 	
@@ -130,12 +137,12 @@ function ADDFORM()
 				'<TD>身分證字號</TD><TD><INPUT TYPE=TEXT NAME=IDNo_'+no+' STYLE=\'WIDTH:150;FONT-SIZE:16\'></TD></TR>'+
 			'<TR><TD></TD>'+
 				'<TD>性　　　別</TD><TD><INPUT TYPE=RADIO NAME=Sex_'+no+' VALUE=\'M\' CHECKED>男&nbsp;<INPUT TYPE=RADIO NAME=Sex_'+no+' VALUE=\'F\'>女</TD>'+
-				'<TD>出生年月日</TD><TD>'+returnB_Y(no)+returnB_M(no)+returnB_D(no)+'</TD></TR>'+
+				'<TD>出生年月日</TD><TD>'+returnB_Y(no)+returnB_M(no)+returnB_D(no)+'</TD><TD><IMG SRC=\'info.png\' STYLE=\'WIDTH:20\' ALT=\'必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免\' TITLE=\'必須在 1992 年 1 月 13 日（含）以前出生才能提議或連署罷免\'></TD></TR>'+
 			'<TR><TD></TD>'+
 				'<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_'+no+' STYLE=\'WIDTH:100;FONT-SIZE:16\'>（請勿超過５個字）</TD></TR>'+
 			'<TR><TD><INPUT TYPE=CHECKBOX ID=SAMEADD_'+no+' ONCLICK=filladd('+no+')>同 1</TD>'+
 				'<TD>地　　　址</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=RegAdd_'+no+' STYLE=\'WIDTH:400;FONT-SIZE:16\'></TD></TR>'+
-			'<TR><TD></TD><TD></TD><TD COLSPAN=3>（請完全依身分證背後地址欄內容填寫）</TD></TR>'+
+			'<TR><TD></TD><TD></TD><TD COLSPAN=3><IMG SRC=\'info.png\' STYLE=\'WIDTH:20\'><SPAN STYLE=\'HEIGHT:20;VERTICAL-ALIGN:TOP\'>&nbsp;請完全依身分證背後地址欄內容填寫，鄰里勿漏</SPAN></TD></TR>'+
 			'</TABLE>'+
 			'</DIV>';
 	for(i=0;i<no;i++)
