@@ -10,33 +10,39 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="js/font-awesome/css/font-awesome.min.css">
-
   <link rel="stylesheet" href="style/main.css">
-
   <!-- Latest compiled and minified JavaScript -->
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/moment/min/moment.min.js"></script>
-  <script src="js/angular-bootstrap3-datepicker/dist/angular-bootstrap3-datepicker.min.js"></script>
 </head>
 <body>
 
 <div class="container" ng-controller="FormCtrl">
 <h1>填寫連署表單</h1>
-<form class="form-horizontal" role="form" action="proposal.php" method="post">
+<form class="form-horizontal" role="form" action="proposalframe.php" method="post" name="proposalForm">
   <div class="main-section section">
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error': proposalForm.EMAIL.$invalid}">
       <label for="inputEmail" class="col-sm-2 control-label">電子信箱</label>
       <div class="col-sm-10">
-        <input type="email" name="EMAIL" class="form-control" id="inputEmail" placeholder="Email">
+        <input type="email" ng-model="email" name="EMAIL" class="form-control" id="inputEmail" placeholder="Email" required>
       </div>
     </div>
     <div class="form-group">
       <label for="inputCount" class="col-sm-2 control-label">填寫份數</label>
-      <div class="col-sm-4">
-        <input type="number" ng-model="count" name="count" class="form-control" id="inputCount">
+      <div class="col-sm-2">
+        <input type="number" readonly ng-model="count" name="count" class="form-control" id="inputCount">
+      </div>
+      <div class="btn-group col-sm-2">
+        <button type="button" class="btn btn-default"
+          ng-click="count = count + 1">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <button type="button" class="btn btn-default"
+          ng-click="count = (count === 1 ? 1 : count - 1) ">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
       </div>
       <label for="inputTarget" class="col-sm-2 control-label">罷免對象</label>
       <div class="col-sm-4">
@@ -69,9 +75,14 @@
           女
         </label>
       </div>
-      <label for="Birthday_{{$index}}" class="col-sm-2 control-label">生日</label>
+      <label class="col-sm-2 control-label">生日</label>
       <div class="col-sm-4">
-        <datepicker name="Birthday_{{$index}}" ng-model="date" language="en" date-format="YYYY-MM-DD">
+        <select ng-model="person.birthdayYear" name="Birthday_y_{{$index}}"
+          ng-options="year for year in range(1895,1992)"></select>
+        <select ng-model="person.birthdayMonth" name="Birthday_m_{{$index}}"
+          ng-options="month for month in range(1,12)"></select>
+        <select ng-model="person.birthdayDay" name="Birthday_d_{{$index}}"
+          ng-options="day for day in range(1,31)"></select>
       </div>
     </div>
     <div class="form-group">
@@ -86,6 +97,7 @@
         <input type="text" class="form-control" name="RegAdd_{{$index}}" placeholder="請完全依身分證背後地址欄內容填寫，鄰里勿漏">
       </div>
     </div>
+    <input type="hidden" ng-model="count" name="Size">
     <div class="text-center">
       <button type="submit" class="btn btn-primary">製作提議書</button>
     </div>
