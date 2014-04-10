@@ -1,12 +1,14 @@
 var appyApp = angular.module('appyApp', []);
 
-appyApp.controller('FormCtrl', function($scope, $http) {
-  $http.get('data/mly-8.json').success(function(data) {
-    $scope.mly = data;
+appyApp.controller('FormCtrl', function($scope, $http, $q) {
+  var mly = $http.get('data/mly-8.json')
+  var constituency = $http.get('data/constituency.json');
+  var districtData = $http.get('data/district-data.json');
+  $q.all([mly, constituency, districtData]).then(function(results) {
+    $scope.mly = results[0].data;
+    $scope.constituency = results[1].data;
+    $scope.districtData = results[2].data;
     $scope.setLegislator('蔡正元');
-  });
-  $http.get('data/constituency.json').success(function(data) {
-    $scope.constituency = data;
   });
 
   $scope.count = 1;
