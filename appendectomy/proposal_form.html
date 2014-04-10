@@ -111,8 +111,12 @@
 
   </div>
   <input type="hidden" name="Size" value="{{count}}">
-  <div class="text-center">
-    <button type="submit" class="btn btn-primary">製作提議書</button>
+
+  <div class="text-center submit">
+    <div ng-class="{ hidden: !proposalForm.$invalid }" class="alert alert-danger">請確認上面標為紅色的欄位均以填寫，並且身分證字號無誤。</div>
+    <button type="submit" class="btn btn-primary" ng-disabled="proposalForm.$invalid">
+      <span class="glyphicon glyphicon-print"></span> 製作提議書
+    </button>
   </div>
 </form>
 </div>

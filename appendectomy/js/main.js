@@ -3,6 +3,7 @@ var appyApp = angular.module('appyApp', []);
 appyApp.controller('FormCtrl', function($scope, $http) {
   $http.get('data/mly-8.json').success(function(data) {
     $scope.mly = data;
+    $scope.setLegislator('蔡正元');
   });
   $http.get('data/constituency.json').success(function(data) {
     $scope.constituency = data;
@@ -14,6 +15,14 @@ appyApp.controller('FormCtrl', function($scope, $http) {
     birthdayYear: 1992,
     birthdayMonth: 1,
     birthdayDay: 1
+  };
+
+  $scope.setLegislator = function(name) {
+    $scope.mly.forEach(function(ly) {
+      if (ly.name === name) {
+        $scope.selectedTarget = ly;
+      }
+    })
   };
 
   $scope.proposers = [angular.copy(defaultData)];
