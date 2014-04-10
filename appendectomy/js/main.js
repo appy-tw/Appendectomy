@@ -20,8 +20,8 @@ appyApp.controller('FormCtrl', function($scope, $http, $q) {
   };
 
   $scope.setLegislator = function(name) {
-    $scope.mly.forEach(function(ly) {
-      if (ly.name === name) {
+    $scope.districtData.forEach(function(ly) {
+      if (ly.district_legislator === name) {
         $scope.selectedTarget = ly;
       }
     })

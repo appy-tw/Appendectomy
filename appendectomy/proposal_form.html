@@ -47,7 +47,7 @@
       </div>
       <label for="inputTarget" class="col-sm-2 control-label">罷免對象</label>
       <div class="col-sm-4">
-        <select name="DISTRICT_ID" ng-model="selectedTarget" class="form-control" ng-options="target.name for target in mly">
+        <select ng-model="selectedTarget" class="form-control" ng-options="target.district_legislator for target in districtData">
         </select>
       </div>
     </div>
@@ -108,9 +108,9 @@
     <input type="hidden" name="Birthday_y_{{$index}}" value="{{person.birthdayYear}}">
     <input type="hidden" name="Birthday_m_{{$index}}" value="{{person.birthdayMonth}}">
     <input type="hidden" name="Birthday_d_{{$index}}" value="{{person.birthdayDay}}">
-
   </div>
   <input type="hidden" name="Size" value="{{count}}">
+  <input type="hidden" name="DISTRICT_ID" value="{{selectedTarget.district_id}}">
 
   <div class="text-center submit">
     <div ng-class="{ hidden: !proposalForm.$invalid }" class="alert alert-danger">請確認上面標為紅色的欄位均以填寫，並且身分證字號無誤。</div>
