@@ -94,34 +94,34 @@ ELSE IF($_GET[NO]>0)
 }
 
 //DUMMY DATA
-IF($_POST[Name_0]=="")
+IF($_POST['Name_0']=="")
 {
-	$_POST[Name_0]="馬娘娘";
-	$_POST[IDNo_0]="A246813579";
-	$_POST[Sex_0]="F";
-	$_POST[Birthday_0]="YYYY.MM.DD";
-	$_POST[Occupation_0]="孬孬";
-	$_POST[RegAdd_0]="魯蛇大本營";	
-	$_POST[SNo_0]="123456789";
+	$_POST['Name_0']="馬娘娘";
+	$_POST['IDNo_0']="A246813579";
+	$_POST['Sex_0']="F";
+	$_POST['Birthday_0']="YYYY.MM.DD";
+	$_POST['Occupation_0']="孬孬";
+	$_POST['RegAdd_0']="魯蛇大本營";	
+	$_POST['SNo_0']="123456789";
 }
-IF($_POST[Name_1]=="")
+IF($_POST['Name_1']=="")
 {
-	$_POST[Name_1]="金小刀";
-	$_POST[IDNo_1]="A135792468";
-	$_POST[Sex_1]="M";
-	$_POST[Birthday_1]="YYYY.MM.DD";
-	$_POST[Occupation_1]="孬孬";
-	$_POST[RegAdd_1]="魯蛇大本營";
-	$_POST[SNo_1]="987654321";
+	$_POST['Name_1']="金小刀";
+	$_POST['IDNo_1']="A135792468";
+	$_POST['Sex_1']="M";
+	$_POST['Birthday_1']="YYYY.MM.DD";
+	$_POST['Occupation_1']="孬孬";
+	$_POST['RegAdd_1']="魯蛇大本營";
+	$_POST['SNo_1']="987654321";
 }
 
-IF($_POST[Size]=="")
+IF($_POST['Size']=="")
 {
 	$SIZE=2;
 }
 ELSE
 {
-	$SIZE=$_POST[Size];
+	$SIZE=$_POST['Size'];
 }
 
 for($SEED=0;$SEED<$SIZE;$SEED++)
@@ -132,7 +132,7 @@ for($SEED=0;$SEED<$SIZE;$SEED++)
 	$BIRTHDAY=$_POST["Birthday_y_".$SEED]."-".$_POST["Birthday_m_".$SEED]."-".$_POST["Birthday_d_".$SEED];
 	$OCCUPATION=$_POST["Occupation_".$SEED];
 	$REGADD=$_POST["RegAdd_".$SEED];
-	$QRImgPath="qrcode.jpg";
+	$QRImgPath="https://farmer.yooho.com.tw/VFarmGameServer_20121128/flash/images/top/fbgamebanner04.jpg";
 	IF($_POST["QRImgPath_".$SEED]!="")
 		$QRImgPath=$_POST["QRImgPath_".$SEED];
 	$SNo=$_POST["SNo_".$SEED];
