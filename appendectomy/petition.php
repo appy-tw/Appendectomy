@@ -4,6 +4,17 @@
 
 	IF($_POST[Size]>0)
 	{
+		//依 constituency 取得 DISTRICT_ID
+		IF($_POST[constituency]!="")
+		{
+			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY='".$_POST[constituency]."'";
+			IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
+			{
+				$DATA=MYSQL_FETCH_ARRAY($RESULT);
+				$_POST[DISTRICT_ID]=$DATA[district_id];
+			}
+		}
+
 		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL='".$_POST[EMAIL]."'";
 		//取得使用者代號
 		IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
@@ -17,11 +28,11 @@
 			IF(MYSQL_QUERY($QUERY_STRING))
 				$USER_ID=MYSQL_INSERT_ID();
 		}
-		
+
 		FOR($SEED=0;$SEED<$_POST[Size];$SEED++)
 		{
 			//更新產製資料
-			$QUERY_STRING="INSERT INTO PETITION(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
+			$QUERY_STRING="INSERT INTO petition(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
 				VALUES('".
 				$USER_ID."','".
 				$_POST[DISTRICT_ID]."','".
@@ -50,39 +61,28 @@ $pdf->AddUniCNShwFont($CHI_FONT);
 
 $pdf->Open();
 
-$REASON=$_POST[Reason];
-$NOTICE=$_POST[Notice];
-$OTHERS=$_POST[Others];
-$ZIPCODE=$_POST[Zipcode];
-$ADDRESS=$_POST[Address];
-$RECEIVER=$_POST[Receiver];
-$ELEDIST=$_POST[EleDist];
-$TARGETNAME=$_POST[TargetName];
+IF($_POST[DISTRICT_ID]!="")
+{
+	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
+	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
+}
 
 //DUMMY DATA
-$REASON="罷免理由";
-$NOTICE="注意事項";
-$OTHERS="其他";
-$ZIPCODE="郵遞區號";
-$ADDRESS="連署書郵寄地址";
-$RECEIVER="連署書收件人";
-$ELEDIST="選區";
-$TARGETNAME="罷免對象姓名";
+IF($DATA[receiver]=="")
+{
+	$DATA[reason]="罷免理由";
+	$DATA[notice]="注意事項";
+	$DATA[others]="其他";
+	$DATA[zipcode]="郵遞區號";
+	$DATA[mailing_address]="連署書郵寄地址";
+	$DATA[receiver]="連署書收件人";
+}
 $NAME="連署人姓名";
 $IDNo="A135792468";
 $SEX="M";
 $BIRTHDAY="YYYY.MM.DD";
 $OCCUPATION="職業";
 $REGADD="提案人戶籍地址";
-
-
-IF($_POST[DISTRICT_ID]!="")
-{
-	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
-	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
-	$ELEDIST=$DATA[district_name];
-	$TARGETNAME=$DATA[district_legislator];
-}
 
 IF($_GET[NO]=="")
 {
@@ -132,16 +132,16 @@ for($SEED=0;$SEED<$SIZE;$SEED++)
 	$BIRTHDAY=$_POST["Birthday_y_".$SEED]."-".$_POST["Birthday_m_".$SEED]."-".$_POST["Birthday_d_".$SEED];
 	$OCCUPATION=$_POST["Occupation_".$SEED];
 	$REGADD=$_POST["RegAdd_".$SEED];
-	$QRImgPath="qrcode.jpg";
+	$QRImgPath="";
 	IF($_POST["QRImgPath_".$SEED]!="")
 		$QRImgPath=$_POST["QRImgPath_".$SEED];
 	$SNo=$_POST["SNo_".$SEED];
 
 
-	generatePDF($pdf,$CHI_FONT,$ENG_FONT,$REASON,$NOTICE,$OTHERS,$ZIPCODE,$ADDRESS,$RECEIVER,$ELEDIST,$TARGETNAME,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo);
+	generatePDF($pdf,$CHI_FONT,$ENG_FONT,$DATA,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo);
 }
 
-function generatePDF($pdf,$CHI_FONT,$ENG_FONT,$REASON,$NOTICE,$OTHERS,$ZIPCODE,$ADDRESS,$RECEIVER,$ELEDIST,$TARGETNAME,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo)
+function generatePDF($pdf,$CHI_FONT,$ENG_FONT,$DATA,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo)
 {
 $pdf->AddPage();
 $pdf->SetFont($CHI_FONT,'',14);
@@ -150,49 +150,67 @@ $pdf->SetTextColor(0,0,0);
 $pdf->Cell(0,1,'',0,1);
 
 
-$add_offset=99;
-$form_offset=198;
+$add_offset=104;
+$form_offset=213;
+$first_line=104;
+$second_line=203;
 
 //說明資訊列===================================
-$pdf->SetXY(10,11);
-$pdf->SetFillColor(200,200,200);
-$pdf->Cell(150,50,$REASON,1,1,'C',true);
-$pdf->SetXY(10,63);
-$pdf->SetFillColor(150,150,150);
-$pdf->Cell(150,30,$NOTICE,1,1,'C',true);
-$pdf->SetXY(163,10);
-$pdf->SetFillColor(100,100,100);
-$pdf->Cell(40,83,$OTHERS,1,1,'C',true);
-
+IF($DATA[petdescimgpath]!="")
+{
+	$pdf->Image($DATA[petdescimgpath],0,0,210);
+}
+ELSE
+{
+	$pdf->SetXY(10,11);
+	$pdf->SetFillColor(200,200,200);
+	$pdf->Cell(150,50,$DATA[reason],1,1,'C',true);
+	$pdf->SetXY(10,63);
+	$pdf->SetFillColor(150,150,150);
+	$pdf->Cell(150,30,$DATA[notice],1,1,'C',true);
+	$pdf->SetXY(163,10);
+	$pdf->SetFillColor(100,100,100);
+	$pdf->Cell(40,83,$DATA[others],1,1,'C',true);
+}
 
 //地址資訊列===================================
 $pdf->SetXY(175,5+$add_offset);
 $pdf->Cell(20,25,'郵票',1,1,'C',false);
 
-$pdf->SetXY(80,45+$add_offset);
-$pdf->Cell(0,8,$ZIPCODE,0,1,'L',false);
-$pdf->SetXY(80,53+$add_offset);
-$pdf->Cell(0,8,$ADDRESS,0,0,'L',false);
-$pdf->SetXY(80,66+$add_offset);
-$pdf->Cell(0,8,$RECEIVER.'　啟',0,0,'L',false);
+if($DATA[prepaid]==1)
+{
+	$pdf->Image("adv_mail.jpg",0,$add_offset,210);
+	$pdf->SetXY(141.1,14.7+$add_offset);
+	$pdf->SetFont($CHI_FONT,'',11);
+	$pdf->Cell(41.5,7.4,$DATA[postoffice]."郵局登記證",０,0,'C',false);
+	$pdf->SetXY(141.1,22.1+$add_offset);
+	$pdf->Cell(41.5,7.4,$DATA[adv_no],0,0,'C',false);
 
-//QR Code 影像
-$pdf->Image($QRImgPath,10,140,40);
-//刪除 QR Code 影像
-unlink($QRImgPath);
-$pdf->SetXY(10,78+$add_offset);
-$pdf->Cell(40,12,$SNo,0,1,'C',false);
+}
 
+$pdf->SetFont($CHI_FONT,'',20);
+$pdf->SetXY(60,55+$add_offset);
+$pdf->Cell(0,8,$DATA[zipcode],0,1,'L',false);
+$pdf->SetXY(60,63+$add_offset);
+$pdf->Cell(0,8,$DATA[mailing_address],0,0,'L',false);
+$pdf->SetXY(60,76+$add_offset);
+$pdf->Cell(0,8,$DATA[receiver].'　啟',0,0,'L',false);
+
+if($QRImgPath!="")
+{
+	//QR Code 影像
+	$pdf->Image($QRImgPath,10,1+$add_offset,33);
+	//刪除 QR Code 影像
+	unlink($QRImgPath);
+	$pdf->SetXY(10,28+$add_offset);
+	$pdf->SetFont($CHI_FONT,'',14);
+	$pdf->Cell(33,12,$SNo,0,1,'C',false);
+}
 //連署書表單列===================================
 $pdf->SetXY(5,5+$form_offset);
 $pdf->SetFont($CHI_FONT,'',24);
 $pdf->Cell(205,8,'公職人員罷免連署人名冊',0,0,'C',false);
 $pdf->SetFont($CHI_FONT,'',18);
-
-/*$pdf->SetFont($CHI_FONT,'',18);
-$pdf->SetFillColor(0,0,125);
-$pdf->SetTextColor(255,255,255);
-$pdf->Cell(0,10,'環世聯訊法律翻譯服務中心 - 服務請款單...',0,1,'C',true);*/
 
 //$pdf->Cell(0,2,'',0,1);
 
@@ -200,7 +218,7 @@ $pdf->SetXY(5,15+$form_offset);
 $pdf->SetFont($CHI_FONT,'',12);
 $pdf->SetFillColor(255,255,255);
 $pdf->SetTextColor(0,0,0);
-$pdf->Cell(200,8,$ELEDIST.'立法委員'.$TARGETNAME.'罷免案連署人名冊',1,1,'C',false);
+$pdf->Cell(200,8,$DATA[district_name].'立法委員'.$DATA[district_legislator].'罷免案連署人名冊',1,1,'C',false);
 
 $pdf->SetXY(5,23+$form_offset);
 $pdf->SetFont($CHI_FONT,'',14);
@@ -268,8 +286,8 @@ $pdf->Cell(4,12,$IDNo[8],1,0,'C',true);
 $pdf->Cell(4,12,$IDNo[9],1,0,'C',true);
 $pdf->Cell(20,8,'',0,1);
 
-dashLine($pdf,5,99,200,99,2,2);
-dashLine($pdf,5,198,200,198,2,2);
+dashLine($pdf,5,$first_line,200,$first_line,2,2);
+dashLine($pdf,5,$second_line,200,$second_line,2,2);
 
 $ADDLEN=MB_STRLEN($REGADD);
 $WORDPERLINE=12;
