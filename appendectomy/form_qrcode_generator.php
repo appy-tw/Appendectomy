@@ -35,10 +35,10 @@
 			FOR($SEED=0;$SEED<$NO_OF_DATA;$SEED++)
 			{
 				$DDATA=MYSQL_FETCH_ARRAY($RESULT);
-				ECHO "<OPTION VALUE='".$DDATA[district_id]."' ";
-				IF($DDATA[district_id]==$_GET[DDID])
+				ECHO "<OPTION VALUE='".$DDATA['district_id']."' ";
+				IF($DDATA['district_id']==$_GET['DDID'])
 					ECHO "SELECTED";
-				ECHO ">".$DDATA[district_name]."．".$DDATA[district_legislator]."．".$DDATA[party_name].")</OPTION>";
+				ECHO ">".$DDATA['district_name']."．".$DDATA['district_legislator']."．".$DDATA['party_name'].")</OPTION>";
 			}
 		}
 	?>
