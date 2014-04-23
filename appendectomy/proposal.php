@@ -1,7 +1,28 @@
 <?PHP
 	require('inc/pdoCon.php');
+	function dashLine($pdf,$STARTX,$STARTY,$ENDX,$ENDY,$DASHWIDTH,$SPACING)
+	{
+		$pdf->SetLineWidth(0.1);
+		$SKIPWIDTH=$DASHWIDTH+$SPACING;
+		FOR($SEED=1;$SEED<$ENDX;$SEED=$SEED+$SKIPWIDTH)
+		{
+			$pdf->Line($STARTX+$SEED, $STARTY, ($STARTX+$DASHWIDTH)+$SEED, $ENDY);
+		}
+	}
+	
+	function returnValidation()
+	{
+	//	$BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$BASESTRING="0123456789";
+		$FINALSTRING='';
+		FOR($SEED=0;$SEED<30;$SEED++)
+		{
+			$FINALSTRING.=$BASESTRING[RAND(0,9)];
+		}
+		RETURN $FINALSTRING;
+	}
 /*
-	$dbh = db_connect('RoadQuality', '', '');
+	$dbh = db_connect('資料庫', '帳號', '密');
 	$sql = 'SELECT "GpsLatitude", "GpsLongitude"
 	FROM "ClusteringResult"
 	WHERE "GpsLatitude" >= :down AND
@@ -19,13 +40,14 @@
 	{
 
  */
+	$dbh = db_connect('資料庫', '帳號', '密');
 	IF($_POST['Size']>0)
 	{
 		//依 constituency 取得 DISTRICT_ID
-		IF($_POST['constituency']!="")
+		IF(isset($_POST['constituency'])&&$_POST['constituency']!="")
 		{
-// 			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY='".$_POST[constituency]."'";
-			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY=:constituency";
+// 			$QUERY_STRING="SELECT district_id FROM district_data WHERE CONSTITUENCY='".$_POST[constituency]."'";
+			$QUERY_STRING="SELECT district_id FROM district_data WHERE CONSTITUENCY=:constituency";
 			$stmt = $dbh->prepare($QUERY_STRING);
 			$stmt->bindParam(':constituency', $_POST[constituency]);
 			$stmt->execute();
@@ -37,8 +59,8 @@
 			}
 		}
 
-// 		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL='".$_POST[EMAIL]."'";
-		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL=:EMAIL";
+// 		$QUERY_STRING="SELECT user_id FROM user_basic WHERE EMAIL='".$_POST[EMAIL]."'";
+		$QUERY_STRING="SELECT user_id FROM user_basic WHERE EMAIL=:EMAIL";
 		$stmt = $dbh->prepare($QUERY_STRING);
 		$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
 		$stmt->execute();
@@ -51,14 +73,14 @@
 		}
 		ELSE
 		{
-// 			$QUERY_STRING="INSERT INTO USER_BASIC(EMAIL)VALUES('".$_POST[EMAIL]."')";
-			$QUERY_STRING="INSERT INTO USER_BASIC(EMAIL)VALUES(:EMAIL)";
+// 			$QUERY_STRING="INSERT INTO user_basic(EMAIL)VALUES('".$_POST[EMAIL]."')";
+			$QUERY_STRING="INSERT INTO user_basic (EMAIL) VALUES (:EMAIL)";
 			$stmt = $dbh->prepare($QUERY_STRING);
 			$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
 			$stmt->execute();
 // 			IF(MYSQL_QUERY($QUERY_STRING))
 // 				$USER_ID=MYSQL_INSERT_ID();
-			$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL=:EMAIL";
+			$QUERY_STRING="SELECT user_id FROM user_basic WHERE EMAIL=:EMAIL";
 			$stmt = $dbh->prepare($QUERY_STRING);
 			$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
 			$stmt->execute();
@@ -75,13 +97,13 @@
 		{
 			
 			//更新產製資料
-// 			$QUERY_STRING="INSERT INTO PROPOSAL(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
+// 			$QUERY_STRING="INSERT INTO proposal(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
 // 				VALUES('".
 // 				$USER_ID."','".
 // 				$_POST[DISTRICT_ID]."','".
 // 				SUBSTR($_POST["IDNo_".$SEED],5)."','";
-			$QUERY_STRING='INSERT INTO PROPOSAL(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
-				VALUES(:USER_ID.,:DISTRICT_ID,:SEED5,:VCODE,NOW())';
+			$QUERY_STRING='INSERT INTO proposal(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
+				VALUES(:USER_ID,:DISTRICT_ID,:SEED5,:VCODE,NOW())';
 			$stmt = $dbh->prepare($QUERY_STRING);
 			$stmt->bindParam(':USER_ID', $USER_ID);
 			$stmt->bindParam(':DISTRICT_ID', $_POST['DISTRICT_ID']);
@@ -91,7 +113,7 @@
 // 			IF(MYSQL_QUERY($QUERY_STRING))
 			if($stmt->execute())
 			{
-				$QUERY_STRING='SELECT proposal_id FROM PROPOSAL
+				$QUERY_STRING='SELECT proposal_id FROM proposal
 							WHERE USER_ID=:USER_ID AND DISTRICT_ID=:DISTRICT_ID
 							AND ID_LAST_FIVE=:SEED5 AND VALIDATION_CODE=:VCODE ';
 				$stmt = $dbh->prepare($QUERY_STRING);
@@ -106,11 +128,12 @@
 				
 				//建立流水號
 				$_POST["SNo_".$SEED]="AP".SPRINTF("%02d",$_POST[DISTRICT_ID])."1".SPRINTF("%06d",$row[0]);
-				//複製 QR Code 檔案
-				copy("http://140.113.207.111:4000/QRCode/".$_POST["SNo_".$SEED]."&VC=".$VCODE,$_POST["SNo_".$SEED].".jpg");
 				//設定 QR Code 檔案路徑
-				$_POST["QRImgPath_".$SEED]=$_POST["SNo_".$SEED].".jpg";
+				$_POST["QRImgPath_".$SEED]='img/'.$_POST["SNo_".$SEED].".jpg";
+				//複製 QR Code 檔案
+				copy("http://140.113.207.111:4000/QRCode/".$_POST["SNo_".$SEED]."&VC=".$VCODE,$_POST["QRImgPath_".$SEED]);
 			}
+// 			print_r($stmt->errorInfo());
 		}
 	}
 
@@ -125,9 +148,9 @@ $pdf->Open();
 
 IF($_POST[DISTRICT_ID]!="")
 {
-// 	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
+// 	$QUERY_STRING="SELECT * FROM district_data WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
 // 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
-	$QUERY_STRING='SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID=:DISTRICT_ID';
+	$QUERY_STRING='SELECT * FROM district_data WHERE DISTRICT_ID=:DISTRICT_ID';
 	$stmt->bindParam(':DISTRICT_ID', $_POST['DISTRICT_ID']);
 	$stmt->execute();
 	$DATA=$stmt->fetch();
@@ -380,26 +403,5 @@ $pdf->Cell(24,7,"請以膠帶黏貼",1,0,'C',true);
 $pdf->Output();
 
 
-function dashLine($pdf,$STARTX,$STARTY,$ENDX,$ENDY,$DASHWIDTH,$SPACING)
-{
-	$pdf->SetLineWidth(0.1);
-	$SKIPWIDTH=$DASHWIDTH+$SPACING;
-	FOR($SEED=1;$SEED<$ENDX;$SEED=$SEED+$SKIPWIDTH)
-	{
-		$pdf->Line($STARTX+$SEED, $STARTY, ($STARTX+$DASHWIDTH)+$SEED, $ENDY);
-	}
-}
-
-function returnValidation()
-{
-//	$BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	$BASESTRING="0123456789";
-	$FINALSTRING='';
-	FOR($SEED=0;$SEED<30;$SEED++)
-	{
-		$FINALSTRING.=$BASESTRING[RAND(0,9)];
-	}
-	RETURN $FINALSTRING;
-}
 
 ?>
