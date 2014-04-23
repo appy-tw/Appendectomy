@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'chinese.php';
 
 define ('FPDF_UNICODE_ENCODING', 'UCS-2BE');
