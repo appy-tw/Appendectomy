@@ -37,57 +37,23 @@ class Appy extends CI_Controller
 	public function proposal()
 	{
 		$this->load->database ();
-		/*
-		 * $dbh = db_connect('資料庫', '帳號', '密'); $sql = 'SELECT "GpsLatitude", "GpsLongitude" FROM "ClusteringResult" WHERE "GpsLatitude" >= :down AND "GpsLatitude" <= :top AND "GpsLongitude" >= :left AND "GpsLongitude" <= :right'; $stmt = $dbh->prepare($sql); $stmt->bindParam(':down', $down); $stmt->bindParam(':top', $top); $stmt->bindParam(':left', $left); $stmt->bindParam(':right', $right); $stmt->execute(); while($row = $stmt->fetch()) {
-		 */
-		function db_connect($dbname, $user, $password, $dbtype = 'mysql', $host = 'localhost', $port = '5432')
-		{
-			$dsn = "{$dbtype}:dbname={$dbname};host={$host};port={$port}";
-			
-			try
-			{
-				$dbh = new PDO ( $dsn, $user, $password );
-			}
-			catch ( PDOException $e )
-			{
-				echo 'Connection failed: ' . $e->getMessage ();
-			}
-			$dbh->query ( "set names utf8" );
-			
-			return $dbh;
-		}
-		function db_disconnect($dbh)
-		{
-			$dbh = NULL;
-		}
-		function printErrorInfo($stmt)
-		{
-			$arr = $stmt->errorInfo ();
-			if ($arr [0] !== '00000')
-			{
-				echo "\nPDOStatement::errorInfo():\n";
-				print_r ( $arr );
-				exit ( - 1 );
-			}
-		}
-		$dbh = db_connect ( 'appendectomy', 'root', 'ba#!*' );
+
 		IF ($_POST ['Size'] > 0)
 		{
-			// 依 constituency 取得 DISTRICT_ID
+			// 依 constituency 取得立委 DISTRICT_ID
 			IF (isset ( $_POST ['constituency'] ) && $_POST ['constituency'] != "")
 			{
-				// $QUERY_STRING="SELECT district_id FROM district_data WHERE CONSTITUENCY='".$_POST[constituency]."'";
-				$QUERY_STRING = "SELECT district_id FROM district_data WHERE CONSTITUENCY=:constituency";
-				$stmt = $dbh->prepare ( $QUERY_STRING );
-				$stmt->bindParam ( ':constituency', $_POST [constituency] );
-				$stmt->execute ();
-				// IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
-				if ($DATA_DISTRICT = $stmt->fetch ( PDO::FETCH_ASSOC ))
+
+				$data_list = array (
+						'CONSTITUENCY' => $_POST ['constituency']
+				);
+				$query = $this->db->select ( 'district_id' )->get_where ( 'user_basic', $email_data );
+				if ($query->num_rows () > 0)
 				{
-					// $DATA=MYSQL_FETCH_ARRAY($RESULT);
-					$_POST ['DISTRICT_ID'] = $DATA_DISTRICT ['district_id'];
+					$_POST ['DISTRICT_ID'] = $query->row()->district_id;
 				}
 			}
+			//揣（ㄘㄨㄝ）使用者資料
 			$email_data = array (
 					'EMAIL' => $_POST ['EMAIL'] 
 			);
@@ -107,7 +73,7 @@ class Appy extends CI_Controller
 				$row = $query->row ();
 				$USER_ID = $row->user_id;
 			}
-			
+			//pdf流水號記到資料庫
 			FOR($SEED = 0; $SEED < $_POST ['Size']; $SEED ++)
 			{
 				
@@ -145,12 +111,9 @@ class Appy extends CI_Controller
 		
 		IF ($_POST ['DISTRICT_ID'] != "")
 		{
-			// $QUERY_STRING="SELECT * FROM district_data WHERE DISTRICT_ID='".$_POST['DISTRICT_ID']."'";
-			// $DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
-			$QUERY_STRING = 'SELECT * FROM district_data WHERE DISTRICT_ID=:DISTRICT_ID';
-			$stmt->bindParam ( ':DISTRICT_ID', $_POST ['DISTRICT_ID'] );
-			$stmt->execute ();
-			$DATA = $stmt->fetch ();
+			$data_list=array('DISTRICT_ID'=>$_POST ['DISTRICT_ID']);
+			$query = $this->db->get_where ( 'district_data', $data_list );
+			$DATA = $query->row_array();
 		}
 		
 		// DUMMY DATA
