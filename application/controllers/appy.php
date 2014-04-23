@@ -88,54 +88,26 @@ class Appy extends CI_Controller
 					$_POST ['DISTRICT_ID'] = $DATA_DISTRICT ['district_id'];
 				}
 			}
-			
-			// $QUERY_STRING="SELECT user_id FROM user_basic WHERE EMAIL='".$_POST[EMAIL]."'";
-			$QUERY_STRING = "SELECT user_id FROM user_basic WHERE EMAIL=:EMAIL";
-			$stmt = $dbh->prepare ( $QUERY_STRING );
-			$stmt->bindParam ( ':EMAIL', $_POST ['EMAIL'] );
-			$stmt->execute ();
-			// 取得使用者代號
-			// IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
-			if ($DATA = $stmt->fetch ( PDO::FETCH_ASSOC ))
+			$email_data = array (
+					'EMAIL' => $_POST ['EMAIL'] 
+			);
+			$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
+			if ($query->num_rows () > 0)
 			{
-				// $DATA=MYSQL_FETCH_ARRAY($RESULT);
-				$USER_ID = $DATA ['user_id'];
+				//有資料
+				$row = $query->row ();
+				$USER_ID = $row->user_id;
 			}
 			else
 			{
-				// $QUERY_STRING="INSERT INTO user_basic(EMAIL)VALUES('".$_POST[EMAIL]."')";
-				$QUERY_STRING = "INSERT INTO user_basic (EMAIL) VALUES (:EMAIL)";
-				$stmt = $dbh->prepare ( $QUERY_STRING );
-				$stmt->bindParam ( ':EMAIL', $_POST ['EMAIL'] );
-				$stmt->execute ();
-				// IF(MYSQL_QUERY($QUERY_STRING))
-				// $USER_ID=MYSQL_INSERT_ID();
-				$QUERY_STRING = "SELECT user_id FROM user_basic WHERE EMAIL=:EMAIL";
-				$stmt = $dbh->prepare ( $QUERY_STRING );
-				$stmt->bindParam ( ':EMAIL', $_POST ['EMAIL'] );
-				$stmt->execute ();
-				if ($DATA = $stmt->fetch ( PDO::FETCH_ASSOC ))
-				{
-					// $DATA=MYSQL_FETCH_ARRAY($RESULT);
-					$USER_ID = $DATA [user_id];
-				}
+				//無資料就加新的
+				$query = $this->db->insert ( 'user_basic', $email_data );
+				//揣出來
+				$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
+				$row = $query->row ();
+				$USER_ID = $row->user_id;
 			}
 			
-			$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', array (
-			'EMAIL' => $_POST ['EMAIL']
-			) );
-			foreach ( $query->result () as $row )
-			{
-				echo ($row->user_id);
-				echo '<br>';
-			}
-			echo $USER_ID;
-			$query = $this->db->get ( 'user_basic' );
-			// print_r ( $query );
-			foreach ( $query->result () as $row )
-			{
-				echo ($row);
-			}
 			
 			FOR($SEED = 0; $SEED < $_POST ['Size']; $SEED ++)
 			{
