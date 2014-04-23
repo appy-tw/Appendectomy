@@ -274,24 +274,7 @@ class Appy extends CI_Controller {
 		{
 			$SIZE=$_POST['Size'];
 		}
-		
-		for($SEED=0;$SEED<$SIZE;$SEED++)
-		{
-			$NAME=$_POST["Name_".$SEED];
-			$IDNo=$_POST["IDNo_".$SEED];
-			$SEX=$_POST["Sex_".$SEED];
-			$BIRTHDAY=$_POST["Birthday_y_".$SEED]."-".$_POST["Birthday_m_".$SEED]."-".$_POST["Birthday_d_".$SEED];
-			$OCCUPATION=$_POST["Occupation_".$SEED];
-			$REGADD=$_POST["RegAdd_".$SEED];
-			$QRImgPath="";
-			IF($_POST["QRImgPath_".$SEED]!="")
-			$QRImgPath=$_POST["QRImgPath_".$SEED];
-			$SNo=$_POST["SNo_".$SEED];
-		
-		
-			generatePDF($pdf,$CHI_FONT,$ENG_FONT,$DATA,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo);
-		}
-		
+
 		function generatePDF($pdf,$CHI_FONT,$ENG_FONT,$DATA,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo)
 		{
 			$pdf->AddPage();
@@ -307,7 +290,7 @@ class Appy extends CI_Controller {
 			$second_line=203;
 		
 			//說明資訊列===================================
-			IF($DATA['prodescimgpath']!="")
+			IF(isset($DATA['prodescimgpath']))
 			{
 				$pdf->Image($DATA['prodescimgpath'],0,0,210);
 			}
@@ -328,12 +311,12 @@ class Appy extends CI_Controller {
 			$pdf->SetXY(175,5+$add_offset);
 			$pdf->Cell(20,25,'郵票',1,1,'C',false);
 		
-			if($DATA[prepaid]==1)
+			if(isset($DATA['prepaid'])&&$DATA['prepaid']==1)
 			{
 				$pdf->Image("adv_mail.jpg",0,$add_offset,210);
 				$pdf->SetXY(141.1,14.7+$add_offset);
 				$pdf->SetFont($CHI_FONT,'',11);
-				$pdf->Cell(41.5,7.4,$DATA['postoffice']."郵局登記證",０, 0,'C',false);
+				$pdf->Cell(41.5,7.4,$DATA['postoffice']."郵局登記證",0,0,'C',false);
 				$pdf->SetXY(141.1,22.1+$add_offset);
 				$pdf->Cell(41.5,7.4,$DATA['adv_no'],0,0,'C',false);
 		
@@ -369,6 +352,7 @@ class Appy extends CI_Controller {
 			$pdf->SetFont($CHI_FONT,'',12);
 			$pdf->SetFillColor(255,255,255);
 			$pdf->SetTextColor(0,0,0);
+			//TODO
 			$pdf->Cell(200,8,$DATA['district_name'].'立法委員'.$DATA['district_legislator'].'罷免案提議人名冊',1,1,'C',false);
 		
 			$pdf->SetXY(5,23+$form_offset);
@@ -452,14 +436,31 @@ class Appy extends CI_Controller {
 			$HEIGHT=20/$LINE;
 			FOR($LINESEED=0;$LINESEED<$LINE;$LINESEED++)
 			{
-				$pdf->SetXY(111,39+$form_offset+$LINESEED*$HEIGHT);
-				$pdf->Cell(62,$HEIGHT,MB_SUBSTR($REGADD,$LINESEED*$WORDPERLINE,$WORDPERLINE),'C',false);
+			$pdf->SetXY(111,39+$form_offset+$LINESEED*$HEIGHT);
+			$pdf->Cell(62,$HEIGHT,MB_SUBSTR($REGADD,$LINESEED*$WORDPERLINE,$WORDPERLINE),'C',false);
+			}
+		
+			$pdf->SetXY(95,2);
+			$pdf->SetFont($CHI_FONT,'',10);
+			$pdf->Cell(24,7,"請以膠帶黏貼",1,0,'C',true);
+		
 		}
 		
-		$pdf->SetXY(95,2);
-		$pdf->SetFont($CHI_FONT,'',10);
-		$pdf->Cell(24,7,"請以膠帶黏貼",1,0,'C',true);
+		for($SEED=0;$SEED<$SIZE;$SEED++)
+		{
+			$NAME=$_POST["Name_".$SEED];
+			$IDNo=$_POST["IDNo_".$SEED];
+			$SEX=$_POST["Sex_".$SEED];
+			$BIRTHDAY=$_POST["Birthday_y_".$SEED]."-".$_POST["Birthday_m_".$SEED]."-".$_POST["Birthday_d_".$SEED];
+			$OCCUPATION=$_POST["Occupation_".$SEED];
+			$REGADD=$_POST["RegAdd_".$SEED];
+			$QRImgPath="";
+			IF($_POST["QRImgPath_".$SEED]!="")
+			$QRImgPath=$_POST["QRImgPath_".$SEED];
+			$SNo=$_POST["SNo_".$SEED];
 		
+		
+			generatePDF($pdf,$CHI_FONT,$ENG_FONT,$DATA,$NAME,$IDNo,$SEX,$BIRTHDAY,$OCCUPATION,$REGADD,$QRImgPath,$SNo);
 		}
 		
 		$pdf->Output();
