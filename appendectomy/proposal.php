@@ -292,7 +292,7 @@ $pdf->Cell(20,8,'',0,1);
 dashLine($pdf,5,$first_line,200,$first_line,2,2);
 dashLine($pdf,5,$second_line,200,$second_line,2,2);
 
-$ADDLEN=MB_STRLEN($REGADD);
+$ADDLEN=MB_STRLEN($REGADD, "utf-8");
 $WORDPERLINE=12;
 $LINE=($ADDLEN-$ADDLEN%$WORDPERLINE)/$WORDPERLINE;
 IF(($ADDLEN%$WORDPERLINE)>0)
@@ -305,7 +305,7 @@ $HEIGHT=20/$LINE;
 FOR($LINESEED=0;$LINESEED<$LINE;$LINESEED++)
 {
 	$pdf->SetXY(111,39+$form_offset+$LINESEED*$HEIGHT);
-	$pdf->Cell(62,$HEIGHT,MB_SUBSTR($REGADD,$LINESEED*$WORDPERLINE,$WORDPERLINE),'C',false);
+	$pdf->Cell(62,$HEIGHT,MB_SUBSTR($REGADD,$LINESEED*$WORDPERLINE,$WORDPERLINE, "UTF-8"),'C',false);
 }
 
 $pdf->SetXY(95,2);
