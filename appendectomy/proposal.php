@@ -19,7 +19,6 @@
 	{
 
  */
-	$dbh = db_connect('', '', '');
 	IF($_POST['Size']>0)
 	{
 		//依 constituency 取得 DISTRICT_ID
@@ -72,7 +71,7 @@
 		
 
 		
-		FOR($SEED=0;$SEED<$_POST[Size];$SEED++)
+		FOR($SEED=0;$SEED<$_POST['Size'];$SEED++)
 		{
 			
 			//更新產製資料
@@ -85,7 +84,7 @@
 				VALUES(:USER_ID.,:DISTRICT_ID,:SEED5,:VCODE,NOW())';
 			$stmt = $dbh->prepare($QUERY_STRING);
 			$stmt->bindParam(':USER_ID', $USER_ID);
-			$stmt->bindParam(':DISTRICT_ID', $_POST[DISTRICT_ID]);
+			$stmt->bindParam(':DISTRICT_ID', $_POST['DISTRICT_ID']);
 			$stmt->bindValue(':SEED5', SUBSTR($_POST["IDNo_".$SEED],5));
 			$VCODE=returnValidation();
 			$stmt->bindParam(':VCODE', $VCODE);
@@ -102,10 +101,11 @@
 				$VCODE=returnValidation();
 				$stmt->bindParam(':VCODE', $VCODE);
 				// 			IF(MYSQL_QUERY($QUERY_STRING))
-				if($stmt->execute())
+				$stmt->execute();
+				$row=$stmt->fetch(PDO::FETCH_ASSOC);
 				
 				//建立流水號
-				$_POST["SNo_".$SEED]="AP".SPRINTF("%02d",$_POST[DISTRICT_ID])."1".SPRINTF("%06d",MYSQL_INSERT_ID());
+				$_POST["SNo_".$SEED]="AP".SPRINTF("%02d",$_POST[DISTRICT_ID])."1".SPRINTF("%06d",$row[0]);
 				//複製 QR Code 檔案
 				copy("http://140.113.207.111:4000/QRCode/".$_POST["SNo_".$SEED]."&VC=".$VCODE,$_POST["SNo_".$SEED].".jpg");
 				//設定 QR Code 檔案路徑
@@ -123,22 +123,25 @@ $pdf->AddUniCNShwFont($CHI_FONT);
 
 $pdf->Open();
 
-// IF($_POST[DISTRICT_ID]!="")
-// {
-// // 	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
-// 	$QUERY_STRING='SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID=:DISTRICT_ID';
-// 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
-// }
-$DATA=$DATA_DISTRICT;
-//DUMMY DATA
-IF($DATA[receiver]=="")
+IF($_POST[DISTRICT_ID]!="")
 {
-	$DATA[reason]="罷免理由";
-	$DATA[notice]="注意事項";
-	$DATA[others]="其他";
-	$DATA[zipcode]="郵遞區號";
-	$DATA[mailing_address]="提議書郵寄地址";
-	$DATA[receiver]="提議書收件人";
+// 	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
+// 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
+	$QUERY_STRING='SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID=:DISTRICT_ID';
+	$stmt->bindParam(':DISTRICT_ID', $_POST['DISTRICT_ID']);
+	$stmt->execute();
+	$DATA=$stmt->fetch();
+}
+
+//DUMMY DATA
+IF($DATA['receiver']=="")
+{
+	$DATA['reason']="罷免理由";
+	$DATA['notice']="注意事項";
+	$DATA['others']="其他";
+	$DATA['zipcode']="郵遞區號";
+	$DATA['mailing_address']="提議書郵寄地址";
+	$DATA['receiver']="提議書收件人";
 }
 $NAME="提議人姓名";
 $IDNo="A135792468";
@@ -147,13 +150,13 @@ $BIRTHDAY="YYYY.MM.DD";
 $OCCUPATION="職業";
 $REGADD="提案人戶籍地址";
 
-IF($_GET[NO]=="")
+IF($_GET['NO']=="")
 {
 	$NO=1;
 }
-ELSE IF($_GET[NO]>0)
+ELSE IF($_GET['NO']>0)
 {
-	$NO=$_GET[NO];
+	$NO=$_GET['NO'];
 }
 
 //DUMMY DATA
@@ -219,21 +222,21 @@ $first_line=104;
 $second_line=203;
 
 //說明資訊列===================================
-IF($DATA[prodescimgpath]!="")
+IF($DATA['prodescimgpath']!="")
 {
-	$pdf->Image($DATA[prodescimgpath],0,0,210);
+	$pdf->Image($DATA['prodescimgpath'],0,0,210);
 }
 ELSE
 {
 	$pdf->SetXY(10,11);
 	$pdf->SetFillColor(200,200,200);
-	$pdf->Cell(150,50,$DATA[reason],1,1,'C',true);
+	$pdf->Cell(150,50,$DATA['reason'],1,1,'C',true);
 	$pdf->SetXY(10,63);
 	$pdf->SetFillColor(150,150,150);
-	$pdf->Cell(150,30,$DATA[notice],1,1,'C',true);
+	$pdf->Cell(150,30,$DATA['notice'],1,1,'C',true);
 	$pdf->SetXY(163,10);
 	$pdf->SetFillColor(100,100,100);
-	$pdf->Cell(40,83,$DATA[others],1,1,'C',true);
+	$pdf->Cell(40,83,$DATA['others'],1,1,'C',true);
 }
 
 //地址資訊列===================================
@@ -245,19 +248,19 @@ if($DATA[prepaid]==1)
 	$pdf->Image("adv_mail.jpg",0,$add_offset,210);
 	$pdf->SetXY(141.1,14.7+$add_offset);
 	$pdf->SetFont($CHI_FONT,'',11);
-	$pdf->Cell(41.5,7.4,$DATA[postoffice]."郵局登記證",０,0,'C',false);
+	$pdf->Cell(41.5,7.4,$DATA['postoffice']."郵局登記證",０, 0,'C',false);
 	$pdf->SetXY(141.1,22.1+$add_offset);
-	$pdf->Cell(41.5,7.4,$DATA[adv_no],0,0,'C',false);
+	$pdf->Cell(41.5,7.4,$DATA['adv_no'],0,0,'C',false);
 
 }
 
 $pdf->SetFont($CHI_FONT,'',20);
 $pdf->SetXY(60,55+$add_offset);
-$pdf->Cell(0,8,$DATA[zipcode],0,1,'L',false);
+$pdf->Cell(0,8,$DATA['zipcode'],0,1,'L',false);
 $pdf->SetXY(60,63+$add_offset);
-$pdf->Cell(0,8,$DATA[mailing_address],0,0,'L',false);
+$pdf->Cell(0,8,$DATA['mailing_address'],0,0,'L',false);
 $pdf->SetXY(60,76+$add_offset);
-$pdf->Cell(0,8,$DATA[receiver].'　啟',0,0,'L',false);
+$pdf->Cell(0,8,$DATA['receiver'].'　啟',0,0,'L',false);
 
 if($QRImgPath!="")
 {
@@ -281,7 +284,7 @@ $pdf->SetXY(5,15+$form_offset);
 $pdf->SetFont($CHI_FONT,'',12);
 $pdf->SetFillColor(255,255,255);
 $pdf->SetTextColor(0,0,0);
-$pdf->Cell(200,8,$DATA[district_name].'立法委員'.$DATA[district_legislator].'罷免案提議人名冊',1,1,'C',false);
+$pdf->Cell(200,8,$DATA['district_name'].'立法委員'.$DATA['district_legislator'].'罷免案提議人名冊',1,1,'C',false);
 
 $pdf->SetXY(5,23+$form_offset);
 $pdf->SetFont($CHI_FONT,'',14);
@@ -391,6 +394,7 @@ function returnValidation()
 {
 //	$BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$BASESTRING="0123456789";
+	$FINALSTRING='';
 	FOR($SEED=0;$SEED<30;$SEED++)
 	{
 		$FINALSTRING.=$BASESTRING[RAND(0,9)];
