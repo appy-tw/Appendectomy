@@ -8,6 +8,13 @@ sudo apt-get install php5-mysql
 	cd database
 	cat *.sql | mysql -u root -p
 
+database sign in information setting
+	modify appendectomy/config/database.php
+	
+	$db['default']['username'] = 'your database username';
+	$db['default']['password'] = 'your pass word';
+	$db['default']['database'] = 'your database name'; //default is appendectomy
+
 看資料庫
 	http://www.phpmyadmin.net/home_page/downloads.php
 	
