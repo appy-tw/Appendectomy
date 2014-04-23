@@ -1,32 +1,73 @@
 <?PHP
-	require('inc/sql.php');
-	connect_valid();
+	require('inc/pdoCon.php');
+/*
+	$dbh = db_connect('RoadQuality', '', '');
+	$sql = 'SELECT "GpsLatitude", "GpsLongitude"
+	FROM "ClusteringResult"
+	WHERE "GpsLatitude" >= :down AND
+	  "GpsLatitude" <= :top AND
+	  "GpsLongitude" >= :left AND
+	  "GpsLongitude" <= :right';
+	$stmt = $dbh->prepare($sql);
+	$stmt->bindParam(':down', $down);
+	$stmt->bindParam(':top', $top);
+	$stmt->bindParam(':left', $left);
+	$stmt->bindParam(':right', $right);
+	
+	$stmt->execute();
+	while($row = $stmt->fetch())
+	{
 
-	IF($_POST[Size]>0)
+ */
+	$dbh = db_connect('', '', '');
+	IF($_POST['Size']>0)
 	{
 		//依 constituency 取得 DISTRICT_ID
-		IF($_POST[constituency]!="")
+		IF($_POST['constituency']!="")
 		{
-			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY='".$_POST[constituency]."'";
-			IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
+// 			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY='".$_POST[constituency]."'";
+			$QUERY_STRING="SELECT district_id FROM DISTRICT_DATA WHERE CONSTITUENCY=:constituency";
+			$stmt = $dbh->prepare($QUERY_STRING);
+			$stmt->bindParam(':constituency', $_POST[constituency]);
+			$stmt->execute();
+// 			IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
+			if($DATA_DISTRICT = $stmt->fetch(PDO::FETCH_ASSOC))
 			{
-				$DATA=MYSQL_FETCH_ARRAY($RESULT);
-				$_POST[DISTRICT_ID]=$DATA[district_id];
+// 				$DATA=MYSQL_FETCH_ARRAY($RESULT);
+				$_POST['DISTRICT_ID']=$DATA_DISTRICT['district_id'];
 			}
 		}
 
-		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL='".$_POST[EMAIL]."'";
+// 		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL='".$_POST[EMAIL]."'";
+		$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL=:EMAIL";
+		$stmt = $dbh->prepare($QUERY_STRING);
+		$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
+		$stmt->execute();
 		//取得使用者代號
-		IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
+// 		IF(MYSQL_NUM_ROWS($RESULT=MYSQL_QUERY($QUERY_STRING))==1)
+		if($DATA = $stmt->fetch(PDO::FETCH_ASSOC))
 		{
-			$DATA=MYSQL_FETCH_ARRAY($RESULT);
+// 			$DATA=MYSQL_FETCH_ARRAY($RESULT);
 			$USER_ID=$DATA[user_id];
 		}
 		ELSE
 		{
-			$QUERY_STRING="INSERT INTO USER_BASIC(EMAIL)VALUES('".$_POST[EMAIL]."')";
-			IF(MYSQL_QUERY($QUERY_STRING))
-				$USER_ID=MYSQL_INSERT_ID();
+// 			$QUERY_STRING="INSERT INTO USER_BASIC(EMAIL)VALUES('".$_POST[EMAIL]."')";
+			$QUERY_STRING="INSERT INTO USER_BASIC(EMAIL)VALUES(:EMAIL)";
+			$stmt = $dbh->prepare($QUERY_STRING);
+			$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
+			$stmt->execute();
+// 			IF(MYSQL_QUERY($QUERY_STRING))
+// 				$USER_ID=MYSQL_INSERT_ID();
+			$QUERY_STRING="SELECT user_id FROM USER_BASIC WHERE EMAIL=:EMAIL";
+			$stmt = $dbh->prepare($QUERY_STRING);
+			$stmt->bindParam(':EMAIL', $_POST['EMAIL']);
+			$stmt->execute();
+			if($DATA = $stmt->fetch(PDO::FETCH_ASSOC))
+			{
+				// 			$DATA=MYSQL_FETCH_ARRAY($RESULT);
+				$USER_ID=$DATA[user_id];
+			}
 		}
 		
 
@@ -35,16 +76,34 @@
 		{
 			
 			//更新產製資料
-			$QUERY_STRING="INSERT INTO PROPOSAL(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
-				VALUES('".
-				$USER_ID."','".
-				$_POST[DISTRICT_ID]."','".
-				SUBSTR($_POST["IDNo_".$SEED],5)."','";
+// 			$QUERY_STRING="INSERT INTO PROPOSAL(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
+// 				VALUES('".
+// 				$USER_ID."','".
+// 				$_POST[DISTRICT_ID]."','".
+// 				SUBSTR($_POST["IDNo_".$SEED],5)."','";
+			$QUERY_STRING='INSERT INTO PROPOSAL(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
+				VALUES(:USER_ID.,:DISTRICT_ID,:SEED5,:VCODE,NOW())';
+			$stmt = $dbh->prepare($QUERY_STRING);
+			$stmt->bindParam(':USER_ID', $USER_ID);
+			$stmt->bindParam(':DISTRICT_ID', $_POST[DISTRICT_ID]);
+			$stmt->bindValue(':SEED5', SUBSTR($_POST["IDNo_".$SEED],5));
 			$VCODE=returnValidation();
-			$QUERY_STRING.=$VCODE;
-			$QUERY_STRING.="',NOW())";
-			IF(MYSQL_QUERY($QUERY_STRING))
+			$stmt->bindParam(':VCODE', $VCODE);
+// 			IF(MYSQL_QUERY($QUERY_STRING))
+			if($stmt->execute())
 			{
+				$QUERY_STRING='SELECT proposal_id FROM PROPOSAL
+							WHERE USER_ID=:USER_ID AND DISTRICT_ID=:DISTRICT_ID
+							AND ID_LAST_FIVE=:SEED5 AND VALIDATION_CODE=:VCODE ';
+				$stmt = $dbh->prepare($QUERY_STRING);
+				$stmt->bindParam(':USER_ID', $USER_ID);
+				$stmt->bindParam(':DISTRICT_ID', $_POST[DISTRICT_ID]);
+				$stmt->bindValue(':SEED5', SUBSTR($_POST["IDNo_".$SEED],5));
+				$VCODE=returnValidation();
+				$stmt->bindParam(':VCODE', $VCODE);
+				// 			IF(MYSQL_QUERY($QUERY_STRING))
+				if($stmt->execute())
+				
 				//建立流水號
 				$_POST["SNo_".$SEED]="AP".SPRINTF("%02d",$_POST[DISTRICT_ID])."1".SPRINTF("%06d",MYSQL_INSERT_ID());
 				//複製 QR Code 檔案
@@ -64,12 +123,13 @@ $pdf->AddUniCNShwFont($CHI_FONT);
 
 $pdf->Open();
 
-IF($_POST[DISTRICT_ID]!="")
-{
-	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
-	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
-}
-
+// IF($_POST[DISTRICT_ID]!="")
+// {
+// // 	$QUERY_STRING="SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID='".$_POST[DISTRICT_ID]."'";
+// 	$QUERY_STRING='SELECT * FROM DISTRICT_DATA WHERE DISTRICT_ID=:DISTRICT_ID';
+// 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
+// }
+$DATA=$DATA_DISTRICT;
 //DUMMY DATA
 IF($DATA[receiver]=="")
 {
