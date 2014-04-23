@@ -94,59 +94,42 @@ class Appy extends CI_Controller
 			$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
 			if ($query->num_rows () > 0)
 			{
-				//有資料
+				// 有資料
 				$row = $query->row ();
 				$USER_ID = $row->user_id;
 			}
 			else
 			{
-				//無資料就加新的
+				// 無資料就加新的
 				$query = $this->db->insert ( 'user_basic', $email_data );
-				//揣出來
+				// 揣出來
 				$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
 				$row = $query->row ();
 				$USER_ID = $row->user_id;
 			}
 			
-			
 			FOR($SEED = 0; $SEED < $_POST ['Size']; $SEED ++)
 			{
 				
 				// 更新產製資料
-				// $QUERY_STRING="INSERT INTO proposal(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
-				// VALUES('".
-				// $USER_ID."','".
-				// $_POST['DISTRICT_ID']."','".
-				// SUBSTR($_POST["IDNo_".$SEED],5)."','";
-				$QUERY_STRING = 'INSERT INTO proposal(USER_ID,DISTRICT_ID,ID_LAST_FIVE,VALIDATION_CODE,CREATED_TIME)
-				VALUES(:USER_ID,:DISTRICT_ID,:SEED5,:VCODE,NOW())';
-				$stmt = $dbh->prepare ( $QUERY_STRING );
-				$stmt->bindParam ( ':USER_ID', $USER_ID );
-				$stmt->bindParam ( ':DISTRICT_ID', $_POST ['DISTRICT_ID'] );
-				$stmt->bindValue ( ':SEED5', SUBSTR ( $_POST ["IDNo_" . $SEED], 5 ) );
 				$VCODE = $this->returnValidation ();
-				$stmt->bindParam ( ':VCODE', $VCODE );
-				// IF(MYSQL_QUERY($QUERY_STRING))
-				if ($stmt->execute ())
-				{
-					$QUERY_STRING = 'SELECT proposal_id FROM proposal
-							WHERE USER_ID=:USER_ID AND DISTRICT_ID=:DISTRICT_ID
-							AND ID_LAST_FIVE=:SEED5 AND VALIDATION_CODE=:VCODE ';
-					$stmt = $dbh->prepare ( $QUERY_STRING );
-					$stmt->bindParam ( ':USER_ID', $USER_ID );
-					$stmt->bindParam ( ':DISTRICT_ID', $_POST ['DISTRICT_ID'] );
-					$stmt->bindValue ( ':SEED5', SUBSTR ( $_POST ["IDNo_" . $SEED], 5 ) );
-					$stmt->bindParam ( ':VCODE', $VCODE );
-					$stmt->execute ();
-					$row = $stmt->fetch ( PDO::FETCH_ASSOC );
-					
-					// 建立流水號
-					$_POST ["SNo_" . $SEED] = "AP" . SPRINTF ( "%02d", $_POST ['DISTRICT_ID'] ) . "1" . SPRINTF ( "%06d", $row [0] );
-					// 設定 QR Code 檔案路徑
-					$_POST ["QRImgPath_" . $SEED] = 'img/' . $_POST ["SNo_" . $SEED] . ".jpg";
-					// 複製 QR Code 檔案
-					copy ( "http://140.113.207.111:4000/QRCode/" . $_POST ["SNo_" . $SEED] . "&VC=" . $VCODE, $_POST ["QRImgPath_" . $SEED] );
-				}
+				$data_list = array (
+						'USER_ID' => $USER_ID,
+						'DISTRICT_ID' => $_POST ['DISTRICT_ID'],
+						'ID_LAST_FIVE' => SUBSTR ( $_POST ["IDNo_" . $SEED], 5 ),
+						'VALIDATION_CODE' => $VCODE,
+				);
+				$this->db->insert ( 'proposal', $data_list );
+
+				$query = $this->db->select ( 'proposal_id' )->get_where ( 'proposal', $data_list );
+				$row = $query->row ();
+				$proposal_id = $row->proposal_id;
+				// 建立流水號
+				$_POST ["SNo_" . $SEED] = "AP" . SPRINTF ( "%02d", $_POST ['DISTRICT_ID'] ) . "1" . SPRINTF ( "%06d", $proposal_id );
+				// 設定 QR Code 檔案路徑
+				$_POST ["QRImgPath_" . $SEED] = 'img/' . $_POST ["SNo_" . $SEED] . ".jpg";
+				// 複製 QR Code 檔案
+				copy ( "http://140.113.207.111:4000/QRCode/" . $_POST ["SNo_" . $SEED] . "&VC=" . $VCODE, $_POST ["QRImgPath_" . $SEED] );
 				// print_r($stmt->errorInfo());
 			}
 		}
