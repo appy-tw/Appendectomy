@@ -1,7 +1,7 @@
 <body onload=document.TRANSFER.submit();>
 
 <?php
-	ECHO "<FORM NAME=TRANSFER ACTION=proposal.php METHOD=POST TARGET=pdfframe>";
+	ECHO "<FORM NAME=TRANSFER ACTION='../index.php/appy/proposal' METHOD=POST TARGET=pdfframe>";
 	while($element = current($_POST)) {
     echo "<INPUT TYPE=HIDDEN NAME=".key($_POST)." VALUE='".$_POST[key($_POST)]."'>";
     next($_POST);
