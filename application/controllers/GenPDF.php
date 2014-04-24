@@ -32,6 +32,13 @@ class GenPDF extends CI_Controller
 	{
 		$this->load->database ();
 		$this->load->helper ( 'proposal' );
+		//無傳參數愛另外處理
+		IF (!isset($_POST ['Size']))
+		{
+			$_POST ['Size']=2;
+			$_POST ['EMAIL']='a@gmail.com';
+			$_POST ['constituency']='TPE,4';
+		}
 		IF ($_POST ['Size'] > 0)
 		{
 			// 依 constituency 取得立委 DISTRICT_ID
@@ -39,9 +46,9 @@ class GenPDF extends CI_Controller
 			{
 				
 				$data_list = array (
-						'CONSTITUENCY' => $_POST ['constituency'] 
+						'constituency' => $_POST ['constituency'] 
 				);
-				$query = $this->db->select ( 'district_id' )->get_where ( 'user_basic', $data_list );
+				$query = $this->db->select ( 'district_id' )->get_where ( 'district_data', $data_list );
 				if ($query->num_rows () > 0)
 				{
 					$_POST ['DISTRICT_ID'] = $query->row ()->district_id;
