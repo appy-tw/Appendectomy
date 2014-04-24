@@ -41,7 +41,7 @@ class GenPDF extends CI_Controller
 				$data_list = array (
 						'CONSTITUENCY' => $_POST ['constituency'] 
 				);
-				$query = $this->db->select ( 'district_id' )->get_where ( 'user_basic', $email_data );
+				$query = $this->db->select ( 'district_id' )->get_where ( 'user_basic', $data_list );
 				if ($query->num_rows () > 0)
 				{
 					$_POST ['DISTRICT_ID'] = $query->row ()->district_id;
