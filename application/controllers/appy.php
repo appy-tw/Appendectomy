@@ -191,6 +191,135 @@ class Appy extends CI_Controller
 		
 		$pdf->Output ();
 	}
+	
+	public function  input_proposal_form()
+	{
+
+//  		require_once "inc/sql.php";
+//  		connect_valid();
+		$this->load->database ();
+		ECHO "<CENTER><FORM NAME=DATAINPUT ACTION=proposalframe.php METHOD=POST>
+		<TABLE BORDER=0 STYLE='FONT-SIZE:16'>
+		<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫提議表單</TD></TR>
+		<TR><TD><INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
+			<TABLE BORDER=0 WIDTH=100%>
+			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>電子信箱</TD><TD><INPUT TYPE=TEXT NAME=EMAIL STYLE='WIDTH:300;FONT-SIZE:16'></TD>
+				<TD STYLE='WIDTH:100;TEXT-ALIGN:CENTER;BORDER:2px solid #666666'>
+				<SPAN STYLE='CURSOR:POINTER;' ONCLICK=ADDFORM()>增加份數</SPAN>
+				</TD>
+				<TD ALIGN=CENTER>
+					<SPAN STYLE='CURSOR:POINTER;COLOR:BLACK'><IMG SRC='info.png' STYLE='WIDTH:20' ALT='可製作數份罷免相同立委的提議書' TITLE='可製作數份罷免相同立委的提議書'></SPAN>
+				</TD>
+			</TR>
+			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>罷免對象</TD><TD COLSPAN=3>";
+	
+			//揣（ㄘㄨㄝ）使用者資料
+		
+		$query = $this->db->get( 'district_data');
+		if ($query->num_rows () > 0)
+		{
+			// 有資料
+			$row = $query->row ();
+			$USER_ID = $row->district_id;
+		}
+		
+		$RESULT=$this->db->get('district_data');
+		$NO_OF_DATA=$RESULT->num_rows();
+
+		if ($query->num_rows () > 0)
+		{
+			ECHO "<SELECT NAME=DISTRICT_ID STYLE='WIDTH:300;HEIGHT:30;FONT-SIZE:16'>";
+			FOR($SEED=0;$SEED<$NO_OF_DATA;$SEED++)
+			{				
+				$DATA=$query->result($RESULT);
+				ECHO "<OPTION VALUE='".$DATA[district_id]."'>".$DATA[district_name]."．".$DATA[district_legislator]."．".$DATA[party_name].")</OPTION>";
+			}
+			ECHO "</SELECT>";
+		}
+		ECHO "</TD></TR>
+		<TR><TD COLSPAN=4>
+		<DIV ID=INPUTFORM>
+			<DIV>
+			<TABLE STYLE='BACKGROUND-COLOR:#DDDDDD'>
+			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>1</TD>
+				<TD>姓　　　名</TD><TD><INPUT TYPE=TEXT NAME=Name_0 STYLE='WIDTH:100;FONT-SIZE:16'></TD>
+				<TD>身分證字號</TD><TD><INPUT TYPE=TEXT NAME=IDNo_0 STYLE='WIDTH:150;FONT-SIZE:16'></TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='請輸入半形英文數字' TITLE='請輸入半形英文數字'></TD></TR>
+			<TR><TD></TD>
+				<TD>性　　　別</TD><TD><INPUT TYPE=RADIO NAME=Sex_0 VALUE='M' CHECKED>男&nbsp;<INPUT TYPE=RADIO NAME=Sex_0 VALUE='F'>女</TD>
+				<TD>出生年月日</TD><TD>";
+							$this->RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);
+							$this->RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1);
+							$this->RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);
+							ECHO "</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能提議罷免'></TD></TR>
+			<TR><TD></TD>
+				<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_0 STYLE='WIDTH:100;FONT-SIZE:16'>（請勿超過４個字）</TD></TR>
+			<TR><TD></TD>
+				<TD>地　　　址</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=RegAdd_0 STYLE='WIDTH:400;FONT-SIZE:16'></TD></TR>
+			<TR><TD></TD><TD></TD><TD COLSPAN=3><IMG SRC='info.png' STYLE='WIDTH:20'><SPAN STYLE='HEIGHT:20;VERTICAL-ALIGN:TOP'>&nbsp;請完全依身分證背後地址欄內容填寫，鄰里勿漏</SPAN></TD></TR>
+			</TABLE>
+			</DIV>
+		</DIV>
+		<HR>
+		</TD></TR>
+		</TABLE></TD></TR>
+		<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
+		</TABLE>
+		</FORM>";
+	
+		$this->load->view ( 'input_proposal_form' );
+	}
+	
+	public function proposalframe()
+	{
+		ECHO "<FORM NAME=TRANSFER ACTION='../index.php/appy/proposal' METHOD=POST TARGET=pdfframe>";
+		while($element = current($_POST)) {
+			echo "<INPUT TYPE=HIDDEN NAME=".key($_POST)." VALUE='".$_POST[key($_POST)]."'>";
+			next($_POST);
+		}
+		ECHO "</FORM>";
+		$this->load->view ( 'proposalframe' );
+	}
+	
+	protected function RETURN_Y($NAME,$STYLE,$DEFAULT)
+	{
+		ECHO "<SELECT NAME='".$NAME."' STYLE='".$STYLE."'>";
+		$START=date('Y');
+		FOR($SEED=22;$SEED<120;$SEED++)
+		{
+			ECHO "<OPTION VALUE='".($START-$SEED)."' ";
+			IF($SEED==$DEFAULT)
+			ECHO "SELECTED";
+			ECHO ">".($START-$SEED)." 年</OPTION>";
+		}
+		ECHO "</SELECT>";
+	}	
+	
+	protected function RETURN_M($NAME,$STYLE,$DEFAULT)
+	{
+		ECHO "<SELECT NAME='".$NAME."' STYLE='".$STYLE."'>";
+		FOR($SEED=1;$SEED<13;$SEED++)
+		{
+			ECHO "<OPTION VALUE='".$SEED."' ";
+			IF($SEED==$DEFAULT)
+			ECHO "SELECTED";
+			ECHO ">".$SEED." 月</OPTION>";
+		}
+		ECHO "</SELECT>";
+	}	
+	
+	protected FUNCTION RETURN_D($NAME,$STYLE,$DEFAULT)
+	{
+		ECHO "<SELECT NAME='".$NAME."' STYLE='".$STYLE."'>";
+		FOR($SEED=1;$SEED<32;$SEED++)
+		{
+		ECHO "<OPTION VALUE='".$SEED."' ";
+				IF($SEED==$DEFAULT)
+				ECHO "SELECTED";
+				ECHO ">".$SEED." 日</OPTION>";
+		}
+		ECHO "</SELECT>";
+	}
+	
 	protected function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING)
 	{
 		$pdf->SetLineWidth ( 0.1 );
@@ -200,6 +329,7 @@ class Appy extends CI_Controller
 			$pdf->Line ( $STARTX + $SEED, $STARTY, ($STARTX + $DASHWIDTH) + $SEED, $ENDY );
 		}
 	}
+	
 	protected function returnValidation()
 	{
 		// $BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

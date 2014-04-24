@@ -8,12 +8,12 @@ sudo apt-get install php5-mysql
 	cd database
 	cat *.sql | mysql -u root -p
 
-database sign in information setting
+資料庫登入設定
 	modify appendectomy/config/database.php
 	
 	$db['default']['username'] = 'your database username';
 	$db['default']['password'] = 'your pass word';
-	$db['default']['database'] = 'your database name'; //default is appendectomy
+	$db['default']['database'] = 'your database name'; //預設是 appendectomy
 
 看資料庫
 	http://www.phpmyadmin.net/home_page/downloads.php
@@ -26,3 +26,16 @@ codeigniter
 	說明文件：
 		http://www.codeigniter.org.tw/user_guide/database/active_record.html
 		http://www.codeigniter.org.tw/user_guide/database/results.html
+		
+Eclipse安裝 PHP, web 插件
+	help -> Install new software
+	work with 選擇
+		Kepler - http://download.eclipse.org/releases/kepler
+	項目
+		Web,XML,JAVA EE and OSGi Enterprise Development中的
+	安裝
+		Eclipse XML Editors and tools
+		PHP Development Tools (PDT)
+			
+Appendectomy-Php/img 資料夾權限修改
+	chmod 1777 img		
