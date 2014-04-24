@@ -176,8 +176,8 @@ if ( ! function_exists('generatePDF'))
 		$pdf->Cell ( 4, 12, $IDNo [9], 1, 0, 'C', true );
 		$pdf->Cell ( 20, 8, '', 0, 1 );
 		
-		$this->dashLine ( $pdf, 5, $first_line, 200, $first_line, 2, 2 );
-		$this->dashLine ( $pdf, 5, $second_line, 200, $second_line, 2, 2 );
+		dashLine ( $pdf, 5, $first_line, 200, $first_line, 2, 2 );
+		dashLine ( $pdf, 5, $second_line, 200, $second_line, 2, 2 );
 		
 		$ADDLEN = MB_STRLEN ( $REGADD );
 		$WORDPERLINE = 12;
