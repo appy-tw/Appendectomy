@@ -1,4 +1,5 @@
 <?php 
+
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 if ( ! function_exists('dashLine'))
@@ -198,4 +199,4 @@ if ( ! function_exists('generatePDF'))
 		$pdf->SetFont ( $CHI_FONT, '', 10 );
 		$pdf->Cell ( 24, 7, "請以膠帶黏貼", 1, 0, 'C', true );
 	}
-}
+}	

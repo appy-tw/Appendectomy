@@ -1,4 +1,76 @@
 
+<CENTER>
+	<FORM NAME=DATAINPUT ACTION=proposalframe METHOD=POST>
+		<TABLE BORDER=0 STYLE='FONT-SIZE:16'>
+			<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫提議表單</TD></TR>
+			<TR><TD>
+				<INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
+				<TABLE BORDER=0 WIDTH=100%>
+					<TR>
+						<TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>電子信箱</TD>
+						<TD><INPUT TYPE=TEXT NAME=EMAIL STYLE='WIDTH:300;FONT-SIZE:16'></TD>
+						<TD STYLE='WIDTH:100;TEXT-ALIGN:CENTER;BORDER:2px solid #666666'>
+							<SPAN STYLE='CURSOR:POINTER;' ONCLICK=ADDFORM()>增加份數</SPAN>
+						</TD>
+						<TD ALIGN=CENTER>
+							<SPAN STYLE='CURSOR:POINTER;COLOR:BLACK'><IMG SRC='info.png' STYLE='WIDTH:20' ALT='可製作數份罷免相同立委的提議書' TITLE='可製作數份罷免相同立委的提議書'></SPAN>
+						</TD>
+					</TR>
+					<TR>
+						<TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>罷免對象</TD><TD COLSPAN=3>
+						<SELECT NAME=DISTRICT_ID STYLE='WIDTH:300;HEIGHT:30;FONT-SIZE:16'>";
+						<?php foreach($RESULT as $DATA): ?>
+							 <OPTION VALUE= <?php echo $DATA['district_id'];?>> 
+							 	<?php echo $DATA['district_name']?> 
+							 	<?php echo $DATA['district_legislator']?> 
+							 	<?php echo $DATA['party_name']?>
+							 </OPTION>
+						<?php endforeach; ?>
+						</SELECT></TD>
+					</TR>
+					<TR>
+						<TD COLSPAN=4>
+							<DIV ID=INPUTFORM>
+								<DIV>
+									<TABLE STYLE='BACKGROUND-COLOR:#DDDDDD'>
+										<TR>
+											<TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>1</TD>
+											<TD>姓　　　名</TD><TD><INPUT TYPE=TEXT NAME=Name_0 STYLE='WIDTH:100;FONT-SIZE:16'></TD>
+											<TD>身分證字號</TD><TD><INPUT TYPE=TEXT NAME=IDNo_0 STYLE='WIDTH:150;FONT-SIZE:16'></TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='請輸入半形英文數字' TITLE='請輸入半形英文數字'></TD>
+										</TR>
+										<TR><TD></TD>
+											<TD>性　　　別</TD><TD><INPUT TYPE=RADIO NAME=Sex_0 VALUE='M' CHECKED>男&nbsp;<INPUT TYPE=RADIO NAME=Sex_0 VALUE='F'>女</TD>
+											<TD>出生年月日</TD><TD>;
+												<?php echo RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);?>
+												<?php echo RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1)?>
+												<?php echo RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);?>
+											</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能提議罷免'></TD>
+										</TR>
+										<TR>
+											<TD></TD>
+											<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_0 STYLE='WIDTH:100;FONT-SIZE:16'>（請勿超過４個字）</TD>
+										</TR>
+										<TR>
+											<TD></TD>
+											<TD>地　　　址</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=RegAdd_0 STYLE='WIDTH:400;FONT-SIZE:16'></TD>
+										</TR>
+										<TR>
+											<TD></TD>
+											<TD></TD>
+											<TD COLSPAN=3><IMG SRC='info.png' STYLE='WIDTH:20'><SPAN STYLE='HEIGHT:20;VERTICAL-ALIGN:TOP'>&nbsp;請完全依身分證背後地址欄內容填寫，鄰里勿漏</SPAN></TD>
+										</TR>
+									</TABLE>
+								</DIV>
+							</DIV>
+							<HR>
+						</TD>
+					</TR>
+				</TABLE>
+			</TD></TR>
+			<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
+		</TABLE>
+	</FORM>
+
 <SCRIPT>
 //動態增加表單
 function ADDFORM()

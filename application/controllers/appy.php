@@ -37,7 +37,7 @@ class Appy extends CI_Controller
 	public function proposal()
 	{
 		$this->load->database ();
-
+		$this->load->helper('proposal');
 		IF ($_POST ['Size'] > 0)
 		{
 			// 依 constituency 取得立委 DISTRICT_ID
@@ -78,7 +78,7 @@ class Appy extends CI_Controller
 			{
 				
 				// 更新產製資料
-				$VCODE = $this->returnValidation ();
+				$VCODE = returnValidation ();
 				$data_list = array (
 						'USER_ID' => $USER_ID,
 						'DISTRICT_ID' => $_POST ['DISTRICT_ID'],
@@ -186,7 +186,7 @@ class Appy extends CI_Controller
 				$QRImgPath = $_POST ["QRImgPath_" . $SEED];
 			$SNo = $_POST ["SNo_" . $SEED];
 			
-			$this->generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo );
+			generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo );
 		}
 		
 		$pdf->Output ();
@@ -194,84 +194,11 @@ class Appy extends CI_Controller
 	
 	public function  input_proposal_form()
 	{
-		$this->load->database ();	
-		ECHO "<CENTER><FORM NAME=DATAINPUT ACTION=proposalframe METHOD=POST>
-		<TABLE BORDER=0 STYLE='FONT-SIZE:16'>
-		<TR><TD STYLE='TEXT-ALIGN:CENTER;BACKGROUND-COLOR:#DDDDDD'>填寫提議表單</TD></TR>
-		<TR><TD><INPUT TYPE=HIDDEN ID=Size NAME=Size VALUE=1>
-			<TABLE BORDER=0 WIDTH=100%>
-			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>電子信箱</TD><TD><INPUT TYPE=TEXT NAME=EMAIL STYLE='WIDTH:300;FONT-SIZE:16'></TD>
-				<TD STYLE='WIDTH:100;TEXT-ALIGN:CENTER;BORDER:2px solid #666666'>
-				<SPAN STYLE='CURSOR:POINTER;' ONCLICK=ADDFORM()>增加份數</SPAN>
-				</TD>
-				<TD ALIGN=CENTER>
-					<SPAN STYLE='CURSOR:POINTER;COLOR:BLACK'><IMG SRC='info.png' STYLE='WIDTH:20' ALT='可製作數份罷免相同立委的提議書' TITLE='可製作數份罷免相同立委的提議書'></SPAN>
-				</TD>
-			</TR>
-			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>罷免對象</TD><TD COLSPAN=3>";
-	
-			//揣（ㄘㄨㄝ）使用者資料
-		
-		$query = $this->db->get( 'district_data');
-		if ($query->num_rows () > 0)
-		{
-			// 有資料
-			$row = $query->row ();
-			$USER_ID = $row->district_id;
-		}
-		
-		$RESULT=$this->db->get('district_data');
-		$NO_OF_DATA=$RESULT->num_rows();
-
-		if ($NO_OF_DATA > 0)
-		{
-			ECHO "<SELECT NAME=DISTRICT_ID STYLE='WIDTH:300;HEIGHT:30;FONT-SIZE:16'>";
-			FOR($SEED=0;$SEED<$NO_OF_DATA;$SEED++)
-			{				
-				$DATA=$query->result($RESULT);
-				ECHO "<OPTION VALUE='".$DATA[district_id]."'>".$DATA[district_name]."．".$DATA[district_legislator]."．".$DATA[party_name].")</OPTION>";
-			}
-			ECHO "</SELECT>";
-		}
-
-
-		
-// 		$data['Y'] = $this->RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);
-// 		$data['M'] = $this->RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1);
-// 		$data['D'] = $this->RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);
-// 		$data['DATA'] = $DATA;
-		ECHO "</TD></TR>
-		<TR><TD COLSPAN=4>
-		<DIV ID=INPUTFORM>
-			<DIV>
-			<TABLE STYLE='BACKGROUND-COLOR:#DDDDDD'>
-			<TR><TD STYLE='WIDTH:80;TEXT-ALIGN:CENTER'>1</TD>
-				<TD>姓　　　名</TD><TD><INPUT TYPE=TEXT NAME=Name_0 STYLE='WIDTH:100;FONT-SIZE:16'></TD>
-				<TD>身分證字號</TD><TD><INPUT TYPE=TEXT NAME=IDNo_0 STYLE='WIDTH:150;FONT-SIZE:16'></TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='請輸入半形英文數字' TITLE='請輸入半形英文數字'></TD></TR>
-			<TR><TD></TD>
-				<TD>性　　　別</TD><TD><INPUT TYPE=RADIO NAME=Sex_0 VALUE='M' CHECKED>男&nbsp;<INPUT TYPE=RADIO NAME=Sex_0 VALUE='F'>女</TD>
-				<TD>出生年月日</TD><TD>";
-							$this->load->helper('input_proposal_form');
-							echo RETURN_Y("Birthday_y_0","WIDTH:80;FONT-SIZE:16",1984);
-							echo RETURN_M("Birthday_m_0","WIDTH:60;FONT-SIZE:16",1);
-							echo RETURN_D("Birthday_d_0","WIDTH:60;FONT-SIZE:16",1);
-							ECHO "</TD><TD><IMG SRC='info.png' STYLE='WIDTH:20;CURSOR:POINTER' ALT='必須在 1992 年 1 月 13 日（含）以前才能提議或連署罷免' TITLE='必須在 1992 年 1 月 13 日（含）以前出生才能提議罷免'></TD></TR>
-			<TR><TD></TD>
-				<TD>職　　　業</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=Occupation_0 STYLE='WIDTH:100;FONT-SIZE:16'>（請勿超過４個字）</TD></TR>
-			<TR><TD></TD>
-				<TD>地　　　址</TD><TD COLSPAN=3><INPUT TYPE=TEXT NAME=RegAdd_0 STYLE='WIDTH:400;FONT-SIZE:16'></TD></TR>
-			<TR><TD></TD><TD></TD><TD COLSPAN=3><IMG SRC='info.png' STYLE='WIDTH:20'><SPAN STYLE='HEIGHT:20;VERTICAL-ALIGN:TOP'>&nbsp;請完全依身分證背後地址欄內容填寫，鄰里勿漏</SPAN></TD></TR>
-			</TABLE>
-			</DIV>
-		</DIV>
-		<HR>
-		</TD></TR>
-		</TABLE></TD></TR>
-		<TR><TD ALIGN=CENTER><INPUT TYPE=BUTTON ONCLICK=checkInput() VALUE='製作提議書' STYLE='HEIGHT:30;FONT-SIZE:16'></TD></TR>
-		</TABLE>
-		</FORM>";
-
-		$this->load->view ( 'input_proposal_form');
+		$this->load->database ();
+		$this->load->helper('input_proposal_form');		
+		$RESULT = $this->db->get('district_data');
+		$data['RESULT'] =  $RESULT->result_array();
+		$this->load->view ( 'input_proposal_form', $data);
 	}
 	
 	public function proposalframe()
@@ -284,7 +211,6 @@ class Appy extends CI_Controller
 		ECHO "</FORM>";
 		$this->load->view ( 'proposalframe' );
 	}
-
 }
 
 /* End of file welcome.php */
