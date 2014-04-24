@@ -32,20 +32,17 @@ class Appy extends CI_Controller
 		// $data=array('a'=>$row->email);
 		// }
 		// $this->load->view('welcome_message',$data);
-		$this->load->view ( 'welcome_message' );
+		// $this->load->view ( 'welcome_message' );
+		$this->input_proposal_form ();
 	}
-
-	
-	public function  input_proposal_form()
+	public function input_proposal_form()
 	{
 		$this->load->database ();
-		$this->load->helper('input_proposal_form');		
-		$RESULT = $this->db->get('district_data');
-		$data['RESULT'] =  $RESULT->result_array();
-		$this->load->view ( 'input_proposal_form', $data);
+		$this->load->helper ( 'input_proposal_form' );
+		$RESULT = $this->db->get ( 'district_data' );
+		$data ['RESULT'] = $RESULT->result_array ();
+		$this->load->view ( 'input_proposal_form', $data );
 	}
-	
-
 }
 
 /* End of file welcome.php */
