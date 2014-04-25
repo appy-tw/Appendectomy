@@ -2,7 +2,37 @@
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 
-if (! function_exists ( 'dashLine' ))
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+if ( ! function_exists('PostFilter'))
+{
+	function PostFilter()
+	{
+		if(($myData['Size'] = $this->input->post('Size'))==false)return false;
+		else if($myData['Size'] > 0)
+		{
+			if(($myData['constituency'] = $this->input->post('constituency'))==false)return false;
+			if($myData ['constituency'] == "")return false;
+			if(($myData['EMAIL'] = $this->input->post('EMAIL'))==false)return false;
+			for($SEED = 0; $SEED < $SIZE; $SEED ++) 
+			{
+				if(($myData["Name_" . $SEED] = $this->input->post("Name_" . $SEED))==false)return false;
+				if(($myData["IDNo_" . $SEED] = $this->input->post("IDNo_" . $SEED))==false)return false;
+				if(($myData["Sex_" . $SEED] = $this->input->post("Sex_" . $SEED))==false)return false;
+				if(($myData["Birthday_y_" . $SEED] = $this->input->post("Birthday_y_" . $SEED))==false)return false;
+				if(($myData["Birthday_m_" . $SEED] = $this->input->post("Birthday_m_" . $SEED))==false)return false;
+				if(($myData["Birthday_d_" . $SEED] = $this->input->post("Birthday_d_" . $SEED))==false)return false;
+				if(($myData["Occupation_" . $SEED] = $this->input->post("Occupation_" . $SEED))==false)return false;
+				if(($myData["RegAdd_" . $SEED] = $this->input->post("RegAdd_" . $SEED))==false)return false;
+			}		
+			return $myData;
+		}
+		else return false;
+	}
+}
+
+
+if ( ! function_exists('dashLine'))
 {
 	function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING)
 	{
