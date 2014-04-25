@@ -31,7 +31,7 @@ class GenPDF extends CI_Controller {
 		$dataValid = true;
 		if (($data ['Size'] = $this->input->post ( 'Size', true )) == false)
 			$dataValid = false;
-		if ($dataValid == true && $data ['Size'] > 0) {
+		if ($dataValid == true && $data ['Size'] > 0 &&  $data ['Size'] != "") {
 			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) == false)
 				$dataValid = false;
 			if ($data ['constituency'] == "")
@@ -184,13 +184,8 @@ class GenPDF extends CI_Controller {
 				$data ['SNo_1'] = "987654321";
 			}
 			
-			if ($data ['Size'] == "") {
-				$SIZE = 2;
-			} else {
-				$SIZE = $data ['Size'];
-			}
 			
-			for($SEED = 0; $SEED < $SIZE; $SEED ++) {
+			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				$NAME = $data ["Name_" . $SEED];
 				$IDNo = $data ["IDNo_" . $SEED];
 				$SEX = $data ["Sex_" . $SEED];
