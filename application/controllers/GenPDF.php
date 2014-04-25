@@ -36,8 +36,6 @@ class GenPDF extends CI_Controller {
 				$dataValid = false;
 			if ($data ['constituency'] == "")
 				$dataValid = false;
-			if (($data ['DISTRICT_ID'] = $this->input->post ( 'DISTRICT_ID' )) == false)
-				$dataValid = false;
 			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' )) == false)
 				$dataValid = false;
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
