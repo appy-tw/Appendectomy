@@ -1,0 +1,283 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:text="@string/process_result"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="12pt" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutSerialNo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="19dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewSerialNo"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/serial_number"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueSerialNo"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/scanned_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDocType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutSerialNo"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewDocType"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/doctype"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueDocType"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/identified_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutDistrict"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutDocType"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewDistrict"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/district"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueDistrict"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/identified_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>    
+    
+    <LinearLayout
+        android:id="@+id/linearLayoutDocOriStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutDistrict"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewDocOriStatus"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/docoristatus"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueDocOriStatus"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/returned_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+        
+    <LinearLayout
+        android:id="@+id/linearLayoutDocStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutDocOriStatus"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewDocStatus"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/doccurrentstatus"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueDocStatus"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/returned_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearStatusUpdatetime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayoutDocStatus"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textStatusUpdatetime"
+            android:layout_width="10dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/statusupdatetime"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueStatusUpdatetime"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/returned_data"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/linearLayoutIDL5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearStatusUpdatetime"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewIDL5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:text="@string/idl5"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/valueIDL5"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3pt"
+            android:text="@string/no_idl5"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    
+    
+    <EditText
+        android:id="@+id/editTextIDL5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/linearLayoutIDL5"
+        android:layout_below="@+id/linearLayoutIDL5"
+        android:ems="5"
+        android:maxLength="5"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:id="@+id/linearNextStep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextIDL5"
+        android:layout_alignLeft="@+id/linearLayoutButton"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textNextStep"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.60"
+            android:gravity="center"
+            android:text="@string/nextstep"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ff0000" />
+
+        <TextView
+            android:id="@+id/valueNextStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3pt"
+            android:text="@string/nextdoc"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/editTextIDL5"
+        android:layout_below="@+id/linearNextStep"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonContinue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/continues"
+            android:textSize="12pt" />
+
+        <Button
+            android:id="@+id/buttonExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/exit"
+            android:textSize="12pt" />
+    </LinearLayout>
+    
+</RelativeLayout>
