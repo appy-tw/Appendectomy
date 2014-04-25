@@ -53,6 +53,13 @@ class Doctor extends CI_Controller
 		}
 		echo 'meu';
 	}
+	//外口框架
+	function _output($content)
+	{
+		// Load the base template with output content available as $content
+		$data ['content'] = &$content;
+		echo $this->load->view ( 'doctor/base', $data, true );
+	}
 }
 
 /* End of file welcome.php */
