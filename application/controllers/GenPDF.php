@@ -156,14 +156,7 @@ class GenPDF extends CI_Controller {
 				$DATA ['zipcode'] = "郵遞區號";
 				$DATA ['mailing_address'] = "提議書郵寄地址";
 				$DATA ['receiver'] = "提議書收件人";
-			}
-			$NAME = "提議人姓名";
-			$IDNo = "A135792468";
-			$SEX = "M";
-			$BIRTHDAY = "YYYY.MM.DD";
-			$OCCUPATION = "職業";
-			$REGADD = "提案人戶籍地址";
-			
+			}			
 				// DUMMY DATA
 			if ($data ['Name_0'] == "") {
 				$data ['Name_0'] = "馬娘娘";
@@ -174,16 +167,22 @@ class GenPDF extends CI_Controller {
 				$data ['RegAdd_0'] = "魯蛇大本營";
 				$data ['SNo_0'] = "123456789";
 			}
-			if (! isset ( $data ['Name_1'] )) {
-				$data ['Name_1'] = "金小刀";
-				$data ['IDNo_1'] = "A135792468";
-				$data ['Sex_1'] = "M";
-				$data ['Birthday_1'] = "YYYY.MM.DD";
-				$data ['Occupation_1'] = "孬孬";
-				$data ['RegAdd_1'] = "魯蛇大本營";
-				$data ['SNo_1'] = "987654321";
-			}
-			
+// 			if (! isset ( $data ['Name_1'] )) {
+// 				$data ['Name_1'] = "金小刀";
+// 				$data ['IDNo_1'] = "A135792468";
+// 				$data ['Sex_1'] = "M";
+// 				$data ['Birthday_1'] = "YYYY.MM.DD";
+// 				$data ['Occupation_1'] = "孬孬";
+// 				$data ['RegAdd_1'] = "魯蛇大本營";
+// 				$data ['SNo_1'] = "987654321";
+// 			}
+
+// 			$NAME = "提議人姓名";
+// 			$IDNo = "A135792468";
+// 			$SEX = "M";
+// 			$BIRTHDAY = "YYYY.MM.DD";
+// 			$OCCUPATION = "職業";
+// 			$REGADD = "提案人戶籍地址";			
 			
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				$NAME = $data ["Name_" . $SEED];
