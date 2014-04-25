@@ -22,17 +22,12 @@ class Doctor extends CI_Controller
 				$nickname,
 				$password 
 		) );
-		// $data_list = array (
-		// 'nickname' => $nickname,
-		// 'password' => $password
-		// );
-		// $query = $this->db->get_where ( 'staff_info', $data_list );
 		echo $query->num_rows ();
 		if ($query->num_rows () == 1)
 		{
 			$this->load->library ( 'session' );
 			$this->session->set_userdata ( 'nickname', $nickname );
-			redirect ( 'doctor/menu' );
+			redirect ( 'doctor/main' );
 		}
 		else
 		{
@@ -44,16 +39,40 @@ class Doctor extends CI_Controller
 		$this->load->library ( 'session' );
 		return $this->session->userdata ( 'nickname' );
 	}
-	public function menu()
+	public function logout()
+	{
+		$this->load->library ( 'session' );
+		$this->session->sess_destroy ();
+		$this->load->helper ( 'url' );
+		redirect ( 'doctor/login' );
+	}
+	public function main()
 	{
 		if (! $this->isLogin ())
 		{
 			$this->load->helper ( 'url' );
 			redirect ( 'doctor/login' );
+			return;
 		}
-		echo 'meu';
+		$this->load->helper ( 'url' );
+		$data = array (
+				'link' => array (
+						array ('doctor/process', '文書處理' ),
+						array ( 'doctor/logout', '登出' ) 
+				) 
+		);
+		$this->load->view ( 'doctor/menu', $data );
 	}
-	//外口框架
+	public function process()
+	{
+		if (! $this->isLogin ())
+		{
+			$this->load->helper ( 'url' );
+			redirect ( 'doctor/login' );
+			return;
+		}
+	}
+	// 外口框架
 	function _output($content)
 	{
 		// Load the base template with output content available as $content
