@@ -1,8 +1,8 @@
-<?php 
+<?php
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
 
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-if ( ! function_exists('dashLine'))
+if (! function_exists ( 'dashLine' ))
 {
 	function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING)
 	{
@@ -15,7 +15,7 @@ if ( ! function_exists('dashLine'))
 	}
 }
 
-if ( ! function_exists('returnValidation'))
+if (! function_exists ( 'returnValidation' ))
 {
 	function returnValidation()
 	{
@@ -30,7 +30,7 @@ if ( ! function_exists('returnValidation'))
 	}
 }
 
-if ( ! function_exists('generatePDF'))
+if (! function_exists ( 'generatePDF' ))
 {
 	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo)
 	{
@@ -48,7 +48,7 @@ if ( ! function_exists('generatePDF'))
 		// 說明資訊列===================================
 		IF (isset ( $DATA ['prodescimgpath'] ))
 		{
-			$pdf->Image ( $DATA ['prodescimgpath'], 0, 0, 210 );
+			$pdf->Image ( 'static/image/' . $DATA ['prodescimgpath'], 0, 0, 210 );
 		}
 		else
 		{
@@ -69,7 +69,7 @@ if ( ! function_exists('generatePDF'))
 		
 		if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
 		{
-			$pdf->Image ( "adv_mail.jpg", 0, $add_offset, 210 );
+			$pdf->Image ( "static/image/adv_mail.jpg", 0, $add_offset, 210 );
 			$pdf->SetXY ( 141.1, 14.7 + $add_offset );
 			$pdf->SetFont ( $CHI_FONT, '', 11 );
 			$pdf->Cell ( 41.5, 7.4, $DATA ['postoffice'] . "郵局登記證", 0, 0, 'C', false );
