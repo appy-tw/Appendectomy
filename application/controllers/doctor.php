@@ -27,7 +27,7 @@ class Doctor extends CI_Controller
 		{
 			$this->load->library ( 'session' );
 			$this->session->set_userdata ( 'nickname', $nickname );
-			redirect ( 'doctor/main' );
+			redirect ( 'surgery/main' );
 		}
 		else
 		{
@@ -45,32 +45,6 @@ class Doctor extends CI_Controller
 		$this->session->sess_destroy ();
 		$this->load->helper ( 'url' );
 		redirect ( 'doctor/login' );
-	}
-	public function main()
-	{
-		if (! $this->isLogin ())
-		{
-			$this->load->helper ( 'url' );
-			redirect ( 'doctor/login' );
-			return;
-		}
-		$this->load->helper ( 'url' );
-		$data = array (
-				'link' => array (
-						array ('doctor/process', '文書處理' ),
-						array ( 'doctor/logout', '登出' ) 
-				) 
-		);
-		$this->load->view ( 'doctor/menu', $data );
-	}
-	public function process()
-	{
-		if (! $this->isLogin ())
-		{
-			$this->load->helper ( 'url' );
-			redirect ( 'doctor/login' );
-			return;
-		}
 	}
 	// 外口框架
 	function _output($content)
