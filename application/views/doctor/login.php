@@ -1,0 +1,35 @@
+<CENTER>
+	<TABLE BORDER=0>
+		<TR>
+			<TD COLSPAN=3 STYLE='TEXT-ALIGN: CENTER; BACKGROUND-COLOR: #BBBBBB'>罷免工作人員管理及罷免文書處理系統</TD>
+		</TR>
+		<TR STYLE='VERTICAL-ALIGN: TOP'>
+			<TD>
+				<FORM ACTION='<?php echo $post_url; ?>' METHOD=POST>
+					<TABLE BORDER=0 STYLE='BACKGROUND-COLOR: #EEEEEE'>
+						<TR>
+							<TD COLSPAN=2
+								STYLE='TEXT-ALIGN: CENTER; BACKGROUND-COLOR: #CCCCCC'>罷免工作人員登入</TD>
+						</TR>
+						<TR>
+							<TD
+								STYLE='WIDTH: 150; TEXT-ALIGN: CENTER; BACKGROUND-COLOR: #DDDDDD'>使用者名稱</TD>
+							<TD><INPUT TYPE=TEXT NAME=NICKNAME
+								STYLE='WIDTH: 150; FONT-SIZE: 16'></TD>
+						</TR>
+						<TR>
+							<TD
+								STYLE='WIDTH: 150; TEXT-ALIGN: CENTER; BACKGROUND-COLOR: #DDDDDD'>密
+								碼</TD>
+							<TD><INPUT TYPE=PASSWORD NAME=PASSWORD
+								STYLE='WIDTH: 150; FONT-SIZE: 16'></TD>
+						</TR>
+						<TR>
+							<TD COLSPAN=2 ALIGN=CENTER><INPUT TYPE=SUBMIT VALUE='登入'></TD>
+						</TR>
+					</TABLE>
+				</FORM>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
