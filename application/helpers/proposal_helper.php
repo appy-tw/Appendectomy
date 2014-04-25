@@ -4,34 +4,6 @@ if (! defined ( 'BASEPATH' ))
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-if ( ! function_exists('PostFilter'))
-{
-	function PostFilter()
-	{
-		if(($myData['Size'] = $this->input->post('Size'))==false)return false;
-		else if($myData['Size'] > 0)
-		{
-			if(($myData['constituency'] = $this->input->post('constituency'))==false)return false;
-			if($myData ['constituency'] == "")return false;
-			if(($myData['EMAIL'] = $this->input->post('EMAIL'))==false)return false;
-			for($SEED = 0; $SEED < $SIZE; $SEED ++) 
-			{
-				if(($myData["Name_" . $SEED] = $this->input->post("Name_" . $SEED))==false)return false;
-				if(($myData["IDNo_" . $SEED] = $this->input->post("IDNo_" . $SEED))==false)return false;
-				if(($myData["Sex_" . $SEED] = $this->input->post("Sex_" . $SEED))==false)return false;
-				if(($myData["Birthday_y_" . $SEED] = $this->input->post("Birthday_y_" . $SEED))==false)return false;
-				if(($myData["Birthday_m_" . $SEED] = $this->input->post("Birthday_m_" . $SEED))==false)return false;
-				if(($myData["Birthday_d_" . $SEED] = $this->input->post("Birthday_d_" . $SEED))==false)return false;
-				if(($myData["Occupation_" . $SEED] = $this->input->post("Occupation_" . $SEED))==false)return false;
-				if(($myData["RegAdd_" . $SEED] = $this->input->post("RegAdd_" . $SEED))==false)return false;
-			}		
-			return $myData;
-		}
-		else return false;
-	}
-}
-
-
 if ( ! function_exists('dashLine'))
 {
 	function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING)
@@ -97,15 +69,15 @@ if (! function_exists ( 'generatePDF' ))
 		$pdf->SetXY ( 175, 5 + $add_offset );
 		$pdf->Cell ( 20, 25, '郵票', 1, 1, 'C', false );
 		
-		if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
-		{
-			$pdf->Image ( "static/image/adv_mail.jpg", 0, $add_offset, 210 );
-			$pdf->SetXY ( 141.1, 14.7 + $add_offset );
-			$pdf->SetFont ( $CHI_FONT, '', 11 );
-			$pdf->Cell ( 41.5, 7.4, $DATA ['postoffice'] . "郵局登記證", 0, 0, 'C', false );
-			$pdf->SetXY ( 141.1, 22.1 + $add_offset );
-			$pdf->Cell ( 41.5, 7.4, $DATA ['adv_no'], 0, 0, 'C', false );
-		}
+// 		if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
+// 		{
+// 			$pdf->Image ( "static/image/adv_mail.jpg", 0, $add_offset, 210 );
+// 			$pdf->SetXY ( 141.1, 14.7 + $add_offset );
+// 			$pdf->SetFont ( $CHI_FONT, '', 11 );
+// 			$pdf->Cell ( 41.5, 7.4, $DATA ['postoffice'] . "郵局登記證", 0, 0, 'C', false );
+// 			$pdf->SetXY ( 141.1, 22.1 + $add_offset );
+// 			$pdf->Cell ( 41.5, 7.4, $DATA ['adv_no'], 0, 0, 'C', false );
+// 		}
 		
 		$pdf->SetFont ( $CHI_FONT, '', 20 );
 		$pdf->SetXY ( 60, 55 + $add_offset );
