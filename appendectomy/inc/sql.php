@@ -9,9 +9,9 @@
 function connect_to_db()
 {
 	$host = 'localhost';
-	$dbname = '';
-	$user = '';
-	$password = '';
+	$dbname = 'appendectomy';
+	$user = 'root';
+	$password = 'cleanshine7811';
 	if ($link = mysql_pconnect ( $host, $user, $password ))
 	{
 		mysql_query ( "SET NAMES 'utf8'" );
