@@ -2,74 +2,74 @@
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 class GenPDF extends CI_Controller {
-	public function index() {
-		// $this->load->database();
-		// $this->db->get('user_basic');
-		// $query = $this->db->limit(2)->get('user_basic');
-		// $query = $this->db->limit(2)->get('user_basic');
+// 	public function index() {
+// 		// $this->load->database();
+// 		// $this->db->get('user_basic');
+// 		// $query = $this->db->limit(2)->get('user_basic');
+// 		// $query = $this->db->limit(2)->get('user_basic');
 		
-		// foreach ($query->result() as $row)
-		// {
-		// $data=array('a'=>$row->email);
-		// }
-		// $this->load->view('welcome_message',$data);
-		$this->load->view ( 'welcome_message' );
-	}
-	public function proposalframe() {
-		ECHO "<FORM NAME=TRANSFER ACTION='proposal' METHOD=POST TARGET=pdfframe>";
-		while ( $element = current ( $_POST ) ) {
-			echo "<INPUT TYPE=HIDDEN NAME=" . key ( $_POST ) . " VALUE='" . $_POST [key ( $_POST )] . "'>";
-			next ( $_POST );
-		}
-		ECHO "</FORM>";
-		$this->load->view ( 'proposalframe' );
-	}
+// 		// foreach ($query->result() as $row)
+// 		// {
+// 		// $data=array('a'=>$row->email);
+// 		// }
+// 		// $this->load->view('welcome_message',$data);
+// 		$this->load->view ( 'welcome_message' );
+// 	}
+	// public function proposalframe() {
+	// ECHO "<FORM NAME=TRANSFER ACTION='proposal' METHOD=POST TARGET=pdfframe>";
+	// while ( $element = current ( $_POST ) ) {
+	// echo "<INPUT TYPE=HIDDEN NAME=" . key ( $_POST ) . " VALUE='" . $_POST [key ( $_POST )] . "'>";
+	// next ( $_POST );
+	// }
+	// ECHO "</FORM>";
+	// $this->load->view ( 'proposalframe' );
+	// }
 	public function proposal() {
 		$this->load->database ();
 		$this->load->helper ( 'proposal' );
 		
 		$dataValid = true;
-		if (($data ['Size'] = $this->input->post ( 'Size',true )) == false)
+		if (($data ['Size'] = $this->input->post ( 'Size', true )) == false)
 			$dataValid = false;
 		if ($dataValid == true && $data ['Size'] > 0) {
-			if (($data ['constituency'] = $this->input->post ( 'constituency' ,true)) == false)
+			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) == false)
 				$dataValid = false;
 			if ($data ['constituency'] == "")
 				$dataValid = false;
-			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL',true )) == false)
+			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' , true)) == false)
 				$dataValid = false;
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				if ($dataValid == false)
 					break;
-				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED ,true)) == false) {
+				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED ,true)) == false) {
+				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED ,true)) == false) {
+				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED ,true)) == false) {
+				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED ,true)) == false) {
+				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED ,true)) == false) {
+				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED ,true)) == false) {
+				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED ,true)) == false) {
+				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED , true)) == false) {
 					$dataValid = false;
 					break;
 				}
@@ -78,6 +78,8 @@ class GenPDF extends CI_Controller {
 			$dataValid = false;
 		
 		if ($dataValid == true) {
+			// 依 constituency 取得立委 DISTRICT_ID
+			// if (isset ( $data ['constituency'] ) && $data ['constituency'] != "") {
 			
 			$data_list = array (
 					'CONSTITUENCY' => $data ['constituency'] 
@@ -86,6 +88,7 @@ class GenPDF extends CI_Controller {
 			if ($query->num_rows () > 0) {
 				$data ['DISTRICT_ID'] = $query->row ()->district_id;
 			}
+			// }
 			// 揣（ㄘㄨㄝ）使用者資料
 			$email_data = array (
 					'EMAIL' => $data ['EMAIL'] 
@@ -104,7 +107,7 @@ class GenPDF extends CI_Controller {
 				$USER_ID = $row->user_id;
 			}
 			// pdf流水號記到資料庫
-			FOR($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
+			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				
 				// 更新產製資料
 				$VCODE = returnValidation ();
@@ -161,7 +164,7 @@ class GenPDF extends CI_Controller {
 			$OCCUPATION = "職業";
 			$REGADD = "提案人戶籍地址";
 			
-			// DUMMY DATA
+				// DUMMY DATA
 			if ($data ['Name_0'] == "") {
 				$data ['Name_0'] = "馬娘娘";
 				$data ['IDNo_0'] = "A246813579";
