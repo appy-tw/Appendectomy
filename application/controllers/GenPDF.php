@@ -29,47 +29,47 @@ class GenPDF extends CI_Controller {
 		$this->load->helper ( 'proposal' );
 		
 		$dataValid = true;
-		if (($data ['Size'] = $this->input->post ( 'Size' )) == false)
+		if (($data ['Size'] = $this->input->post ( 'Size',true )) == false)
 			$dataValid = false;
 		if ($dataValid == true && $data ['Size'] > 0) {
-			if (($data ['constituency'] = $this->input->post ( 'constituency' )) == false)
+			if (($data ['constituency'] = $this->input->post ( 'constituency' ,true)) == false)
 				$dataValid = false;
 			if ($data ['constituency'] == "")
 				$dataValid = false;
-			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' )) == false)
+			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL',true )) == false)
 				$dataValid = false;
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				if ($dataValid == false)
 					break;
-				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED )) == false) {
+				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED )) == false) {
+				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED )) == false) {
+				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED )) == false) {
+				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED )) == false) {
+				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED )) == false) {
+				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED )) == false) {
+				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED )) == false) {
+				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED ,true)) == false) {
 					$dataValid = false;
 					break;
 				}
@@ -78,8 +78,6 @@ class GenPDF extends CI_Controller {
 			$dataValid = false;
 		
 		if ($dataValid == true) {
-			// 依 constituency 取得立委 DISTRICT_ID
-			// if (isset ( $data ['constituency'] ) && $data ['constituency'] != "") {
 			
 			$data_list = array (
 					'CONSTITUENCY' => $data ['constituency'] 
@@ -88,7 +86,6 @@ class GenPDF extends CI_Controller {
 			if ($query->num_rows () > 0) {
 				$data ['DISTRICT_ID'] = $query->row ()->district_id;
 			}
-			// }
 			// 揣（ㄘㄨㄝ）使用者資料
 			$email_data = array (
 					'EMAIL' => $data ['EMAIL'] 
@@ -163,12 +160,6 @@ class GenPDF extends CI_Controller {
 			$BIRTHDAY = "YYYY.MM.DD";
 			$OCCUPATION = "職業";
 			$REGADD = "提案人戶籍地址";
-			
-			if (! isset ( $_GET ['NO'] )) {
-				$NO = 1;
-			} else if ($_GET ['NO'] > 0) {
-				$NO = $_GET ['NO'];
-			}
 			
 			// DUMMY DATA
 			if ($data ['Name_0'] == "") {
