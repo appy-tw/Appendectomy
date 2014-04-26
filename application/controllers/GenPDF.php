@@ -31,6 +31,12 @@ class GenPDF extends CI_Controller {
 		$dataValid = true;
 		if (($data ['Size'] = $this->input->post ( 'Size', true )) == false)
 			$dataValid = false;
+		//推薦人 e-mail 資料
+		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) == false)
+			$dataValid = false;
+		//承諾協助收取文件數
+		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) == false)
+			$dataValid = false;
 		if ($dataValid == true && $data ['Size'] > 0 &&  $data ['Size'] != "") {
 			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) == false)
 				$dataValid = false;
@@ -98,8 +104,25 @@ class GenPDF extends CI_Controller {
 				// 有資料
 				$row = $query->row ();
 				$USER_ID = $row->user_id;
+					//如果使用者有承諾另外協助收取文件
+					if($data ['Promise']>0)
+					{
+						$update_data = array (
+							'PROMISE_PROPOSAL' => $data ['Promise']
+						);
+						$this->db->where('user_id', $USER_ID);
+						$this->db->update('user_basic', $update_data); 
+					}
 			} else {
 				// 無資料就加新的
+					//如果使用者有承諾另外協助收取文件
+					if($data ['Promise']>0)
+					{
+						$email_data = array (
+								'EMAIL' => $data ['EMAIL'],
+								'PROMISE_PROPOSAL' => $data ['Promise']
+						);
+					}
 				$query = $this->db->insert ( 'user_basic', $email_data );
 				// 揣出來
 				$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
@@ -109,14 +132,30 @@ class GenPDF extends CI_Controller {
 			// pdf流水號記到資料庫
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				
-				// 更新產製資料
+				//取得驗證碼
 				$VCODE = returnValidation ();
-				$data_list = array (
-						'USER_ID' => $USER_ID,
-						'DISTRICT_ID' => $data ['DISTRICT_ID'],
-						'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
-						'VALIDATION_CODE' => $VCODE 
-				);
+				
+				//如果有推薦人資料
+				if($data ['Referral']!="")
+				{
+					$data_list = array (
+							'USER_ID' => $USER_ID,
+							'DISTRICT_ID' => $data ['DISTRICT_ID'],
+							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+							'VALIDATION_CODE' => $VCODE,
+							'REFERRAL' => $data['Referral'] 
+					);
+				}
+				//如果沒有推薦人資料
+				else
+				{
+					$data_list = array (
+							'USER_ID' => $USER_ID,
+							'DISTRICT_ID' => $data ['DISTRICT_ID'],
+							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+							'VALIDATION_CODE' => $VCODE 
+					);
+				}
 				$this->db->insert ( 'proposal', $data_list );
 				
 				$query = $this->db->select ( 'proposal_id' )->get_where ( 'proposal', $data_list );

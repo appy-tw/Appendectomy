@@ -67,7 +67,7 @@ if (! function_exists ( 'generatePDF' ))
 		
 		// 地址資訊列===================================
 		$pdf->SetXY ( 175, 5 + $add_offset );
-		$pdf->Cell ( 20, 25, '5 元郵票', 1, 1, 'C', false );
+		$pdf->Cell ( 20, 25, '5元郵票', 1, 1, 'C', false );
 		
 // 		if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
 // 		{
