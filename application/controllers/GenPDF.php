@@ -104,6 +104,15 @@ class GenPDF extends CI_Controller {
 				// 有資料
 				$row = $query->row ();
 				$USER_ID = $row->user_id;
+					//如果使用者有承諾另外協助收取文件
+					if($data ['Promise']>0)
+					{
+						$update_data = array (
+							'PROMISE_PROPOSAL' => $data ['Promise']
+						);
+						$this->db->where('user_id', $USER_ID);
+						$this->db->update('user_basic', $update_data); 
+					}
 			} else {
 				// 無資料就加新的
 					//如果使用者有承諾另外協助收取文件
