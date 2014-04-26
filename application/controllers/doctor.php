@@ -15,8 +15,8 @@ class Doctor extends CI_Controller
 	{
 		$this->load->database ();
 		$this->load->helper ( 'url' );
-		$nickname = $this->input->post ( 'NICKNAME' );
-		$password = $this->input->post ( 'PASSWORD' );
+		$nickname = $this->input->post ( 'NICKNAME', true );
+		$password = $this->input->post ( 'PASSWORD', true );
 		$sql = "SELECT * FROM staff_info WHERE nickname = ? AND password = PASSWORD(?)";
 		$query = $this->db->query ( $sql, array (
 				$nickname,
