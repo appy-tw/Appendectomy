@@ -29,53 +29,53 @@ class GenPDF extends CI_Controller {
 		$this->load->helper ( 'proposal' );
 		
 		$dataValid = true;
-		if (($data ['Size'] = $this->input->post ( 'Size', true )) == false)
+		if (($data ['Size'] = $this->input->post ( 'Size', true )) === false)
 			$dataValid = false;
 		//推薦人 e-mail 資料
-		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) == false)
+		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) === false)
 			$dataValid = false;
 		//承諾協助收取文件數
-		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) == false)
+		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) === false)
 			$dataValid = false;
 		if ($dataValid == true && $data ['Size'] > 0 &&  $data ['Size'] != "") {
-			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) == false)
+			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) === false)
 				$dataValid = false;
 			if ($data ['constituency'] == "")
 				$dataValid = false;
-			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' , true)) == false)
+			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' , true)) === false)
 				$dataValid = false;
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				if ($dataValid == false)
 					break;
-				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED , true)) == false) {
+				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED , true)) == false) {
+				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED , true)) == false) {
+				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED , true)) == false) {
+				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED , true)) == false) {
+				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED , true)) == false) {
+				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED , true)) == false) {
+				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
-				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED , true)) == false) {
+				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
