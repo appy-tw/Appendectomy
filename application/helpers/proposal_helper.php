@@ -78,8 +78,6 @@ if (! function_exists ( 'generatePDF' ))
 // 			$pdf->SetXY ( 141.1, 22.1 + $add_offset );
 // 			$pdf->Cell ( 41.5, 7.4, $DATA ['adv_no'], 0, 0, 'C', false );
 // 		}
-
-		
 		
 		$pdf->SetFont ( $CHI_FONT, '', 20 );
 		$pdf->SetXY ( 60, 55 + $add_offset );
