@@ -1,4 +1,4 @@
-Eclipse安裝 PHP, web 插件
+Eclipse安裝(官網下載，別使用apt-get) PHP, web 插件
 	help -> Install new software
 	work with 選擇
 		Kepler - http://download.eclipse.org/releases/kepler
@@ -18,12 +18,13 @@ Eclipse安裝 PHP, web 插件
 	sudo apt-get install php5-mysql
 
 初使化資料庫
-	cd database
+	cd /Appendectomy/database
 	cat *.sql | mysql -u root -p
 
 
 資料庫登入設定
-	modify appendectomy/config/database.php
+	從Eclipse進入專案
+	modify application/config/database.php
 	
 	$db['default']['username'] = 'your database username';
 	$db['default']['password'] = 'your pass word';
