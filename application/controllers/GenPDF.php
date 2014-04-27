@@ -143,7 +143,8 @@ class GenPDF extends CI_Controller {
 							'DISTRICT_ID' => $data ['DISTRICT_ID'],
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
 							'VALIDATION_CODE' => $VCODE,
-							'REFERRAL' => $data['Referral'] 
+							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+							'REFERRAL' => $data ['Referral'] 
 					);
 				}
 				//如果沒有推薦人資料
@@ -153,6 +154,7 @@ class GenPDF extends CI_Controller {
 							'USER_ID' => $USER_ID,
 							'DISTRICT_ID' => $data ['DISTRICT_ID'],
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
 							'VALIDATION_CODE' => $VCODE 
 					);
 				}

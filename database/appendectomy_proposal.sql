@@ -39,6 +39,7 @@ CREATE TABLE `proposal` (
   `last_update` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `notified_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `referral` varchar(45) default NULL,
+  `birth_year` varchar(5) default NULL,
   PRIMARY KEY  (`proposal_id`),
   KEY `proposal_to_user_idx` (`user_id`),
   KEY `proposal_to_district_idx` (`district_id`),
@@ -65,4 +66,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-26 14:34:43
+-- Dump completed on 2014-04-27 12:03:33
