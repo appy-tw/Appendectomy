@@ -274,7 +274,8 @@ class GenPDF extends CI_Controller {
 		}
 		else 
 		{
-			$error['errorInfo'] = nl2br($errorInfo);
+			if(ENVIRONMENT == 'development')$error['errorInfo'] = nl2br($errorInfo);
+			else $error['errorInfo'] = "";
 			$this->load->view ( 'RequestError', $error);
 		}
 	}
