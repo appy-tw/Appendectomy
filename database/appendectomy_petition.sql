@@ -40,6 +40,7 @@ CREATE TABLE `petition` (
   `notified_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `referral` varchar(45) default NULL,
   `birth_year` varchar(5) default NULL,
+  `userComment` varchar(255) default NULL,
   PRIMARY KEY  (`petition_id`),
   KEY `petition_to_user_idx` (`user_id`),
   KEY `petition_to_district_idx` (`district_id`),
@@ -66,4 +67,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-27 12:03:34
+-- Dump completed on 2014-04-29 14:26:30
