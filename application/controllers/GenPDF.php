@@ -111,9 +111,11 @@ class GenPDF extends CI_Controller {
 					break;
 				}
 				if (($data ["Phone_" . $SEED] = $this->input->post ( "Phone_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "Phone Error\n";
-					$dataValid = false;
-					break;
+					//$errorInfo  = $errorInfo. "Phone Error\n";
+					//$dataValid = false;
+					//break;
+					$data ["Phone_" . $SEED] = "";
+					//Reserve flexible for "phone for person", but now we just need one phone number as Phone_0
 				}
 			}
 		} else
