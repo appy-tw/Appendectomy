@@ -106,6 +106,12 @@ class GenPDF extends CI_Controller {
 					break;
 				}
 				if (($data ["addPrefix_" . $SEED] = $this->input->post ( "addPrefix_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "AddPrefix Error\n";
+					$dataValid = false;
+					break;
+				}
+				if (($data ["Phone_" . $SEED] = $this->input->post ( "Phone_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "Phone Error\n";
 					$dataValid = false;
 					break;
 				}
