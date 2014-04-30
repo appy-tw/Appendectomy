@@ -101,6 +101,10 @@ class Surgery extends CI_Controller
 						'文書處理' 
 				),
 				array (
+						'hospital/change_password',
+						'改密碼' 
+				) ,
+				array (
 						'doctor/logout',
 						'登出' 
 				) 
