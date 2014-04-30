@@ -105,6 +105,10 @@ class GenPDF extends CI_Controller {
 					$dataValid = false;
 					break;
 				}
+				if (($data ["addPrefix_" . $SEED] = $this->input->post ( "addPrefix_" . $SEED , true)) === false) {
+					$dataValid = false;
+					break;
+				}
 			}
 		} else
 		{
@@ -174,6 +178,7 @@ class GenPDF extends CI_Controller {
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
 							'VALIDATION_CODE' => $VCODE,
 							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+							'userComment' => $data ["addPrefix_" . $SEED],
 							'REFERRAL' => $data ['Referral'] 
 					);
 				}
@@ -185,6 +190,7 @@ class GenPDF extends CI_Controller {
 							'DISTRICT_ID' => $data ['DISTRICT_ID'],
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
 							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+							'userComment' => $data ["addPrefix_" . $SEED],
 							'VALIDATION_CODE' => $VCODE 
 					);
 				}
@@ -266,8 +272,9 @@ class GenPDF extends CI_Controller {
 				if ($data ["QRImgPath_" . $SEED] != "")
 					$QRImgPath = $data ["QRImgPath_" . $SEED];
 				$SNo = $data ["SNo_" . $SEED];
+				$PHONE = $data ["Phone_" . $SEED];
 				
-				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo );
+				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 			}
 			
 			$pdf->Output ();

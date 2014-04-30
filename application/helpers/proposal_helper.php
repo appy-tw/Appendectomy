@@ -34,7 +34,7 @@ if (! function_exists ( 'returnValidation' ))
 
 if (! function_exists ( 'generatePDF' ))
 {
-	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo)
+	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE)
 	{
 		$pdf->AddPage ();
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
@@ -98,6 +98,10 @@ if (! function_exists ( 'generatePDF' ))
 			$pdf->Cell ( 33, 12, $SNo, 0, 1, 'C', false );
 		}
 		// 提議書表單列===================================
+		$pdf->SetXY(145,$form_offset-11);
+		$pdf->SetFont($CHI_FONT,'',14);
+		$pdf->Cell(190,8,'聯絡電話：'.$PHONE,0,0,'L',false);
+
 		$pdf->SetXY ( 5, 5 + $form_offset );
 		$pdf->SetFont ( $CHI_FONT, '', 24 );
 		$pdf->Cell ( 205, 8, '公職人員罷免提議人名冊', 0, 0, 'C', false );
