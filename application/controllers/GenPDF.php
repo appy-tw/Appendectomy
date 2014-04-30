@@ -29,59 +29,93 @@ class GenPDF extends CI_Controller {
 		$this->load->helper ( 'proposal' );
 		
 		$dataValid = true;
+		$errorInfo = "";
 		if (($data ['Size'] = $this->input->post ( 'Size', true )) === false)
+		{
 			$dataValid = false;
+			$errorInfo = $errorInfo."Size Error\n";
+		}
 		//推薦人 e-mail 資料
 		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) === false)
+		{
 			$dataValid = false;
+			$errorInfo = $errorInfo."Referral Error\n";
+		}
 		//承諾協助收取文件數
 		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) === false)
+		{
 			$dataValid = false;
+			$errorInfo = $errorInfo."Promise Error\n";
+		}
 		if ($dataValid == true && $data ['Size'] > 0 &&  $data ['Size'] != "") {
 			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) === false)
+			{
 				$dataValid = false;
-			if ($data ['constituency'] == "")
+				$errorInfo = $errorInfo."Constituency Error\n";
+			}else if ($data ['constituency'] == "")
+			{
 				$dataValid = false;
+				$errorInfo = $errorInfo."None constituency\n";
+			}
 			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' , true)) === false)
+			{
 				$dataValid = false;
+				$errorInfo  = $errorInfo. "EMAIL Error\n";
+			}
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				if ($dataValid == false)
 					break;
 				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "Name Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo."IDNo Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo."Sex Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "Birthday_y Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "Birthday_m Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo."Birthday_d Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "Occupation Error\n";
 					$dataValid = false;
 					break;
 				}
 				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED , true)) === false) {
+					$errorInfo  = $errorInfo. "RegAdd Error\n";
+					$dataValid = false;
+					break;
+				}
+				if (($data ["addPrefix_" . $SEED] = $this->input->post ( "addPrefix_" . $SEED , true)) === false) {
 					$dataValid = false;
 					break;
 				}
 			}
 		} else
+		{
+			if($data ['Size'] == 0 ||  $data ['Size'] == "")
+				$errorInfo  = $errorInfo."Size Data Error\n";
 			$dataValid = false;
+		}
 		
 		if ($dataValid == true) {
 			// 依 constituency 取得立委 DISTRICT_ID
@@ -143,7 +177,9 @@ class GenPDF extends CI_Controller {
 							'DISTRICT_ID' => $data ['DISTRICT_ID'],
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
 							'VALIDATION_CODE' => $VCODE,
-							'REFERRAL' => $data['Referral'] 
+							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+							'userComment' => $data ["addPrefix_" . $SEED],
+							'REFERRAL' => $data ['Referral'] 
 					);
 				}
 				//如果沒有推薦人資料
@@ -153,6 +189,8 @@ class GenPDF extends CI_Controller {
 							'USER_ID' => $USER_ID,
 							'DISTRICT_ID' => $data ['DISTRICT_ID'],
 							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+							'userComment' => $data ["addPrefix_" . $SEED],
 							'VALIDATION_CODE' => $VCODE 
 					);
 				}
@@ -234,11 +272,18 @@ class GenPDF extends CI_Controller {
 				if ($data ["QRImgPath_" . $SEED] != "")
 					$QRImgPath = $data ["QRImgPath_" . $SEED];
 				$SNo = $data ["SNo_" . $SEED];
+				$PHONE = $data ["Phone_" . $SEED];
 				
-				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo );
+				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 			}
 			
 			$pdf->Output ();
+		}
+		else 
+		{
+			if(ENVIRONMENT == 'development')$error['errorInfo'] = nl2br($errorInfo);
+			else $error['errorInfo'] = "";
+			$this->load->view ( 'RequestError', $error);
 		}
 	}
 }

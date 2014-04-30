@@ -22,38 +22,40 @@ USE `appendectomy`;
 --
 
 --
--- Table structure for table `petition`
+-- Table structure for table `proposal`
 --
 
-DROP TABLE IF EXISTS `petition`;
+DROP TABLE IF EXISTS `proposal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `petition` (
-  `petition_id` int(11) NOT NULL auto_increment,
+CREATE TABLE `proposal` (
+  `proposal_id` int(11) NOT NULL auto_increment,
   `user_id` int(11) default NULL,
   `district_id` smallint(6) NOT NULL,
   `id_last_five` varchar(6) default NULL,
   `current_status` enum('created','received','sent','refused','voided') NOT NULL default 'created',
-  `validation_code` varchar(30) NOT NULL,
+  `validation_code` varchar(50) NOT NULL,
   `created_time` datetime NOT NULL,
   `last_update` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `notified_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `referral` varchar(45) default NULL,
-  PRIMARY KEY  (`petition_id`),
-  KEY `petition_to_user_idx` (`user_id`),
-  KEY `petition_to_district_idx` (`district_id`),
-  CONSTRAINT `petition_to_district` FOREIGN KEY (`district_id`) REFERENCES `district_data` (`district_id`) ON UPDATE CASCADE,
-  CONSTRAINT `petition_to_user` FOREIGN KEY (`user_id`) REFERENCES `user_basic` (`user_id`) ON DELETE NO ACTION ON UPDATE CASCADE
+  `birth_year` varchar(5) default NULL,
+  `userComment` varchar(255) default NULL,
+  PRIMARY KEY  (`proposal_id`),
+  KEY `proposal_to_user_idx` (`user_id`),
+  KEY `proposal_to_district_idx` (`district_id`),
+  CONSTRAINT `proposal_to_district` FOREIGN KEY (`district_id`) REFERENCES `district_data` (`district_id`) ON UPDATE CASCADE,
+  CONSTRAINT `proposal_to_user` FOREIGN KEY (`user_id`) REFERENCES `user_basic` (`user_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `petition`
+-- Dumping data for table `proposal`
 --
 
-LOCK TABLES `petition` WRITE;
-/*!40000 ALTER TABLE `petition` DISABLE KEYS */;
-/*!40000 ALTER TABLE `petition` ENABLE KEYS */;
+LOCK TABLES `proposal` WRITE;
+/*!40000 ALTER TABLE `proposal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `proposal` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -65,4 +67,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-26 14:34:44
+-- Dump completed on 2014-04-29 14:26:30
