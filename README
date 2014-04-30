@@ -31,7 +31,8 @@ Eclipse安裝(官網下載，別使用apt-get) PHP, web 插件
 	$db['default']['database'] = 'your database name'; //預設是 appendectomy
 	
 	modify appendectomy/config/config.php
-		有一個session key要改，再補
+		有一個session key要改
+		$config['encryption_key'] = '自己決定一字串';
 
 phpmyadmin看資料庫
 	http://www.phpmyadmin.net/home_page/downloads.php
