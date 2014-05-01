@@ -283,7 +283,7 @@ class GenPDF extends CI_Controller {
 				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 			}
 			
-			$pdf->Output ();
+			$pdf->Output ("proposal.pdf",'D');
 		}
 		else 
 		{
