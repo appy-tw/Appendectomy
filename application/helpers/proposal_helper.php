@@ -160,8 +160,10 @@ if (! function_exists ( 'generatePDF' ))
 		$pdf->Cell ( 40, 8, $NAME, 1, 0, 'C', false );
 		IF ($SEX == "M" || $SEX == "男")
 			$SEX_STRING = "男";
-		else
+		else IF ($SEX == "F" || $SEX == "女")
 			$SEX_STRING = "女";
+		else
+			$SEX_STRING = "";
 		$pdf->Cell ( 8, 20, $SEX_STRING, 1, 0, 'C', true );
 		$pdf->Cell ( 26, 20, $BIRTHDAY, 1, 0, 'C', true );
 		$pdf->Cell ( 20, 20, $OCCUPATION, 1, 0, 'C', true );
