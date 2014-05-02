@@ -136,84 +136,99 @@ class GenPDF extends CI_Controller {
 			if ($query->num_rows () > 0) {
 				$data ['DISTRICT_ID'] = $query->row ()->district_id;
 			}
-			// }
-			// 揣（ㄘㄨㄝ）使用者資料
-			$email_data = array (
-					'EMAIL' => $data ['EMAIL'] 
-			);
-			$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
-			if ($query->num_rows () > 0) {
-				// 有資料
-				$row = $query->row ();
-				$USER_ID = $row->user_id;
-					//如果使用者有承諾另外協助收取文件
-					if($data ['Promise']>0)
-					{
-						$update_data = array (
-							'PROMISE_PROPOSAL' => $data ['Promise']
-						);
-						$this->db->where('user_id', $USER_ID);
-						$this->db->update('user_basic', $update_data); 
-					}
-			} else {
-				// 無資料就加新的
-					//如果使用者有承諾另外協助收取文件
-					if($data ['Promise']>0)
-					{
-						$email_data = array (
-								'EMAIL' => $data ['EMAIL'],
-								'PROMISE_PROPOSAL' => $data ['Promise']
-						);
-					}
-				$query = $this->db->insert ( 'user_basic', $email_data );
-				// 揣出來
+								
+			// DUMMY DATA
+			if ($data ['Name_0'] == "") {
+				// Empty form.
+				$data ['Name_0'] = "";
+				$data ['IDNo_0'] = "";
+				$data ['Sex_0'] = "";
+				$data ['Birthday_0'] = "";
+				$data ['Occupation_0'] = "";
+				$data ['RegAdd_0'] = "";
+				$data ['SNo_0'] = "";
+				$data ['QRImgPath_0'] = "";
+				$data ['Size'] = 1; // Empty form, just need to generate single page.
+			} else { // no user name, no need to do database operation.						
+				// }
+				// 揣（ㄘㄨㄝ）使用者資料
+				$email_data = array (
+						'EMAIL' => $data ['EMAIL'] 
+				);
 				$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
-				$row = $query->row ();
-				$USER_ID = $row->user_id;
-			}
-			// pdf流水號記到資料庫
-			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
-				
-				//取得驗證碼
-				$VCODE = returnValidation ();
-				
-				//如果有推薦人資料
-				if($data ['Referral']!="")
-				{
-					$data_list = array (
-							'USER_ID' => $USER_ID,
-							'DISTRICT_ID' => $data ['DISTRICT_ID'],
-							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
-							'VALIDATION_CODE' => $VCODE,
-							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
-							'userComment' => $data ["addPrefix_" . $SEED],
-							'REFERRAL' => $data ['Referral'] 
-					);
+				if ($query->num_rows () > 0) {
+					// 有資料
+					$row = $query->row ();
+					$USER_ID = $row->user_id;
+						//如果使用者有承諾另外協助收取文件
+						if($data ['Promise']>0)
+						{
+							$update_data = array (
+								'PROMISE_PROPOSAL' => $data ['Promise']
+							);
+							$this->db->where('user_id', $USER_ID);
+							$this->db->update('user_basic', $update_data); 
+						}
+				} else {
+					// 無資料就加新的
+						//如果使用者有承諾另外協助收取文件
+						if($data ['Promise']>0)
+						{
+							$email_data = array (
+									'EMAIL' => $data ['EMAIL'],
+									'PROMISE_PROPOSAL' => $data ['Promise']
+							);
+						}
+					$query = $this->db->insert ( 'user_basic', $email_data );
+					// 揣出來
+					$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
+					$row = $query->row ();
+					$USER_ID = $row->user_id;
 				}
-				//如果沒有推薦人資料
-				else
-				{
-					$data_list = array (
-							'USER_ID' => $USER_ID,
-							'DISTRICT_ID' => $data ['DISTRICT_ID'],
-							'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
-							'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
-							'userComment' => $data ["addPrefix_" . $SEED],
-							'VALIDATION_CODE' => $VCODE 
-					);
+				// pdf流水號記到資料庫
+				for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
+					
+					//取得驗證碼
+					$VCODE = returnValidation ();
+					
+					//如果有推薦人資料
+					if($data ['Referral']!="")
+					{
+						$data_list = array (
+								'USER_ID' => $USER_ID,
+								'DISTRICT_ID' => $data ['DISTRICT_ID'],
+								'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+								'VALIDATION_CODE' => $VCODE,
+								'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+								'userComment' => $data ["addPrefix_" . $SEED],
+								'REFERRAL' => $data ['Referral'] 
+						);
+					}
+					//如果沒有推薦人資料
+					else
+					{
+						$data_list = array (
+								'USER_ID' => $USER_ID,
+								'DISTRICT_ID' => $data ['DISTRICT_ID'],
+								'ID_LAST_FIVE' => SUBSTR ( $data ["IDNo_" . $SEED], 5 ),
+								'BIRTH_YEAR' => $data ["Birthday_y_" . $SEED],
+								'userComment' => $data ["addPrefix_" . $SEED],
+								'VALIDATION_CODE' => $VCODE 
+						);
+					}
+					$this->db->insert ( 'proposal', $data_list );
+					
+					$query = $this->db->select ( 'proposal_id' )->get_where ( 'proposal', $data_list );
+					$row = $query->row ();
+					$proposal_id = $row->proposal_id;
+					// 建立流水號
+					$data ["SNo_" . $SEED] = "AP" . SPRINTF ( "%02d", $data ['DISTRICT_ID'] ) . "1" . SPRINTF ( "%06d", $proposal_id );
+					// 設定 QR Code 檔案路徑
+					$data ["QRImgPath_" . $SEED] = 'img/' . $data ["SNo_" . $SEED] . ".jpg";
+					// 複製 QR Code 檔案
+					copy ( "http://140.113.207.111:4000/QRCode/" . $data ["SNo_" . $SEED] . "&VC=" . $VCODE, $data ["QRImgPath_" . $SEED] );
+					// print_r($stmt->errorInfo());
 				}
-				$this->db->insert ( 'proposal', $data_list );
-				
-				$query = $this->db->select ( 'proposal_id' )->get_where ( 'proposal', $data_list );
-				$row = $query->row ();
-				$proposal_id = $row->proposal_id;
-				// 建立流水號
-				$data ["SNo_" . $SEED] = "AP" . SPRINTF ( "%02d", $data ['DISTRICT_ID'] ) . "1" . SPRINTF ( "%06d", $proposal_id );
-				// 設定 QR Code 檔案路徑
-				$data ["QRImgPath_" . $SEED] = 'img/' . $data ["SNo_" . $SEED] . ".jpg";
-				// 複製 QR Code 檔案
-				copy ( "http://140.113.207.111:4000/QRCode/" . $data ["SNo_" . $SEED] . "&VC=" . $VCODE, $data ["QRImgPath_" . $SEED] );
-				// print_r($stmt->errorInfo());
 			}
 			
 			require ('FPDF/chinese-unicode.php');
@@ -242,16 +257,7 @@ class GenPDF extends CI_Controller {
 				$DATA ['mailing_address'] = "提議書郵寄地址";
 				$DATA ['receiver'] = "提議書收件人";
 			}			
-				// DUMMY DATA
-			if ($data ['Name_0'] == "") {
-				$data ['Name_0'] = "馬娘娘";
-				$data ['IDNo_0'] = "A246813579";
-				$data ['Sex_0'] = "F";
-				$data ['Birthday_0'] = "YYYY.MM.DD";
-				$data ['Occupation_0'] = "孬孬";
-				$data ['RegAdd_0'] = "魯蛇大本營";
-				$data ['SNo_0'] = "123456789";
-			}
+
 // 			if (! isset ( $data ['Name_1'] )) {
 // 				$data ['Name_1'] = "金小刀";
 // 				$data ['IDNo_1'] = "A135792468";
