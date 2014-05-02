@@ -280,6 +280,9 @@ class GenPDF extends CI_Controller {
 				$IDNo = $data ["IDNo_" . $SEED];
 				$SEX = $data ["Sex_" . $SEED];
 				$BIRTHDAY = $data ["Birthday_y_" . $SEED] . "-" . $data ["Birthday_m_" . $SEED] . "-" . $data ["Birthday_d_" . $SEED];
+				if ($data ["Birthday_y_" . $SEED] == "") {
+					$BIRTHDAY = "";
+				}
 				$OCCUPATION = $data ["Occupation_" . $SEED];
 				$REGADD = $data ["RegAdd_" . $SEED];
 				$QRImgPath = "";
