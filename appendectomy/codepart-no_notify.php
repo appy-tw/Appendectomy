@@ -26,11 +26,11 @@
 		$errorInfo = $errorInfo."VC Error\n";
 	}
 
-	$data = array (
+	$update = array (
 		'no_notify' => '1'
 	);
 
-	if($this->db->update($TABLE_NAME,data,$TABLE_ID." = '".$data['id']."' AND validation_code='".$data ['vc']."'"))
+	if($this->db->update($TABLE_NAME,$update,$TABLE_ID." = '".$data['id']."' AND validation_code='".$data ['vc']."'"))
 	{
 		ECHO "感謝您的通知。";
 	}
