@@ -33,6 +33,8 @@ function returnEmailList($DOCTYPE,$STATUS,$DAY_INTERVAL)
 			$MAILLIST[$SEED]['IDL5']=$DATA['id_last_five'];
 			//E-MAIL
 			$MAILLIST[$SEED]['EMAIL']=$DATA['email'];
+			//驗證碼
+			$MAILLIST[$SEED]['VC']=$DATA['validation_code'];
 		}
 	}
 	RETURN $MAILLIST;
@@ -57,6 +59,10 @@ function returnEmailText($DOCTYPE,$MAILLIST_ITEM)
 		今天寄這封信給您，是想提醒您儘快寄出您之前為身分證後五碼為 ".$MAILLIST_ITEM['IDL5']."的".$USERTYPE."所製作，<BR>
 		流水號為 ".$MAILLIST_ITEM['SNO']." 的".$DOCNAME."。<BR>
 		謝謝您的配合與支持。<BR><BR>
+		
+		<FONT COLOR=RED>若您已經將該".$DOCNAME."寄出，請<A HREF=no_notify.php?DOCTYPE=".$DOCTYPE."&ID=".$MAILLIST['DID']."&VC=".$MAILLIST_ITEM[].">按這裡</A>告訴我們，謝謝！</FONT><BR><BR>
+		
+		
 		祝您　一切順心<BR><BR>
 		割闌尾團隊敬上";
 
@@ -80,6 +86,8 @@ function updateNotifiedTime($DOCTYPE,$ID)
 //				$MAILLIST_ITEM['CREATE_TIME']=$MAILLIST[$SEED]['CREATE_TIME'];
 //				$MAILLIST_ITEM['SNO']=$MAILLIST[$SEED]['SNO'];
 //				$MAILLIST_ITEM['IDL5']=$MAILLIST[$SEED]['IDL5'];
+//				$MAILLIST_ITEM['DID']=$MAILLIST[$SEED]['DID'];
+//				$MAILLIST_ITEM['VC']=$MAILLIST[$SEED]['VC'];
 //
 //				//取得信件內要放的內容
 //				$TEXT_TO_SEND=returnEmailText($DOCTYPE,$MAILLIST_ITEM);
