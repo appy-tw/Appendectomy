@@ -11,6 +11,40 @@ class Surgery extends CI_Controller
 	{
 		$this->load->view ( 'surgery/process' );
 	}
+	
+	public function process_statistics()
+	{
+		$this->load->database ();
+		
+		$query = $this->db->group_by('district_id')->get('proposal');
+		$count = $query->num_rows ();
+		$district_id = $query->row ()->district_id;
+		
+		for($i=0;$i<$count;$i++)
+		{
+			$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id[$i]));
+			
+			if ($query->num_rows () > 0) {
+ 				$temp ['district_legislator'] = $query->row ()->district_legislator;
+ 				$temp ['totalApply'] = $this->db->where('district_id',$district_id[$i])->from('proposal')->count_all_results();
+ 				$withoutRepeat = $this->db->where('district_id', $district_id[$i])->group_by('id_last_five')->get('proposal');
+ 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
+ 				$received = $this->db->where(array('district_id' => $district_id[$i], 'current_status' => 'received'))->
+ 				group_by('id_last_five')->get_where('proposal');
+ 				$temp ['received'] = $received->num_rows ();
+				
+				$data["district_.$i"] = array(
+						'district_id' => $temp ['district_legislator'],
+						'totalApply'=> $temp ['totalApply'],
+						'withoutRepeat'=> $temp ['withoutRepeat'],
+						'received'=> $temp ['received']
+				);				
+			}
+		};
+		$DATA['data'] = $data;
+		$this->load->view ( 'surgery/process_statistics', $DATA );
+	}
+	
 	public function process_update()
 	{
 		// $this->load->view ( 'surgery/process_update' );
@@ -99,6 +133,10 @@ class Surgery extends CI_Controller
 				array (
 						'surgery/process',
 						'文書處理' 
+				),
+				array (
+						'surgery/process_statistics',
+						'統計資料'
 				),
 				array (
 						'hospital/change_password',
