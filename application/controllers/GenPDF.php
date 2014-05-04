@@ -292,6 +292,8 @@ class GenPDF extends CI_Controller {
 			header ( 'Content-Disposition: attachment; filename="proposal.pdf";' ); // <-- sends filename header
 			header ( 'Cache-Control: private, max-age=0, must-revalidate' );
 			readfile ( $pdfNewFileName ); // <--reads and outputs the file onto the output buffer
+			unlink ( $pdfOldFileName );
+			unlink ( $pdfNewFileName );
 			die (); // <--cleanup
 		} else {
 			if (ENVIRONMENT == 'development')
