@@ -14,22 +14,23 @@
 			<TD>
 				已收到連署書</TD>
 		</TR>
-		
-		<?php foreach ($data as $item):?>
-			<TR ALIGN=CENTER>
-				<TD ALIGN=CENTER STYLE='WIDTH: 30; BACKGROUND-COLOR: #EEEEFF'>
-					<?php echo $item['district_id'] ?>
-				</TD>
-				<TD>
-					<?php echo $item['totalApply'] ?>
-				</TD>
-				<TD>
-					<?php echo $item['withoutRepeat'] ?>
-				</TD>
-				<TD>
-					<?php echo $item['received'] ?>
-				</TD>	
-			</TR>
-		<?php endforeach;?>		
+		<?php if($isData){?>
+			<?php foreach ($data as $item):?>
+				<TR ALIGN=CENTER>
+					<TD ALIGN=CENTER STYLE='WIDTH: 30; BACKGROUND-COLOR: #EEEEFF'>
+						<?php echo $item['district_id'] ?>
+					</TD>
+					<TD>
+						<?php echo $item['totalApply'] ?>
+					</TD>
+					<TD>
+						<?php echo $item['withoutRepeat'] ?>
+					</TD>
+					<TD>
+						<?php echo $item['received'] ?>
+					</TD>	
+				</TR>
+			<?php endforeach;?>
+		<?php }?>		
 	</TABLE>
 </CENTER>

@@ -18,31 +18,38 @@ class Surgery extends CI_Controller
 		
 		$query = $this->db->group_by('district_id')->get('proposal');
 		$count = $query->num_rows ();
-		$district_id = $query->row ()->district_id;
-		
-		for($i=0;$i<$count;$i++)
+		$DATA['isData'] = false;		
+		if($count>0)
 		{
-			$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id[$i]));
+			$DATA['isData'] = true;
+			$district_id = $query->row ()->district_id;
 			
-			if ($query->num_rows () > 0) {
- 				$temp ['district_legislator'] = $query->row ()->district_legislator;
- 				$temp ['totalApply'] = $this->db->where('district_id',$district_id[$i])->from('proposal')->count_all_results();
- 				$withoutRepeat = $this->db->where('district_id', $district_id[$i])->group_by('id_last_five')->get('proposal');
- 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
- 				$received = $this->db->where(array('district_id' => $district_id[$i], 'current_status' => 'received'))->
- 				group_by('id_last_five')->get_where('proposal');
- 				$temp ['received'] = $received->num_rows ();
+			for($i=0;$i<$count;$i++)
+			{
+				$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id[$i]));
 				
-				$data["district_.$i"] = array(
-						'district_id' => $temp ['district_legislator'],
-						'totalApply'=> $temp ['totalApply'],
-						'withoutRepeat'=> $temp ['withoutRepeat'],
-						'received'=> $temp ['received']
-				);				
-			}
-		};
-		$DATA['data'] = $data;
+				if ($query->num_rows () > 0) {
+	 				$temp ['district_legislator'] = $query->row ()->district_legislator;
+	 				$temp ['totalApply'] = $this->db->where('district_id',$district_id[$i])->from('proposal')->count_all_results();
+	 				$withoutRepeat = $this->db->where('district_id', $district_id[$i])->group_by('id_last_five')->get('proposal');
+	 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
+	 				$received = $this->db->where(array('district_id' => $district_id[$i], 'current_status' => 'received'))->
+	 				group_by('id_last_five')->get_where('proposal');
+	 				$temp ['received'] = $received->num_rows ();
+					
+					$data["district_.$i"] = array(
+							'district_id' => $temp ['district_legislator'],
+							'totalApply'=> $temp ['totalApply'],
+							'withoutRepeat'=> $temp ['withoutRepeat'],
+							'received'=> $temp ['received']
+					);				
+				}
+			};
+			$DATA['data'] = $data;
+		}
+		
 		$this->load->view ( 'surgery/process_statistics', $DATA );
+		
 	}
 	
 	public function process_update()
