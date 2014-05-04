@@ -293,12 +293,18 @@ class GenPDF extends CI_Controller {
 				
 				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 			}
-			$pdfOldFileName='pdf/' . $data ["SNo_" . $SEED] . "_old.pdf";
-			$pdfNewFileName='pdf/' . $data ["SNo_" . $SEED] . "_new.pdf";
-			$pdf->Output ($pdfFileName,'F');
+			$pdfOldFileName='pdf/' . $data ["SNo_0"] . "_old.pdf";
+			$pdfNewFileName='pdf/' . $data ["SNo_0"] . "_new.pdf";
+			$pdf->Output ($pdfOldFileName,'F');
 			$cmd='pdftocairo -pdf '.$pdfOldFileName.' '.$pdfNewFileName;
 			system($cmd);
-			//read ffrom $pdfNewFileName and send
+			//read from $pdfNewFileName and send
+			header('Content-Length: '.filesize($pdfNewFileName)); //<-- sends filesize header
+			header('Content-Type: application/x-download'); //<-- send mime-type header
+			header('Content-Disposition: attachment; filename="proposal.pdf";'); //<-- sends filename header
+			header('Cache-Control: private, max-age=0, must-revalidate');
+			readfile($pdfNewFileName); //<--reads and outputs the file onto the output buffer
+			die(); //<--cleanup
 		}
 		else 
 		{
