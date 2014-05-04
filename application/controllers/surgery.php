@@ -152,6 +152,10 @@ class Surgery extends CI_Controller
 						'統計資料'
 				),
 				array (
+						'email/show',
+						'寄email'
+				),
+				array (
 						'hospital/change_password',
 						'改密碼' 
 				) ,
