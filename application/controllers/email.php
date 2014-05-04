@@ -9,7 +9,7 @@ class Email extends Surgery
 		$this->load->database ();
 		$query = $this->db->order_by('','desc')->where->get( 'proposal');
 			
-		$this->load->view ( 'surgery/mail');
+		$this->load->view ( 'email/show');
 	}
 }
 
