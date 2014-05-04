@@ -2,19 +2,19 @@
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 class GenPDF extends CI_Controller {
-// 	public function index() {
-// 		// $this->load->database();
-// 		// $this->db->get('user_basic');
-// 		// $query = $this->db->limit(2)->get('user_basic');
-// 		// $query = $this->db->limit(2)->get('user_basic');
-		
-// 		// foreach ($query->result() as $row)
-// 		// {
-// 		// $data=array('a'=>$row->email);
-// 		// }
-// 		// $this->load->view('welcome_message',$data);
-// 		$this->load->view ( 'welcome_message' );
-// 	}
+	// public function index() {
+	// // $this->load->database();
+	// // $this->db->get('user_basic');
+	// // $query = $this->db->limit(2)->get('user_basic');
+	// // $query = $this->db->limit(2)->get('user_basic');
+	
+	// // foreach ($query->result() as $row)
+	// // {
+	// // $data=array('a'=>$row->email);
+	// // }
+	// // $this->load->view('welcome_message',$data);
+	// $this->load->view ( 'welcome_message' );
+	// }
 	// public function proposalframe() {
 	// ECHO "<FORM NAME=TRANSFER ACTION='proposal' METHOD=POST TARGET=pdfframe>";
 	// while ( $element = current ( $_POST ) ) {
@@ -30,98 +30,91 @@ class GenPDF extends CI_Controller {
 		
 		$dataValid = true;
 		$errorInfo = "";
-		if (($data ['Size'] = $this->input->post ( 'Size', true )) === false)
-		{
+		if (($data ['Size'] = $this->input->post ( 'Size', true )) === false) {
 			$dataValid = false;
-			$errorInfo = $errorInfo."Size Error\n";
+			$errorInfo = $errorInfo . "Size Error\n";
 		}
-		//推薦人 e-mail 資料
-		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) === false)
-		{
+		// 推薦人 e-mail 資料
+		if (($data ['Referral'] = $this->input->post ( 'Referral', true )) === false) {
 			$dataValid = false;
-			$errorInfo = $errorInfo."Referral Error\n";
+			$errorInfo = $errorInfo . "Referral Error\n";
 		}
-		//承諾協助收取文件數
-		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) === false)
-		{
+		// 承諾協助收取文件數
+		if (($data ['Promise'] = $this->input->post ( 'Promise', true )) === false) {
 			$dataValid = false;
-			$errorInfo = $errorInfo."Promise Error\n";
+			$errorInfo = $errorInfo . "Promise Error\n";
 		}
-		if ($dataValid == true && $data ['Size'] > 0 &&  $data ['Size'] != "") {
-			if (($data ['constituency'] = $this->input->post ( 'constituency' , true)) === false)
-			{
+		if ($dataValid == true && $data ['Size'] > 0 && $data ['Size'] != "") {
+			if (($data ['constituency'] = $this->input->post ( 'constituency', true )) === false) {
 				$dataValid = false;
-				$errorInfo = $errorInfo."Constituency Error\n";
-			}else if ($data ['constituency'] == "")
-			{
+				$errorInfo = $errorInfo . "Constituency Error\n";
+			} else if ($data ['constituency'] == "") {
 				$dataValid = false;
-				$errorInfo = $errorInfo."None constituency\n";
+				$errorInfo = $errorInfo . "None constituency\n";
 			}
-			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL' , true)) === false)
-			{
+			if (($data ['EMAIL'] = $this->input->post ( 'EMAIL', true )) === false) {
 				$dataValid = false;
-				$errorInfo  = $errorInfo. "EMAIL Error\n";
+				$errorInfo = $errorInfo . "EMAIL Error\n";
 			}
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				if ($dataValid == false)
 					break;
-				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "Name Error\n";
+				if (($data ["Name_" . $SEED] = $this->input->post ( "Name_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Name Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo."IDNo Error\n";
+				if (($data ["IDNo_" . $SEED] = $this->input->post ( "IDNo_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "IDNo Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo."Sex Error\n";
+				if (($data ["Sex_" . $SEED] = $this->input->post ( "Sex_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Sex Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "Birthday_y Error\n";
+				if (($data ["Birthday_y_" . $SEED] = $this->input->post ( "Birthday_y_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Birthday_y Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "Birthday_m Error\n";
+				if (($data ["Birthday_m_" . $SEED] = $this->input->post ( "Birthday_m_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Birthday_m Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo."Birthday_d Error\n";
+				if (($data ["Birthday_d_" . $SEED] = $this->input->post ( "Birthday_d_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Birthday_d Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "Occupation Error\n";
+				if (($data ["Occupation_" . $SEED] = $this->input->post ( "Occupation_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "Occupation Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "RegAdd Error\n";
+				if (($data ["RegAdd_" . $SEED] = $this->input->post ( "RegAdd_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "RegAdd Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["addPrefix_" . $SEED] = $this->input->post ( "addPrefix_" . $SEED , true)) === false) {
-					$errorInfo  = $errorInfo. "AddPrefix Error\n";
+				if (($data ["addPrefix_" . $SEED] = $this->input->post ( "addPrefix_" . $SEED, true )) === false) {
+					$errorInfo = $errorInfo . "AddPrefix Error\n";
 					$dataValid = false;
 					break;
 				}
-				if (($data ["Phone_" . $SEED] = $this->input->post ( "Phone_" . $SEED , true)) === false) {
-					//$errorInfo  = $errorInfo. "Phone Error\n";
-					//$dataValid = false;
-					//break;
+				if (($data ["Phone_" . $SEED] = $this->input->post ( "Phone_" . $SEED, true )) === false) {
+					// $errorInfo = $errorInfo. "Phone Error\n";
+					// $dataValid = false;
+					// break;
 					$data ["Phone_" . $SEED] = "";
-					//Reserve flexible for "phone for person", but now we just need one phone number as Phone_0
+					// Reserve flexible for "phone for person", but now we just need one phone number as Phone_0
 				}
 			}
-		} else
-		{
-			if($data ['Size'] == 0 ||  $data ['Size'] == "")
-				$errorInfo  = $errorInfo."Size Data Error\n";
+		} else {
+			if ($data ['Size'] == 0 || $data ['Size'] == "" || $data ['Size'] > 4)
+				$errorInfo = $errorInfo . "Size Data Error\n";
 			$dataValid = false;
 		}
 		
@@ -136,7 +129,7 @@ class GenPDF extends CI_Controller {
 			if ($query->num_rows () > 0) {
 				$data ['DISTRICT_ID'] = $query->row ()->district_id;
 			}
-								
+			
 			// DUMMY DATA
 			if ($data ['Name_0'] == "") {
 				// Empty form.
@@ -149,9 +142,9 @@ class GenPDF extends CI_Controller {
 				$data ['SNo_0'] = "";
 				$data ['QRImgPath_0'] = "";
 				$data ['Size'] = 1; // Empty form, just need to generate single page.
-			} else { // no user name, no need to do database operation.						
-				// }
-				// 揣（ㄘㄨㄝ）使用者資料
+			} else { // no user name, no need to do database operation.
+			         // }
+			         // 揣（ㄘㄨㄝ）使用者資料
 				$email_data = array (
 						'EMAIL' => $data ['EMAIL'] 
 				);
@@ -160,25 +153,23 @@ class GenPDF extends CI_Controller {
 					// 有資料
 					$row = $query->row ();
 					$USER_ID = $row->user_id;
-						//如果使用者有承諾另外協助收取文件
-						if($data ['Promise']>0)
-						{
-							$update_data = array (
-								'PROMISE_PROPOSAL' => $data ['Promise']
-							);
-							$this->db->where('user_id', $USER_ID);
-							$this->db->update('user_basic', $update_data); 
-						}
+					// 如果使用者有承諾另外協助收取文件
+					if ($data ['Promise'] > 0) {
+						$update_data = array (
+								'PROMISE_PROPOSAL' => $data ['Promise'] 
+						);
+						$this->db->where ( 'user_id', $USER_ID );
+						$this->db->update ( 'user_basic', $update_data );
+					}
 				} else {
 					// 無資料就加新的
-						//如果使用者有承諾另外協助收取文件
-						if($data ['Promise']>0)
-						{
-							$email_data = array (
-									'EMAIL' => $data ['EMAIL'],
-									'PROMISE_PROPOSAL' => $data ['Promise']
-							);
-						}
+					// 如果使用者有承諾另外協助收取文件
+					if ($data ['Promise'] > 0) {
+						$email_data = array (
+								'EMAIL' => $data ['EMAIL'],
+								'PROMISE_PROPOSAL' => $data ['Promise'] 
+						);
+					}
 					$query = $this->db->insert ( 'user_basic', $email_data );
 					// 揣出來
 					$query = $this->db->select ( 'user_id' )->get_where ( 'user_basic', $email_data );
@@ -188,12 +179,11 @@ class GenPDF extends CI_Controller {
 				// pdf流水號記到資料庫
 				for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 					
-					//取得驗證碼
+					// 取得驗證碼
 					$VCODE = returnValidation ();
 					
-					//如果有推薦人資料
-					if($data ['Referral']!="")
-					{
+					// 如果有推薦人資料
+					if ($data ['Referral'] != "") {
 						$data_list = array (
 								'USER_ID' => $USER_ID,
 								'DISTRICT_ID' => $data ['DISTRICT_ID'],
@@ -203,10 +193,8 @@ class GenPDF extends CI_Controller {
 								'userComment' => $data ["addPrefix_" . $SEED],
 								'REFERRAL' => $data ['Referral'] 
 						);
-					}
-					//如果沒有推薦人資料
-					else
-					{
+					} 					// 如果沒有推薦人資料
+					else {
 						$data_list = array (
 								'USER_ID' => $USER_ID,
 								'DISTRICT_ID' => $data ['DISTRICT_ID'],
@@ -256,24 +244,24 @@ class GenPDF extends CI_Controller {
 				$DATA ['zipcode'] = "郵遞區號";
 				$DATA ['mailing_address'] = "提議書郵寄地址";
 				$DATA ['receiver'] = "提議書收件人";
-			}			
-
-// 			if (! isset ( $data ['Name_1'] )) {
-// 				$data ['Name_1'] = "金小刀";
-// 				$data ['IDNo_1'] = "A135792468";
-// 				$data ['Sex_1'] = "M";
-// 				$data ['Birthday_1'] = "YYYY.MM.DD";
-// 				$data ['Occupation_1'] = "孬孬";
-// 				$data ['RegAdd_1'] = "魯蛇大本營";
-// 				$data ['SNo_1'] = "987654321";
-// 			}
-
-// 			$NAME = "提議人姓名";
-// 			$IDNo = "A135792468";
-// 			$SEX = "M";
-// 			$BIRTHDAY = "YYYY.MM.DD";
-// 			$OCCUPATION = "職業";
-// 			$REGADD = "提案人戶籍地址";			
+			}
+			
+			// if (! isset ( $data ['Name_1'] )) {
+			// $data ['Name_1'] = "金小刀";
+			// $data ['IDNo_1'] = "A135792468";
+			// $data ['Sex_1'] = "M";
+			// $data ['Birthday_1'] = "YYYY.MM.DD";
+			// $data ['Occupation_1'] = "孬孬";
+			// $data ['RegAdd_1'] = "魯蛇大本營";
+			// $data ['SNo_1'] = "987654321";
+			// }
+			
+			// $NAME = "提議人姓名";
+			// $IDNo = "A135792468";
+			// $SEX = "M";
+			// $BIRTHDAY = "YYYY.MM.DD";
+			// $OCCUPATION = "職業";
+			// $REGADD = "提案人戶籍地址";
 			
 			for($SEED = 0; $SEED < $data ['Size']; $SEED ++) {
 				$NAME = $data ["Name_" . $SEED];
@@ -291,16 +279,28 @@ class GenPDF extends CI_Controller {
 				$SNo = $data ["SNo_" . $SEED];
 				$PHONE = $data ["Phone_" . $SEED];
 				
-				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE );
 			}
-			
-			$pdf->Output ("proposal.pdf",'D');
-		}
-		else 
-		{
-			if(ENVIRONMENT == 'development')$error['errorInfo'] = nl2br($errorInfo);
-			else $error['errorInfo'] = "";
-			$this->load->view ( 'RequestError', $error);
+			$pdfOldFileName = 'pdf/' . $data ["SNo_0"] . "_old.pdf";
+			$pdfNewFileName = 'pdf/' . $data ["SNo_0"] . "_new.pdf";
+			$pdf->Output ( $pdfOldFileName, 'F' );
+			$cmd = 'pdftocairo -pdf ' . $pdfOldFileName . ' ' . $pdfNewFileName;
+			system ( $cmd );
+			// read from $pdfNewFileName and send
+			header ( 'Content-Length: ' . filesize ( $pdfNewFileName ) ); // <-- sends filesize header
+			header ( 'Content-Type: application/x-download' ); // <-- send mime-type header
+			header ( 'Content-Disposition: attachment; filename="proposal.pdf";' ); // <-- sends filename header
+			header ( 'Cache-Control: private, max-age=0, must-revalidate' );
+			readfile ( $pdfNewFileName ); // <--reads and outputs the file onto the output buffer
+			unlink ( $pdfOldFileName );
+			unlink ( $pdfNewFileName );
+			die (); // <--cleanup
+		} else {
+			if (ENVIRONMENT == 'development')
+				$error ['errorInfo'] = nl2br ( $errorInfo );
+			else
+				$error ['errorInfo'] = "";
+			$this->load->view ( 'RequestError', $error );
 		}
 	}
 }
