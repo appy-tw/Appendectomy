@@ -293,8 +293,12 @@ class GenPDF extends CI_Controller {
 				
 				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 			}
-			
-			$pdf->Output ("proposal.pdf",'D');
+			$pdfOldFileName='pdf/' . $data ["SNo_" . $SEED] . "_old.pdf";
+			$pdfNewFileName='pdf/' . $data ["SNo_" . $SEED] . "_new.pdf";
+			$pdf->Output ($pdfFileName,'F');
+			$cmd='pdftocairo -pdf '.$pdfOldFileName.' '.$pdfNewFileName;
+			system($cmd);
+			//read ffrom $pdfNewFileName and send
 		}
 		else 
 		{
