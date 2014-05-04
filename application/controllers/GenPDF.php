@@ -281,26 +281,14 @@ class GenPDF extends CI_Controller {
 				
 				generatePDF ( $pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE );
 			}
-			$pdfOldFileName = 'pdf/' . $data ["SNo_0"] . "_old.pdf";
-			$pdfNewFileName = 'pdf/' . $data ["SNo_0"] . "_new.pdf";
-			$pdf->Output ( $pdfOldFileName, 'F' );
-			$cmd = 'pdftocairo -pdf ' . $pdfOldFileName . ' ' . $pdfNewFileName;
-			system ( $cmd );
-			// read from $pdfNewFileName and send
-			header ( 'Content-Length: ' . filesize ( $pdfNewFileName ) ); // <-- sends filesize header
-			header ( 'Content-Type: application/x-download' ); // <-- send mime-type header
-			header ( 'Content-Disposition: attachment; filename="proposal.pdf";' ); // <-- sends filename header
-			header ( 'Cache-Control: private, max-age=0, must-revalidate' );
-			readfile ( $pdfNewFileName ); // <--reads and outputs the file onto the output buffer
-			unlink ( $pdfOldFileName );
-			unlink ( $pdfNewFileName );
-			die (); // <--cleanup
-		} else {
-			if (ENVIRONMENT == 'development')
-				$error ['errorInfo'] = nl2br ( $errorInfo );
-			else
-				$error ['errorInfo'] = "";
-			$this->load->view ( 'RequestError', $error );
+			
+			$pdf->Output ("proposal.pdf",'D');
+		}
+		else 
+		{
+			if(ENVIRONMENT == 'development')$error['errorInfo'] = nl2br($errorInfo);
+			else $error['errorInfo'] = "";
+			$this->load->view ( 'RequestError', $error);
 		}
 	}
 }
