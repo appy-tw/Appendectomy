@@ -7,16 +7,9 @@ class Email extends Surgery
 	public function show()
 	{
 		$this->load->database ();
-		$data_list = array (
-				$id_name => $sn,
-				'id_last_five' => $id_card_five 
-		);
-		$query = $this->db->order_by('','desc')->get( 'proposal');
+		$query = $this->db->order_by('','desc')->where->get( 'proposal');
 			
-		$this->load->helper ( 'url' );
-		$this->load->view ( 'hospital/change_password', array (
-				'trg' => 'hospital/check_change_password' 
-		) );
+		$this->load->view ( 'surgery/mail');
 	}
 }
 
