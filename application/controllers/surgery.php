@@ -34,7 +34,7 @@ class Surgery extends CI_Controller
 	 				$withoutRepeat = $this->db->where('district_id', $district_id[$i])->group_by('id_last_five')->get('proposal');
 	 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
 	 				$received = $this->db->where(array('district_id' => $district_id[$i], 'current_status' => 'received'))->
-	 				group_by('id_last_five')->get_where('proposal');
+	 				group_by('id_last_five')->get('proposal');
 	 				$temp ['received'] = $received->num_rows ();
 					
 					$data["district_.$i"] = array(
