@@ -94,18 +94,24 @@ class Surgery extends CI_Controller
 				return;
 			}
 		}
+		$nickname = $this->session->userdata ( 'nickname' );
+		$data_list = array ( 'nickname'=>$nickname);
+		$query = $this->db->select ( 'staff_id' )->get_where ( 'staff_info', $data_list );
+		$staff_id=$query->row()->staff_id;
 		// 開始更新資料庫
 		for($i = 0; $i < 10; $i ++)
 		{
-			$data_list = array (
-					$id_name => $sn,
-					'id_last_five' => $id_card_five 
-			);
-			$query = $this->db->select ( $id_name )->get_where ( $table, $data_list );
+			$sn = $this->input->post ( 'SNO_' . $i );
+			$id_card_five = $this->input->post ( 'IDL5_' . $i );
+			if ($sn == '' && $id_card_five == '')
+			{
+				continue;
+			}
 			// 代誌記到變化資料表（change）
 			$data_list = array (
-					$id_name => $status,
-					'status_changed_to' => $status 
+					$id_name => $sn,
+					'status_changed_to' => $status ,
+					'staff_id'=>$staff_id
 			);
 			$query = $this->db->insert ( $change_table, $data_list );
 			// 更新總表
@@ -114,7 +120,7 @@ class Surgery extends CI_Controller
 			);
 			$this->db->where ( $id_name, $sn )->update ( $table, $data_list );
 		}
-		redirect ( 'doctor/process' );
+		redirect ( 'surgery/process' );
 	}
 	// 有登入才有網頁
 	public function __construct()
