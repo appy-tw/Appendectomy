@@ -12,29 +12,42 @@ class Email extends Surgery
 				'refused' 
 		);
 		$this->load->database ();
-
-		$query = $this->db->select ( 'user_id, id_last_five' )->distinct()->get ( 'proposal' );
-		foreach ( $query->result () as $row )
+		
+		$user_query = $this->db->select ( 'user_id' )->distinct ()->get ( 'proposal' );
+		foreach ( $user_query->result () as $user_row )
 		{
-			$user_id = $row->user_id;
-			$id_last_five = $row->id_last_five;
-			$condition = array (
-					'user_id' => $user_id,
-					'id_last_five' => $id_last_five 
+			$user_id = $user_row->user_id;
+			$user_condition = array (
+					'user_id' => $user_id 
 			);
-			
-			$ok_record_query = $this->db->where_in ( 'current_status', $received_status )->get_where ( 'proposal' ,$condition);
-			if ($ok_record_query->num_rows() > 0)
+			$query = $this->db->select ( 'id_last_five' )->distinct ()->get_where ( 'proposal', $user_condition );
+			$receive_array = array ();
+			$not_rec_array = array ();
+			foreach ( $query->result () as $row )
 			{
-// 				$ok_record_query->row()->proposal_id;
-				echo $id_last_five .$ok_record_query->row()->proposal_id. 'ok'.$ok_record_query->num_rows().'<br/>';
-			} else
-			{
-				echo $id_last_five . 'not receive<br/>';
+				$id_last_five = $row->id_last_five;
+				$condition = array (
+						'user_id' => $user_id,
+						'id_last_five' => $id_last_five 
+				);
+				
+				$ok_record_query = $this->db->where_in ( 'current_status', $received_status )->get_where ( 'proposal', $condition );
+				if ($ok_record_query->num_rows () > 0)
+				{
+					$receive_array [] = $id_last_five;
+				} else
+				{
+					$not_rec_array [] = $id_last_five;
+				}
 			}
+			echo $user_id;
+			print_r ( $receive_array );
+			print_r ( $not_rec_array );
+			$email = $this->db->select ( 'email' )->get_where ( 'user_basic', $user_condition )->row()->email;
+			echo $email;
 		}
 		
-// 		$this->load->view ( 'email/show' );
+		// $this->load->view ( 'email/show' );
 	}
 }
 
