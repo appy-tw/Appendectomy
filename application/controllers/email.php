@@ -6,10 +6,27 @@ class Email extends Surgery
 {
 	public function show()
 	{
+		$received_status = array (
+				'received',
+				'sent',
+				'refused' 
+		);
 		$this->load->database ();
-		$query = $this->db->order_by('','desc')->where->get( 'proposal');
-			
-		$this->load->view ( 'email/show');
+		$condition = array (
+				'no_notify' => 0 
+		);
+		$recorder_query = $this->db->select ( 'proposal_id, user_id,district_id' )->where_in ( 'current_status', $received_status )->get_where ( 'proposal', $condition );
+		foreach ( $recorder_query->result () as $recorder_query_row )
+		{
+			$user_id = $recorder_query_row->user_id;
+			$proposal_id = $recorder_query_row->proposal_id;
+			$district_id = $recorder_query_row->district_id;
+			#找email、立委名
+			#做json
+			#上尾設no_notify
+		}
+		
+		// $this->load->view ( 'email/show' );
 	}
 }
 
