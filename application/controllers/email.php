@@ -12,39 +12,18 @@ class Email extends Surgery
 				'refused' 
 		);
 		$this->load->database ();
-		
-		$user_query = $this->db->select ( 'user_id' )->distinct ()->get ( 'proposal' );
-		foreach ( $user_query->result () as $user_row )
+		$condition = array (
+				'no_notify' => 0 
+		);
+		$recorder_query = $this->db->select ( 'proposal_id, user_id,district_id' )->where_in ( 'current_status', $received_status )->get_where ( 'proposal', $condition );
+		foreach ( $recorder_query->result () as $recorder_query_row )
 		{
-			$user_id = $user_row->user_id;
-			$user_condition = array (
-					'user_id' => $user_id 
-			);
-			$query = $this->db->select ( 'id_last_five' )->distinct ()->get_where ( 'proposal', $user_condition );
-			$receive_array = array ();
-			$not_rec_array = array ();
-			foreach ( $query->result () as $row )
-			{
-				$id_last_five = $row->id_last_five;
-				$condition = array (
-						'user_id' => $user_id,
-						'id_last_five' => $id_last_five 
-				);
-				
-				$ok_record_query = $this->db->where_in ( 'current_status', $received_status )->get_where ( 'proposal', $condition );
-				if ($ok_record_query->num_rows () > 0)
-				{
-					$receive_array [] = $id_last_five;
-				} else
-				{
-					$not_rec_array [] = $id_last_five;
-				}
-			}
-			echo $user_id;
-			print_r ( $receive_array );
-			print_r ( $not_rec_array );
-			$email = $this->db->select ( 'email' )->get_where ( 'user_basic', $user_condition )->row()->email;
-			echo $email;
+			$user_id = $recorder_query_row->user_id;
+			$proposal_id = $recorder_query_row->proposal_id;
+			$district_id = $recorder_query_row->district_id;
+			#找email、立委名
+			#做json
+			#上尾設no_notify
 		}
 		
 		// $this->load->view ( 'email/show' );
