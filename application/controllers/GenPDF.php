@@ -29,6 +29,7 @@ class GenPDF extends CI_Controller {
 		$this->load->helper ( 'proposal' );
 		
 		$dataValid = true;
+		$isEmptyForm = false;
 		$errorInfo = "";
 		if (($data ['Size'] = $this->input->post ( 'Size', true )) === false) {
 			$dataValid = false;
@@ -133,6 +134,7 @@ class GenPDF extends CI_Controller {
 			// DUMMY DATA
 			if ($data ['Name_0'] == "") {
 				// Empty form.
+				$isEmptyForm = true;
 				$data ['Name_0'] = "";
 				$data ['IDNo_0'] = "";
 				$data ['Sex_0'] = "";
@@ -229,12 +231,18 @@ class GenPDF extends CI_Controller {
                         $pdf->SetFont('droidsansfallback', '', 20, true);
 			
 
-                        if ($data ['DISTRICT_ID'] != "") {
+			if ($data ['DISTRICT_ID'] != "") {
 				$data_list = array (
 						'DISTRICT_ID' => $data ['DISTRICT_ID'] 
 				);
 				$query = $this->db->get_where ( 'district_data', $data_list );
 				$DATA = $query->row_array ();
+				if ($isEmptyForm) {
+					if (isset ( $DATA ['prodescimgpath_empty'] ))
+						$DATA ['prodescimgpath'] = $DATA ['prodescimgpath_empty']
+					else if (isset ( $DATA ['petdescimgpath_empty'] ))
+						$DATA ['petdescimgpath'] = $DATA ['petdescimgpath_empty']
+				}
 			}
 			
 			// DUMMY DATA
