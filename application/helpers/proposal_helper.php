@@ -190,9 +190,9 @@ if (! function_exists ( 'generatePDF' ))
 		
 		dashLine ( $pdf, 5, $first_line, 200, $first_line, 2, 2 );
 		dashLine ( $pdf, 5, $second_line, 200, $second_line, 2, 2 );
-		
-		$ADDLEN = MB_STRLEN ( $REGADD );
-		$WORDPERLINE = 12;
+		$pdf->SetFont ( $CHI_FONT, '', 12 );
+		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8");
+		$WORDPERLINE = 14;
 		$LINE = ($ADDLEN - $ADDLEN % $WORDPERLINE) / $WORDPERLINE;
 		IF (($ADDLEN % $WORDPERLINE) > 0)
 		{
@@ -204,7 +204,7 @@ if (! function_exists ( 'generatePDF' ))
 		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++)
 		{
 			$pdf->SetXY ( 111, 39 + $form_offset + $LINESEED * $HEIGHT );
-			$pdf->Cell ( 62, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE ), 'C', false );
+			$pdf->Cell ( 62, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
 		}
 		
 		$pdf->SetXY ( 95, 2 );
