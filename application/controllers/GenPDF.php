@@ -237,11 +237,11 @@ class GenPDF extends CI_Controller {
 				);
 				$query = $this->db->get_where ( 'district_data', $data_list );
 				$DATA = $query->row_array ();
-				if ($isEmptyForm) {
+				if ($isEmptyForm == true) {
 					if (isset ( $DATA ['prodescimgpath_empty'] ))
-						$DATA ['prodescimgpath'] = $DATA ['prodescimgpath_empty']
+						$DATA ['prodescimgpath'] = $DATA ['prodescimgpath_empty'];
 					elseif (isset ( $DATA ['petdescimgpath_empty'] ))
-						$DATA ['petdescimgpath'] = $DATA ['petdescimgpath_empty']
+						$DATA ['petdescimgpath'] = $DATA ['petdescimgpath_empty'];
 				}
 			}
 			
