@@ -240,7 +240,7 @@ class GenPDF extends CI_Controller {
 				if ($isEmptyForm) {
 					if (isset ( $DATA ['prodescimgpath_empty'] ))
 						$DATA ['prodescimgpath'] = $DATA ['prodescimgpath_empty']
-					else if (isset ( $DATA ['petdescimgpath_empty'] ))
+					elseif (isset ( $DATA ['petdescimgpath_empty'] ))
 						$DATA ['petdescimgpath'] = $DATA ['petdescimgpath_empty']
 				}
 			}
