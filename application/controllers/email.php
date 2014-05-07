@@ -47,12 +47,17 @@ class Email extends CI_Controller
 			$email = $email_query->row ()->email;
 			$lyname_query = $this->db->select ( 'district_legislator' )->where ( 'district_id', $district_id )->get ( 'district_data' );
 			$lyname = $lyname_query->row ()->district_legislator;
-			echo $proposal_id . ' ' . $email . ' ' . $lyname . ' ' . $district_id;
+			$email_data [] = array (
+					$email,
+					$proposal_id,
+					$district_id,
+					$lyname 
+			);
 			// json
 			// 尾設no_notify
 			// $proposal_id_list [] = $proposal_id;
 		}
-		
+		echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
 	}
 }
