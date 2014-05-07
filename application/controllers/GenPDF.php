@@ -206,7 +206,7 @@ class GenPDF extends CI_Controller {
 								'VALIDATION_CODE' => $VCODE 
 						);
 					}
-					$this->db->insert ( 'proposal', $data_list );
+					$this->db->set('created_time', 'NOW()', FALSE)->insert ( 'proposal', $data_list );
 					
 					$query = $this->db->select ( 'proposal_id' )->get_where ( 'proposal', $data_list );
 					$row = $query->row ();
