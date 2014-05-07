@@ -51,6 +51,39 @@ class Hospital extends Surgery
 		$query = $this->db->query ( $sql, $data_list );
 		$this->load->view ( 'surgery/main' );
 	}
+	public function add_user()
+	{
+		$this->load->helper ( 'url' );
+		$this->load->view ( 'hospital/add_user', array (
+				'trg' => 'hospital/check_add_user' 
+		) );
+	}
+	public function check_add_user()
+	{
+		$this->load->database ();
+		$this->load->helper ( 'url' );
+		$nickname = $this->input->post ( 'nickname' );
+		$pasword = $this->input->post ( 'password' );
+		$twice = $this->input->post ( 'twice' );
+		$level = $this->input->post ( 'level' );
+		if ($pasword != $twice)
+		{
+			$data = array (
+					'problem' => '兩個密碼不一樣' 
+			);
+			$this->load->view ( 'surgery/process_error', $data );
+			return;
+		}
+		$data_list = array (
+				$nickname,
+				$pasword,
+				$level 
+		);
+		$sql = "INSERT INTO staff_info (nickname, password, level) VALUES (?, PASSWORD(?),?)";
+		$query = $this->db->query ( $sql, $data_list );
+		
+		$this->load->view ( 'surgery/main' );
+	}
 }
 
 /* End of file welcome.php */

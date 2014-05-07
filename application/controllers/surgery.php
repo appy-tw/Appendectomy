@@ -346,6 +346,10 @@ class Surgery extends CI_Controller
 						'改密碼' 
 				) ,
 				array (
+						'hospital/add_user',
+						'加帳號' 
+				) ,
+				array (
 						'doctor/logout',
 						'登出' 
 				) 
