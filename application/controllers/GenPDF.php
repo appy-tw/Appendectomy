@@ -216,7 +216,7 @@ class GenPDF extends CI_Controller {
 					// 設定 QR Code 檔案路徑
 					$data ["QRImgPath_" . $SEED] = 'img/' . $data ["SNo_" . $SEED] . ".jpg";
 					// 複製 QR Code 檔案
-					copy ( "http://140.113.207.111:4000/QRCode/" . $data ["SNo_" . $SEED] . "&VC=" . $VCODE, $data ["QRImgPath_" . $SEED] );
+					copy ( "https://backend.appy.tw/QRCode/" . $data ["SNo_" . $SEED] . "&VC=" . $VCODE, $data ["QRImgPath_" . $SEED] );
 					// print_r($stmt->errorInfo());
 				}
 			}
