@@ -174,6 +174,12 @@
 			{
 					ECHO $DATA['name'];
 			}
+			//補驗證碼的資料
+			IF($DATA['validation_code']=="")
+			{
+				$QUERY_STRING="UPDATE DOC_ACCEPT_SPOT SET VALIDATION_CODE='".returnValidation()."' WHERE ACCEPT_SPOT_ID='".$DATA['accept_spot_id']."'";
+				MYSQL_QUERY($QUERY_STRING);
+			}
 			ECHO "</TD><TD>".$DATA['city']."</TD><TD>".$DATA['district']."</TD><TD>".$DATA['address']."</TD><TD>".$DATA['telephone']."</TD><TD ROWSPAN=2>".nl2br($DATA['note'])."</TD>
 			<TD ROWSPAN=2>
 			<INPUT TYPE=BUTTON ONCLICK=location.href='?ACT=MOD&ID=".$DATA[accept_spot_id]."' VALUE='修改' STYLE='width:70'>
