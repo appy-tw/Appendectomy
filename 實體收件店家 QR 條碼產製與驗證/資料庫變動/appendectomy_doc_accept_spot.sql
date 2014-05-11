@@ -1,4 +1,4 @@
-﻿CREATE DATABASE  IF NOT EXISTS `appendectomy` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE  IF NOT EXISTS `appendectomy` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `appendectomy`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
 --
@@ -42,7 +42,8 @@ CREATE TABLE `doc_accept_spot` (
   `validation_code` varchar(50) NOT NULL,
   `checking_path` varchar(255) default NULL,
   PRIMARY KEY  (`accept_spot_id`),
-  UNIQUE KEY `UNIQUE_NAME` (`name`,`city`,`district`,`address`)
+  UNIQUE KEY `UNIQUE_NAME` (`name`,`city`,`district`,`address`),
+  UNIQUE KEY `UNIQUE_VC` (`validation_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -52,7 +53,7 @@ CREATE TABLE `doc_accept_spot` (
 
 LOCK TABLES `doc_accept_spot` WRITE;
 /*!40000 ALTER TABLE `doc_accept_spot` DISABLE KEYS */;
-INSERT INTO `doc_accept_spot` VALUES (1,'海邊的卡夫卡‧藝文咖啡館','02-23641996','週日、週一 – 週四: 12:00 – 0:00\r\n週五 – 週六: 12:00 – 2:00','臺北市','中正區','羅斯福路三段244巷2號2樓','（捷運台電大樓／公館站，位於˙台電大樓旁）',NULL,'http://kafkabythe.blogspot.tw/','9864512341','http://www.uisltsc.com.tw/appendectomy/accept_spot_v.php&VC=9864512341'),(2,'測試','123','789','台中','中區','我家','123456',NULL,'123456','373700510328421979458087155580','http://www.uisltsc.com.tw/appendectomy/accept_spot_v.php&VC=373700510328421979458087155580');
+INSERT INTO `doc_accept_spot` VALUES (1,'海邊的卡夫卡‧藝文咖啡館','02-23641996','週日、週一 – 週四: 12:00 – 0:00\r\n週五 – 週六: 12:00 – 2:00','臺北市','中正區','羅斯福路三段244巷2號2樓','（捷運台電大樓／公館站，位於˙台電大樓旁）',NULL,'http://kafkabythe.blogspot.tw/','9864512341','http://www.uisltsc.com.tw/appendectomy/accept_spot/9864512341');
 /*!40000 ALTER TABLE `doc_accept_spot` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -65,4 +66,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-11 13:02:18
+-- Dump completed on 2014-05-11 14:37:47
