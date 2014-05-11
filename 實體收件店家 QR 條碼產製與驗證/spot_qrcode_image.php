@@ -5,10 +5,12 @@
 	$QUERY_STRING="SELECT * FROM DOC_ACCEPT_SPOT WHERE ACCEPT_SPOT_ID='".$_GET['ID']."'";
 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
 
-	$PROCESSING_PATH="http://www.uisltsc.com.tw/appendectomy/accept_spot_v.php";
-//	$PROCESSING_PATH="http://appy.tw/accept_spot_v.php";
+	//處理網址路徑 API
+	$PROCESSING_PATH="http://www.uisltsc.com.tw/appendectomy/accept_spot/";
+	//影像放置路徑
 	$IMAGE_PATH="APDocSpot_".$DATA['accept_spot_id']."_".date('Ymd').".jpg";
-	$CHECKING_PATH=$PROCESSING_PATH."&VC=".$DATA['validation_code'];
+	//驗證碼
+	$CHECKING_PATH=$PROCESSING_PATH.$DATA['validation_code'];
 	IF($CHECKING_PATH!=$DATA['checking_path'])
 	{
 		IF(copy("http://140.113.207.111:4000/QRCode/".$CHECKING_PATH,$IMAGE_PATH))
