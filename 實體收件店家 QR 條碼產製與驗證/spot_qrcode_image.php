@@ -5,8 +5,8 @@
 	$QUERY_STRING="SELECT * FROM DOC_ACCEPT_SPOT WHERE ACCEPT_SPOT_ID='".$_GET['ID']."'";
 	$DATA=MYSQL_FETCH_ARRAY(MYSQL_QUERY($QUERY_STRING));
 
-	//處理網址路徑 API
-	$PROCESSING_PATH="http://www.uisltsc.com.tw/appendectomy/accept_spot/";
+	//處理網址路徑
+	$PROCESSING_PATH="http://www.uisltsc.com.tw/appendectomy/accept_spot_v.php?VC=";
 	//影像放置路徑
 	$IMAGE_PATH="APDocSpot_".$DATA['accept_spot_id']."_".date('Ymd').".jpg";
 	//驗證碼
