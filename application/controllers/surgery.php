@@ -16,24 +16,24 @@ class Surgery extends CI_Controller
 	{
 		$this->load->database ();
 		
-		$query = $this->db->group_by('district_id')->get('proposal');
-		$count = $query->num_rows ();
+		$query_district = $this->db->select('district_id')->distinct()->get('proposal');
+		$count = $query_district->num_rows ();
 		$DATA['isData'] = false;		
 		if($count>0)
 		{
 			$DATA['isData'] = true;
-			$district_id = $query->row ()->district_id;
-			
-			for($i=0;$i<$count;$i++)
+
+			$i=0;
+			foreach ($query_district->result() as $row)
 			{
-				$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id[$i]));
-				
+				$district_id = $row->district_id;
+				$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id));
 				if ($query->num_rows () > 0) {
 	 				$temp ['district_legislator'] = $query->row ()->district_legislator;
-	 				$temp ['totalApply'] = $this->db->where('district_id',$district_id[$i])->from('proposal')->count_all_results();
-	 				$withoutRepeat = $this->db->where('district_id', $district_id[$i])->select('id_last_five, user_id')->distinct()->get('proposal');
+	 				$temp ['totalApply'] = $this->db->where('district_id',$district_id)->from('proposal')->count_all_results();
+	 				$withoutRepeat = $this->db->where('district_id', $district_id)->select('id_last_five, user_id')->distinct()->get('proposal');
 	 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
-	 				$received = $this->db->where(array('district_id' => $district_id[$i], 'current_status' => 'received'))->
+	 				$received = $this->db->where(array('district_id' => $district_id, 'current_status' => 'received'))->
 	 				select('id_last_five, user_id')->distinct()->get('proposal');
 	 				$temp ['received'] = $received->num_rows ();
 					
@@ -42,7 +42,8 @@ class Surgery extends CI_Controller
 							'totalApply'=> $temp ['totalApply'],
 							'withoutRepeat'=> $temp ['withoutRepeat'],
 							'received'=> $temp ['received']
-					);				
+					);
+					$i+=1;				
 				}
 			};
 			$DATA['data'] = $data;
