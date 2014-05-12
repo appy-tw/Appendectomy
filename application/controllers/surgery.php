@@ -11,234 +11,253 @@ class Surgery extends CI_Controller
 	{
 		$this->load->view ( 'surgery/process' );
 	}
-	
 	public function process_statistics()
 	{
 		$this->load->database ();
 		
-		$query_district = $this->db->select('district_id')->distinct()->get('proposal');
+		$query_district = $this->db->select ( 'district_id' )->distinct ()->get ( 'proposal' );
 		$count = $query_district->num_rows ();
-		$DATA['isData'] = false;		
-		if($count>0)
+		$DATA ['isData'] = false;
+		if ($count > 0)
 		{
-			$DATA['isData'] = true;
-
-			$i=0;
-			foreach ($query_district->result() as $row)
+			$DATA ['isData'] = true;
+			
+			$three_day_ago = date ( 'Y-m-d', strtotime ( '-3 day' ) );
+			
+			$received_status = array (
+					'received',
+					'sent',
+					'refused' 
+			);
+			$i = 0;
+			foreach ( $query_district->result () as $row )
 			{
 				$district_id = $row->district_id;
-				$query = $this->db->select('district_legislator')->get_where('district_data', array('district_id' => $district_id));
-				if ($query->num_rows () > 0) {
-	 				$temp ['district_legislator'] = $query->row ()->district_legislator;
-	 				$temp ['totalApply'] = $this->db->where('district_id',$district_id)->from('proposal')->count_all_results();
-	 				$withoutRepeat = $this->db->where('district_id', $district_id)->select('id_last_five, user_id')->distinct()->get('proposal');
-	 				$temp ['withoutRepeat'] = $withoutRepeat->num_rows ();
-	 				$received = $this->db->where(array('district_id' => $district_id, 'current_status' => 'received'))->
-	 				select('id_last_five, user_id')->distinct()->get('proposal');
-	 				$temp ['received'] = $received->num_rows ();
+				$query = $this->db->select ( 'district_legislator' )->get_where ( 'district_data', array (
+						'district_id' => $district_id 
+				) );
+				if ($query->num_rows () > 0)
+				{
+					$temp ['district_legislator'] = $query->row ()->district_legislator;
+					$temp ['totalApply'] = $this->db->where ( 'district_id', $district_id )->from ( 'proposal' )->count_all_results ();
+					$withoutRepeat = $this->db->select ( 'id_last_five, user_id' )->select_max ( 'proposal_id', 'proposal_id' )->select_max ( 'last_update', 'last_update' )->group_by ( array (
+							'id_last_five',
+							' user_id' 
+					) )->where ( 'district_id', $district_id )->get ( 'proposal' );
+					$received = $this->db->where ( array (
+							'district_id' => $district_id,
+							'current_status' => 'received' 
+					) )->select ( 'id_last_five, user_id' )->distinct ()->get ( 'proposal' );
+					$temp ['received'] = $received->num_rows ();
 					
-					$data["district_.$i"] = array(
+					$temp ['withoutRepeat'] = 0;
+					$temp ['no_received_within_3days'] = 0;
+					// 三天前寄信，但是同樣組合沒有記錄的
+					foreach ( $withoutRepeat->result () as $proposal )
+					{
+						$temp ['withoutRepeat'] += 1;
+						list ( $proposal_date, $proposal_time ) = explode ( ' ', $proposal->last_update, 2 );
+						echo $proposal_date;
+						echo $three_day_ago;
+						if ($three_day_ago > $proposal_date)
+						{
+							$condition = array (
+									'district_id' => $district_id,
+									'user_id' => $proposal->user_id,
+									'id_last_five' => $proposal->id_last_five 
+							);
+							$find_all_record = $this->db->where ( $condition ) -> where_in ( 'current_status', $received_status )->get ( 'proposal' );
+							if ($find_all_record->num_rows () == 0)
+							{
+								$temp ['no_received_within_3days'] += 1;
+							}
+						}
+					}
+					
+					$data ["district_.$i"] = array (
 							'district_id' => $temp ['district_legislator'],
-							'totalApply'=> $temp ['totalApply'],
-							'withoutRepeat'=> $temp ['withoutRepeat'],
-							'received'=> $temp ['received']
+							'totalApply' => $temp ['totalApply'],
+							'withoutRepeat' => $temp ['withoutRepeat'],
+							'received' => $temp ['received'],
+							'no_received_within_3days' => $temp ['no_received_within_3days'] 
 					);
-					$i+=1;				
+					$i += 1;
 				}
-			};
-			$DATA['data'] = $data;
+			}
+			;
+			$DATA ['data'] = $data;
 		}
 		
 		$this->load->view ( 'surgery/process_statistics', $DATA );
-		
 	}
-	
 	public function processing()
 	{
 		$this->load->database ();
-		$input['SNO'] = $this->input->get('SNO');
+		$input ['SNO'] = $this->input->get ( 'SNO' );
 		
-		if($input['SNO']!="")
+		if ($input ['SNO'] != "")
 		{
-			$SNO=$this->input->get('SNO');
-			$VC=$this->input->get('VC');
-			$STATUS=$this->input->get('STATUS');
-			$STFPWD=$this->input->get('STFPWD');
-			$NICKNAME=$this->input->get('NICKNAME');
-			$IDL5=$this->input->get('IDL5');
-			$PROCEED=true;
-			if(($STATUS=="refused"||$STATUS=="voided")&&$STFPWD=="")
+			$SNO = $this->input->get ( 'SNO' );
+			$VC = $this->input->get ( 'VC' );
+			$STATUS = $this->input->get ( 'STATUS' );
+			$STFPWD = $this->input->get ( 'STFPWD' );
+			$NICKNAME = $this->input->get ( 'NICKNAME' );
+			$IDL5 = $this->input->get ( 'IDL5' );
+			$PROCEED = true;
+			if (($STATUS == "refused" || $STATUS == "voided") && $STFPWD == "")
 			{
-				$RETURNED_STRING="STFPWD";
-				$PROCEED=false;
-			}
-			else
+				$RETURNED_STRING = "STFPWD";
+				$PROCEED = false;
+			} else
 			{
-				if($STATUS=="refused"||$STATUS=="voided")
+				if ($STATUS == "refused" || $STATUS == "voided")
 				{
 					$sql = "SELECT staff_id FROM STAFF_INFO WHERE NICKNAME=? AND PASSWORD=PASSWORD(?)";
 					$QUERY_STRING = $this->db->query ( $sql, array (
 							$NICKNAME,
-							$STFPWD
+							$STFPWD 
 					) );
-				}
-				else
+				} else
 				{
 					$sql = "SELECT staff_id FROM STAFF_INFO WHERE NICKNAME=?";
 					$QUERY_STRING = $this->db->query ( $sql, array (
-							$NICKNAME
+							$NICKNAME 
 					) );
 				}
-				if($QUERY_STRING->num_rows()==1)
+				if ($QUERY_STRING->num_rows () == 1)
 				{
-					$STAFF= $QUERY_STRING->row_array()->staff_id;
-				}
-				ELSE
+					$STAFF = $QUERY_STRING->row_array ()->staff_id;
+				} else
 				{
-					$PROCEED=FALSE;
+					$PROCEED = FALSE;
 				}
 			}
-			if($PROCEED)
+			if ($PROCEED)
 			{
-				if ($STAFF=="")
+				if ($STAFF == "")
 				{
 					$sql = "SELECT staff_id FROM STAFF_INFO WHERE NICKNAME=?";
 					$QUERY_STRING = $this->db->query ( $sql, array (
-							$NICKNAME
+							$NICKNAME 
 					) );
-					if($QUERY_STRING->num_rows()==1)
+					if ($QUERY_STRING->num_rows () == 1)
 					{
-						$STAFF=$QUERY_STRING->row()->staff_id;
+						$STAFF = $QUERY_STRING->row ()->staff_id;
 					}
 				}
-				IF($STAFF!="")
+				IF ($STAFF != "")
 				{
-					IF($SNO[4]==1)
+					IF ($SNO [4] == 1)
 					{
 						
 						$MAIN_TABLE = "PROPOSAL";
 						$RECORD_TABLE = "PROPOSAL_CHANGE_RECORD";
-						
-					}
-					ELSE IF($SNO[4]==2)
+					} else IF ($SNO [4] == 2)
 					{
 						
 						$MAIN_TABLE = "PETITION";
 						$RECORD_TABLE = "PETITION_CHANGE_RECORD";
-						
 					}
-		
-					$sql="INSERT INTO ?(?_ID,STATUS_CHANGED_TO,STAFF_ID)VALUES(?,?,?)";
+					
+					$sql = "INSERT INTO ?(?_ID,STATUS_CHANGED_TO,STAFF_ID)VALUES(?,?,?)";
 					$QUERY_STRING = $this->db->query ( $sql, array (
 							$RECORD_TABLE,
 							$MAIN_TABLE,
-							intval(substr($SNO,5)),
+							intval ( substr ( $SNO, 5 ) ),
 							$STATUS,
-							$STAFF
-					) );					
-					IF($QUERY_STRING->num_rows() > 0)
+							$STAFF 
+					) );
+					IF ($QUERY_STRING->num_rows () > 0)
 					{
-						$RECORD_ID = $this->db->mysql_insert_id();
-						$sql ="SELECT current_status,id_last_five FROM ? WHERE ?_ID=? AND VALIDATION_CODE=?";
-						$QUERY_STRING = $this->db->query($sql, array(
+						$RECORD_ID = $this->db->mysql_insert_id ();
+						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?_ID=? AND VALIDATION_CODE=?";
+						$QUERY_STRING = $this->db->query ( $sql, array (
 								$MAIN_TABLE,
-								intval(substr($SNO,5)),
-								$VC
-							)
-						);
-						IF($QUERY_STRING->num_rows()==1)
+								intval ( substr ( $SNO, 5 ) ),
+								$VC 
+						) );
+						IF ($QUERY_STRING->num_rows () == 1)
 						{
-							$DATA=$QUERY_STRING->row_array();
-		
-							IF($DATA['id_last_five']=="")
+							$DATA = $QUERY_STRING->row_array ();
+							
+							IF ($DATA ['id_last_five'] == "")
 							{
-								IF($IDL5=="")
+								IF ($IDL5 == "")
 								{
-									$RETURNED_STRING="IDL5";
-									$sql="";
-								}
-								ELSE
+									$RETURNED_STRING = "IDL5";
+									$sql = "";
+								} else
 								{
 									$sql = "UPDATE ? SET CURRENT_STATUS=?,ID_LAST_FIVE=? WHERE ?_ID=? AND VALIDATION_CODE=?";
-									$QUERY_STRING = $this->db->query($sql, array(
+									$QUERY_STRING = $this->db->query ( $sql, array (
 											$MAIN_TABLE,
 											$STATUS,
 											$IDL5,
 											$MAIN_TABLE,
-											intval(substr($SNO,5)),
-											$VC
-										)
-									);
+											intval ( substr ( $SNO, 5 ) ),
+											$VC 
+									) );
 								}
-							}
-							ELSE
+							} else
 							{
 								$sql = "UPDATE ? SET CURRENT_STATUS=? WHERE ?_ID=? AND VALIDATION_CODE=?";
-								$QUERY_STRING = $this->db->query($sql, array(
+								$QUERY_STRING = $this->db->query ( $sql, array (
 										$MAIN_TABLE,
 										$STATUS,
 										$MAIN_TABLE,
-										intval(substr($SNO,5)),
-										$VC
-									)
-								);
-								
+										intval ( substr ( $SNO, 5 ) ),
+										$VC 
+								) );
 							}
-		
-							IF($QUERY_STRING!="")
+							
+							IF ($QUERY_STRING != "")
 							{
-								$RETURNED_STRING=$DATA['current_status'];
-								IF($QUERY_STRING->num_rows() > 0)
+								$RETURNED_STRING = $DATA ['current_status'];
+								IF ($QUERY_STRING->num_rows () > 0)
 								{
-									IF($this->db->affected_rows()==1)
+									IF ($this->db->affected_rows () == 1)
 									{
 										$sql = "UPDATE ? SET SUCCEED='1' WHERE ?_ID=?";
-										$this->db->query($sql, array(
+										$this->db->query ( $sql, array (
 												$RECORD_TABLE,
 												$RECORD_TABLE,
-												$RECORD_ID
-										));
+												$RECORD_ID 
+										) );
 										$sql = "SELECT current_status,last_update FROM ? WHERE ?_ID=? AND VALIDATION_CODE=?";
-										$QUERY_STRING = $this->db->query($sql, array(
+										$QUERY_STRING = $this->db->query ( $sql, array (
 												$MAIN_TABLE,
 												$MAIN_TABLE,
-												intval(substr($SNO,5)),
-												$VC
-										));
+												intval ( substr ( $SNO, 5 ) ),
+												$VC 
+										) );
 										
-										
-										IF($QUERY_STRING->num_rows()==1)
+										IF ($QUERY_STRING->num_rows () == 1)
 										{
-											$DATA=$QUERY_STRING->row_array();
-											$RETURNED_STRING.=";".$DATA['current_status'].";".$DATA['last_update'];
+											$DATA = $QUERY_STRING->row_array ();
+											$RETURNED_STRING .= ";" . $DATA ['current_status'] . ";" . $DATA ['last_update'];
 										}
-									}
-									ELSE
+									} else
 									{
-										$RETURNED_STRING.=";NOCHANGE";
+										$RETURNED_STRING .= ";NOCHANGE";
 									}
-								}
-								ELSE
+								} else
 								{
-									$RETURNED_STRING="更新失敗";
+									$RETURNED_STRING = "更新失敗";
 								}
 							}
-						}
-						ELSE
+						} else
 						{
-							$RETURNED_STRING="更新失敗";
+							$RETURNED_STRING = "更新失敗";
 						}
 					}
-				}
-				ELSE
+				} else
 				{
-					$RETURNED_STRING.="NA";
+					$RETURNED_STRING .= "NA";
 				}
 			}
 		}
 		ECHO $RETURNED_STRING;
 	}
-	
 	public function process_update()
 	{
 		// $this->load->view ( 'surgery/process_update' );
@@ -269,22 +288,24 @@ class Surgery extends CI_Controller
 			$data_list = array (
 					$id_name => $sn,
 					'id_last_five' => $id_card_five 
-			); 
+			);
 			$query = $this->db->select ( $id_name )->get_where ( $table, $data_list );
 			// 有在資料庫無
 			if ($query->num_rows () != 1)
 			{
 				$data = array (
-						'problem' => ($i+1) . '的資料有問題！！' 
+						'problem' => ($i + 1) . '的資料有問題！！' 
 				);
 				$this->load->view ( 'surgery/process_error', $data );
 				return;
 			}
 		}
 		$nickname = $this->session->userdata ( 'nickname' );
-		$data_list = array ( 'nickname'=>$nickname);
+		$data_list = array (
+				'nickname' => $nickname 
+		);
 		$query = $this->db->select ( 'staff_id' )->get_where ( 'staff_info', $data_list );
-		$staff_id=$query->row()->staff_id;
+		$staff_id = $query->row ()->staff_id;
 		// 開始更新資料庫
 		for($i = 0; $i < 10; $i ++)
 		{
@@ -297,8 +318,8 @@ class Surgery extends CI_Controller
 			// 代誌記到變化資料表（change）
 			$data_list = array (
 					$id_name => $sn,
-					'status_changed_to' => $status ,
-					'staff_id'=>$staff_id
+					'status_changed_to' => $status,
+					'staff_id' => $staff_id 
 			);
 			$query = $this->db->insert ( $change_table, $data_list );
 			// 更新總表
@@ -336,20 +357,20 @@ class Surgery extends CI_Controller
 				),
 				array (
 						'surgery/process_statistics',
-						'統計資料'
+						'統計資料' 
 				),
 				array (
 						'email/show',
-						'寄email'
+						'寄email' 
 				),
 				array (
 						'hospital/change_password',
 						'改密碼' 
-				) ,
+				),
 				array (
 						'hospital/add_user',
 						'加帳號' 
-				) ,
+				),
 				array (
 						'doctor/logout',
 						'登出' 
