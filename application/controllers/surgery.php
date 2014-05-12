@@ -45,9 +45,8 @@ class Surgery extends CI_Controller
 							' user_id' 
 					) )->where ( 'district_id', $district_id )->get ( 'proposal' );
 					$received = $this->db->where ( array (
-							'district_id' => $district_id,
-							'current_status' => 'received' 
-					) )->select ( 'id_last_five, user_id' )->distinct ()->get ( 'proposal' );
+							'district_id' => $district_id 
+					) )->where_in ( 'current_status', $received_status )->select ( 'id_last_five, user_id' )->distinct ()->get ( 'proposal' );
 					$temp ['received'] = $received->num_rows ();
 					
 					$temp ['withoutRepeat'] = 0;
@@ -66,7 +65,7 @@ class Surgery extends CI_Controller
 									'user_id' => $proposal->user_id,
 									'id_last_five' => $proposal->id_last_five 
 							);
-							$find_all_record = $this->db->where ( $condition ) -> where_in ( 'current_status', $received_status )->get ( 'proposal' );
+							$find_all_record = $this->db->where ( $condition )->where_in ( 'current_status', $received_status )->get ( 'proposal' );
 							if ($find_all_record->num_rows () == 0)
 							{
 								$temp ['no_received_within_3days'] += 1;
