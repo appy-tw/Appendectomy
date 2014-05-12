@@ -56,8 +56,6 @@ class Surgery extends CI_Controller
 					{
 						$temp ['withoutRepeat'] += 1;
 						list ( $proposal_date, $proposal_time ) = explode ( ' ', $proposal->last_update, 2 );
-						echo $proposal_date;
-						echo $three_day_ago;
 						if ($three_day_ago > $proposal_date)
 						{
 							$condition = array (
