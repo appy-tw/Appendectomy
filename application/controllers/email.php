@@ -6,6 +6,7 @@ class Email extends CI_Controller
 {
 	public function kia3_pue1()
 	{
+		$this->checkLevel(array('admin'));
 		$nickname = $this->input->get ( 'tiunn3', true );
 		$password = $this->input->get ( 'bit8', true );
 		$jit8 = $this->input->get ( 'jit8', true );

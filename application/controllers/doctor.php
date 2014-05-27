@@ -27,6 +27,8 @@ class Doctor extends CI_Controller
 		{
 			$this->load->library ( 'session' );
 			$this->session->set_userdata ( 'nickname', $nickname );
+			$data=$query->row ();
+			$this->session->set_userdata ( 'level', $data->level );
 			redirect ( 'surgery/main' );
 		}
 		else

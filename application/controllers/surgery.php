@@ -9,10 +9,12 @@ class Surgery extends CI_Controller
 	}
 	public function process()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->view ( 'surgery/process' );
 	}
 	public function process_statistics()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->database ();
 		
 		$query_district = $this->db->select ( 'district_id' )->distinct ()->get ( 'proposal' );
@@ -87,8 +89,9 @@ class Surgery extends CI_Controller
 		
 		$this->load->view ( 'surgery/process_statistics', $DATA );
 	}
-	public function processing()
+	public function processing_app()
 	{
+		$this->checkLevel(array('app_qrcode'));
 		$this->load->database ();
 		$input ['SNO'] = $this->input->get ( 'SNO' );
 		
@@ -257,6 +260,7 @@ class Surgery extends CI_Controller
 	}
 	public function process_update()
 	{
+		$this->checkLevel(array('admin','app_qrcode'));
 		// $this->load->view ( 'surgery/process_update' );
 		$district_id = $this->input->post ( 'DISTRICT_ID' );
 		$doctype = $this->input->post ( 'DOCTYPE' );
@@ -376,6 +380,13 @@ class Surgery extends CI_Controller
 		$surgery_data = $this->load->view ( 'surgery/base', $data, true );
 		$data ['content'] = &$surgery_data;
 		echo $this->load->view ( 'doctor/base', $data, true );
+	}
+	private function checkLevel($allow)
+	{
+		if (! in_array($this->session->userdata ( 'nickname' ),$allow))
+		{
+			redirect ( 'doctor/login' );
+		}
 	}
 }
 

@@ -6,6 +6,7 @@ class Hospital extends Surgery
 {
 	public function change_password()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->helper ( 'url' );
 		$this->load->view ( 'hospital/change_password', array (
 				'trg' => 'hospital/check_change_password' 
@@ -13,6 +14,7 @@ class Hospital extends Surgery
 	}
 	public function check_change_password()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->database ();
 		$this->load->helper ( 'url' );
 		$origin = $this->input->post ( 'origin' );
@@ -53,6 +55,7 @@ class Hospital extends Surgery
 	}
 	public function add_user()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->helper ( 'url' );
 		$this->load->view ( 'hospital/add_user', array (
 				'trg' => 'hospital/check_add_user' 
@@ -60,6 +63,7 @@ class Hospital extends Surgery
 	}
 	public function check_add_user()
 	{
+		$this->checkLevel(array('admin'));
 		$this->load->database ();
 		$this->load->helper ( 'url' );
 		$nickname = $this->input->post ( 'nickname' );
@@ -83,6 +87,13 @@ class Hospital extends Surgery
 		$query = $this->db->query ( $sql, $data_list );
 		
 		$this->load->view ( 'surgery/main' );
+	}
+	private function checkLevel($allow)
+	{
+		if (! in_array($this->session->userdata ( 'nickname' ),$allow))
+		{
+			redirect ( 'doctor/login' );
+		}
 	}
 }
 
