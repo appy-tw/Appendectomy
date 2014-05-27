@@ -90,7 +90,7 @@ class Hospital extends Surgery
 	}
 	private function checkLevel($allow)
 	{
-		if (! in_array($this->session->userdata ( 'nickname' ),$allow))
+		if (! in_array($this->session->userdata ( 'level' ),$allow))
 		{
 			redirect ( 'doctor/login' );
 		}

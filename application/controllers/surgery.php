@@ -5,6 +5,7 @@ class Surgery extends CI_Controller
 {
 	public function main()
 	{
+		print($this->session->userdata ( 'level' ));
 		$this->load->view ( 'surgery/main' );
 	}
 	public function process()
@@ -361,7 +362,7 @@ class Surgery extends CI_Controller
 						'統計資料' 
 				),
 				array (
-						'email/show',
+						'email/kia3_pue1',
 						'寄email' 
 				),
 				array (
@@ -383,7 +384,7 @@ class Surgery extends CI_Controller
 	}
 	private function checkLevel($allow)
 	{
-		if (! in_array($this->session->userdata ( 'nickname' ),$allow))
+		if (! in_array($this->session->userdata ( 'level' ),$allow))
 		{
 			redirect ( 'doctor/login' );
 		}

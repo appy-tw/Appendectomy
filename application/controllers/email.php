@@ -61,6 +61,13 @@ class Email extends CI_Controller
 		echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
 	}
+	private function checkLevel($allow)
+	{
+		if (! in_array($this->session->userdata ( 'level' ),$allow))
+		{
+			redirect ( 'doctor/login' );
+		}
+	}
 }
 
 /* End of file welcome.php */
