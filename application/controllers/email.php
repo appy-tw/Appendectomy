@@ -63,6 +63,7 @@ class Email extends CI_Controller
 	}
 	private function checkLevel($allow)
 	{
+		$this->load->library ( 'session' );
 		if (! in_array($this->session->userdata ( 'level' ),$allow))
 		{
 			redirect ( 'doctor/login' );
