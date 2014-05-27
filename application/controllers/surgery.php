@@ -5,7 +5,6 @@ class Surgery extends CI_Controller
 {
 	public function main()
 	{
-		print($this->session->userdata ( 'level' ));
 		$this->load->view ( 'surgery/main' );
 	}
 	public function process()
