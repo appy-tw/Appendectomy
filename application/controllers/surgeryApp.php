@@ -8,6 +8,7 @@ class SurgeryApp extends CI_Controller
 	{
 		$this->load->database ();
 		$input ['SNO'] = $this->input->get ( 'SNO' );
+		$RETURNED_STRING = 'QQ';
 		
 		if ($input ['SNO'] != "")
 		{
