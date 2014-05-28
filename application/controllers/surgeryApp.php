@@ -65,7 +65,7 @@ class SurgeryApp extends CI_Controller
 						$RECORD_TABLE = "petition_change_record";
 					}
 					
-					$sql = "INSERT INTO ?(?_id,status_changed_to,staff_id)VALUES(?,?,?)";
+					$sql = "INSERT INTO ? (?_id,status_changed_to,staff_id) VALUES (?,?,?)";
 					$QUERY_STRING = $this->db->query ( $sql, array (
 							$RECORD_TABLE,
 							$MAIN_TABLE,
@@ -73,6 +73,7 @@ class SurgeryApp extends CI_Controller
 							$STATUS,
 							$STAFF 
 					) );
+										
 					IF ($QUERY_STRING->num_rows () > 0)
 					{
 						$RECORD_ID = $this->db->mysql_insert_id ();
