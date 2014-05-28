@@ -74,7 +74,7 @@ class SurgeryApp extends CI_Controller
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
 						echo '2';
-						$RECORD_ID = $this->db->mysql_insert_id ();
+						$RECORD_ID = $this->db->insert_id ();
 						echo 't';
 						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?=? AND validation_code=?";
 						$QUERY_STRING = $this->db->query ( $sql, array (
