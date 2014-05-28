@@ -65,15 +65,13 @@ class SurgeryApp extends CI_Controller
 						$RECORD_TABLE = "petition_change_record";
 					}
 					
-					$sql = "INSERT INTO ? (?_id,status_changed_to,staff_id) VALUES (?,?,?)";
-					$QUERY_STRING = $this->db->query ( $sql, array (
-							$RECORD_TABLE,
-							$MAIN_TABLE,
-							intval ( substr ( $SNO, 5 ) ),
-							$STATUS,
-							$STAFF 
-					) );
-										
+					$data = array(
+							$MAIN_TABLE.'_id' <= intval ( substr ( $SNO, 5 ) ),
+							status_changed_to <= $STATUS,
+							staff_id <= $STAFF 
+					);
+					$this->db->insert($RECORD_TABLE, $data);
+															
 					IF ($QUERY_STRING->num_rows () > 0)
 					{
 						$RECORD_ID = $this->db->mysql_insert_id ();
