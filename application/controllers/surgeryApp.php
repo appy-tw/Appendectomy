@@ -32,7 +32,7 @@ class SurgeryApp extends CI_Controller
 				) );
 				if ($QUERY_STRING->num_rows () == 1)
 				{
-					$STAFF = $QUERY_STRING->row_array ()->staff_id;
+					$STAFF = $QUERY_STRING->row()->staff_id;
 				} else
 				{
 					$PROCEED = FALSE;
