@@ -32,7 +32,7 @@ class SurgeryApp extends CI_Controller
 				) );
 				if ($QUERY_STRING->num_rows () == 1)
 				{
-					$STAFF = $QUERY_STRING->row_array ()->staff_id;
+					$STAFF = $QUERY_STRING->row ()->staff_id;
 				} else
 				{
 					$PROCEED = FALSE;
@@ -67,8 +67,8 @@ class SurgeryApp extends CI_Controller
 					
 					$data = array(
 							$MAIN_TABLE.'_id' <= intval ( substr ( $SNO, 5 ) ),
-							status_changed_to <= $STATUS,
-							staff_id <= $STAFF 
+							'status_changed_to' <= $STATUS,
+							'staff_id' <= $STAFF 
 					);
 					$this->db->insert($RECORD_TABLE, $data);
 															
