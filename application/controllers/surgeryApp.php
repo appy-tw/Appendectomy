@@ -75,9 +75,10 @@ class SurgeryApp extends CI_Controller
 					{
 						echo '2';
 						$RECORD_ID = $this->db->mysql_insert_id ();
-						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?_id=? AND validation_code=?";
+						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?=? AND validation_code=?";
 						$QUERY_STRING = $this->db->query ( $sql, array (
 								$MAIN_TABLE,
+								$MAIN_TABLE.'_id',
 								intval ( substr ( $SNO, 5 ) ),
 								$VC 
 						) );
@@ -96,12 +97,12 @@ class SurgeryApp extends CI_Controller
 								} else
 								{
 									echo '6';
-									$sql = "UPDATE ? SET current_status=?,id_last_five=? WHERE ?_id=? AND validation_code=?";
+									$sql = "UPDATE ? SET current_status=?,id_last_five=? WHERE ?=? AND validation_code=?";
 									$QUERY_STRING = $this->db->query ( $sql, array (
 											$MAIN_TABLE,
 											$STATUS,
 											$IDL5,
-											$MAIN_TABLE,
+											$MAIN_TABLE.'_id',
 											intval ( substr ( $SNO, 5 ) ),
 											$VC 
 									) );
@@ -109,11 +110,11 @@ class SurgeryApp extends CI_Controller
 							} else
 							{
 								echo '7';
-								$sql = "UPDATE ? SET current_status=? WHERE ?_id=? AND validation_code=?";
+								$sql = "UPDATE ? SET current_status=? WHERE ?=? AND validation_code=?";
 								$QUERY_STRING = $this->db->query ( $sql, array (
 										$MAIN_TABLE,
 										$STATUS,
-										$MAIN_TABLE,
+										$MAIN_TABLE.'_id',
 										intval ( substr ( $SNO, 5 ) ),
 										$VC 
 								) );
@@ -129,16 +130,16 @@ class SurgeryApp extends CI_Controller
 									IF ($this->db->affected_rows () == 1)
 									{
 										echo '10';
-										$sql = "UPDATE ? SET succeed='1' WHERE ?_id=?";
+										$sql = "UPDATE ? SET succeed='1' WHERE ?=?";
 										$this->db->query ( $sql, array (
 												$RECORD_TABLE,
-												$RECORD_TABLE,
+												$RECORD_TABLE.'_id',
 												$RECORD_ID 
 										) );
-										$sql = "SELECT current_status,last_update FROM ? WHERE ?_id=? AND validation_code=?";
+										$sql = "SELECT current_status,last_update FROM ? WHERE ?=? AND validation_code=?";
 										$QUERY_STRING = $this->db->query ( $sql, array (
 												$MAIN_TABLE,
-												$MAIN_TABLE,
+												$MAIN_TABLE.'_id',
 												intval ( substr ( $SNO, 5 ) ),
 												$VC 
 										) );
