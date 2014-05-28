@@ -115,9 +115,7 @@ class SurgeryApp extends CI_Controller
 								IF ($QUERY_STRING)
 								{
 									IF ($this->db->affected_rows () == 1)
-									{
-										echo '10';
-																				
+									{																				
 // 										$data = array(
 // 												'succeed' => '1'
 // 										);											
@@ -129,7 +127,6 @@ class SurgeryApp extends CI_Controller
 										
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
-											echo '11';
 											$DATA = $QUERY_STRING->row();
 											$RETURNED_STRING .= ";" . $DATA ['current_status'] . ";" . $DATA ['last_update'];
 										}
