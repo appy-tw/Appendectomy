@@ -70,32 +70,25 @@ class SurgeryApp extends CI_Controller
 							'status_changed_to' => $STATUS,
 							'staff_id' => $STAFF
 					);
-					echo '1';
+					
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
-						echo '2';
+						
 						$RECORD_ID = $this->db->insert_id ();
-						echo 't';
-
+						
 						$QUERY_STRING = $this->db->select('current_status,id_last_five')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
 										->where('validation_code',$VC)->get($MAIN_TABLE);
-						echo 'q';
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
 							$DATA = $QUERY_STRING->row_array ();
-							echo '3';
 							IF ($DATA ['id_last_five'] == "")
 							{
-								echo '4';
 								IF ($IDL5 == "")
 								{
-									echo '5';
 									$RETURNED_STRING = "IDL5";
 									$QUERY_STRING = "";
 								} else
-								{
-									echo '6';
-									
+								{	
 									$data = array(
 											'current_status' => $STATUS,
 											'id_last_five' => $IDL5
@@ -107,8 +100,6 @@ class SurgeryApp extends CI_Controller
 								}
 							} else
 							{
-								echo '7';
-								
 								$data = array(
 										'current_status' => $STATUS
 								);
@@ -120,29 +111,19 @@ class SurgeryApp extends CI_Controller
 							
 							IF ($QUERY_STRING != "")
 							{
-								echo '8';
 								$RETURNED_STRING = $DATA ['current_status'];
 								IF ($QUERY_STRING)
 								{
-									echo '9';
 									IF ($this->db->affected_rows () == 1)
 									{
 										echo '10';
 																				
-										$data = array(
-												'succeed' => '1'
-										);
-											
-										$this->db->where($RECORD_TABLE.'_id', $RECORD_ID);
-										$this->db->update($RECORD_TABLE, $data);
+// 										$data = array(
+// 												'succeed' => '1'
+// 										);											
+// 										$this->db->where($RECORD_TABLE.'_id', $RECORD_ID);
+// 										$this->db->update($RECORD_TABLE, $data);
 										
-// 										$sql = "SELECT current_status,last_update FROM ? WHERE ?=? AND validation_code=?";
-// 										$QUERY_STRING = $this->db->query ( $sql, array (
-// 												$MAIN_TABLE,
-// 												$MAIN_TABLE.'_id',
-// 												intval ( substr ( $SNO, 5 ) ),
-// 												$VC 
-// 										) );
 										$QUERY_STRING = $this->db->select('current_status,last_update')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
 										->where('validation_code',$VC)->get($MAIN_TABLE);
 										
