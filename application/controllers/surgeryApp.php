@@ -91,7 +91,7 @@ class SurgeryApp extends CI_Controller
 								{
 									echo '5';
 									$RETURNED_STRING = "IDL5";
-									$sql = "";
+									$QUERY_STRING = "";
 								} else
 								{
 									echo '6';
@@ -122,7 +122,7 @@ class SurgeryApp extends CI_Controller
 							{
 								echo '8';
 								$RETURNED_STRING = $DATA ['current_status'];
-								IF ($QUERY_STRING->num_rows () > 0)
+								IF ($QUERY_STRING)
 								{
 									echo '9';
 									IF ($this->db->affected_rows () == 1)
