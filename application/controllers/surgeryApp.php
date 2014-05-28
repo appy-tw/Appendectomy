@@ -84,6 +84,7 @@ class SurgeryApp extends CI_Controller
 								intval ( substr ( $SNO, 5 ) ),
 								$VC 
 						) );
+						echo "tt";
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
 							$DATA = $QUERY_STRING->row_array ();
