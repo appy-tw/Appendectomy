@@ -42,7 +42,7 @@ class SurgeryApp extends CI_Controller
 			{
 				if ($STAFF == "")
 				{
-					$sql = "SELECT staff_id FROM STAFF_INFO WHERE NICKNAME=?";
+					$sql = "SELECT staff_id FROM staff_info WHERE NICKNAME=?";
 					$QUERY_STRING = $this->db->query ( $sql, array (
 							$NICKNAME 
 					) );
