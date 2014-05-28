@@ -122,12 +122,6 @@ class SurgeryApp extends CI_Controller
 								{
 									IF ($this->db->affected_rows () == 1)
 									{
-										$sql = "UPDATE ? SET succeed='1' WHERE ?=?";
-										$this->db->query ( $sql, array (
-												$RECORD_TABLE,
-												$RECORD_TABLE."_id",
-												$RECORD_ID 
-										) );
 										$data = array(
 												'current_status' => $STATUS,
 										);
@@ -161,7 +155,7 @@ class SurgeryApp extends CI_Controller
 						} else
 						{
 							$RETURNED_STRING = "更新失敗";
-						}
+						}echo "7";
 					}
 				} else
 				{
