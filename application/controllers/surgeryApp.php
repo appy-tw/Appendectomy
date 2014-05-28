@@ -161,7 +161,7 @@ class SurgeryApp extends CI_Controller
 				}
 			}
 		}
-		ECHO $RETURNED_STRING;
+		$this->output->set_output($RETURNED_STRING);
 	}
 	
 }
