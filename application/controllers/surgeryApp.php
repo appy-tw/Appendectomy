@@ -8,8 +8,7 @@ class SurgeryApp extends CI_Controller
 	{
 		$this->load->database ();
 		$input ['SNO'] = $this->input->get ( 'SNO' );
-
-		echo "1";
+		
 		if ($input ['SNO'] != "")
 		{
 			$SNO = $this->input->get ( 'SNO' );
@@ -33,7 +32,7 @@ class SurgeryApp extends CI_Controller
 				) );
 				if ($QUERY_STRING->num_rows () == 1)
 				{
-					$STAFF = $QUERY_STRING->row ()->staff_id;
+					$STAFF = $QUERY_STRING->row_array ()->staff_id;
 				} else
 				{
 					$PROCEED = FALSE;
@@ -67,24 +66,20 @@ class SurgeryApp extends CI_Controller
 					}
 					
 					$data = array(
-							$MAIN_TABLE.'_id' => intval ( substr ( $SNO, 5 ) ),
+							$MAIN_TABLE."_id" => intval ( substr ( $SNO, 5 ) ),
 							'status_changed_to' => $STATUS,
-							'staff_id' => $STAFF 
+							'staff_id' => $STAFF
 					);
-					$this->db->insert($RECORD_TABLE, $data);
-					echo "2";
-															
-					IF ($QUERY_STRING->num_rows () > 0)
+					
+					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
 						$RECORD_ID = $this->db->mysql_insert_id ();
-						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?=? AND validation_code=?";
+						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?_id=? AND validation_code=?";
 						$QUERY_STRING = $this->db->query ( $sql, array (
 								$MAIN_TABLE,
-								$MAIN_TABLE."_id",
 								intval ( substr ( $SNO, 5 ) ),
 								$VC 
 						) );
-						echo "tt";
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
 							$DATA = $QUERY_STRING->row_array ();
@@ -97,25 +92,28 @@ class SurgeryApp extends CI_Controller
 									$sql = "";
 								} else
 								{
-									$data = array(
-											'current_status' => $STATUS,
-											'id_last_five' => $IDL5
-									);
-									
-									$this->db->where($MAIN_TABLE."_id", intval ( substr ( $SNO, 5 ) ));
-									$this->db->where('validation_code', $VC);
-									$this->db->update($MAIN_TABLE, $data);
+									$sql = "UPDATE ? SET current_status=?,id_last_five=? WHERE ?_id=? AND validation_code=?";
+									$QUERY_STRING = $this->db->query ( $sql, array (
+											$MAIN_TABLE,
+											$STATUS,
+											$IDL5,
+											$MAIN_TABLE,
+											intval ( substr ( $SNO, 5 ) ),
+											$VC 
+									) );
 								}
-							} else{
-								$data = array(
-										'current_status' => $STATUS,
-								);
-									
-								$this->db->where($MAIN_TABLE."_id", intval ( substr ( $SNO, 5 ) ));
-								$this->db->where('validation_code', $VC);
-								$this->db->update($MAIN_TABLE, $data);
+							} else
+							{
+								$sql = "UPDATE ? SET current_status=? WHERE ?_id=? AND validation_code=?";
+								$QUERY_STRING = $this->db->query ( $sql, array (
+										$MAIN_TABLE,
+										$STATUS,
+										$MAIN_TABLE,
+										intval ( substr ( $SNO, 5 ) ),
+										$VC 
+								) );
 							}
-							echo '3';
+							
 							IF ($QUERY_STRING != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
@@ -123,22 +121,20 @@ class SurgeryApp extends CI_Controller
 								{
 									IF ($this->db->affected_rows () == 1)
 									{
-										$data = array(
-												'current_status' => $STATUS,
-										);
-											
-										$this->db->where($RECORD_TABLE."_id", $RECORD_ID );
-										$this->db->update($RECORD_TABLE, $data);
-										
-										
-										$sql = "SELECT current_status,last_update FROM ? WHERE ?=? AND validation_code=?";
+										$sql = "UPDATE ? SET succeed='1' WHERE ?_id=?";
+										$this->db->query ( $sql, array (
+												$RECORD_TABLE,
+												$RECORD_TABLE,
+												$RECORD_ID 
+										) );
+										$sql = "SELECT current_status,last_update FROM ? WHERE ?_id=? AND validation_code=?";
 										$QUERY_STRING = $this->db->query ( $sql, array (
 												$MAIN_TABLE,
-												$MAIN_TABLE."_id",
+												$MAIN_TABLE,
 												intval ( substr ( $SNO, 5 ) ),
 												$VC 
 										) );
-										echo "4";
+										
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
 											$DATA = $QUERY_STRING->row_array ();
@@ -147,16 +143,16 @@ class SurgeryApp extends CI_Controller
 									} else
 									{
 										$RETURNED_STRING .= ";NOCHANGE";
-									}echo "5";
+									}
 								} else
 								{
 									$RETURNED_STRING = "更新失敗";
 								}
-							}echo "6";
+							}
 						} else
 						{
 							$RETURNED_STRING = "更新失敗";
-						}echo "7";
+						}
 					}
 				} else
 				{
@@ -164,7 +160,7 @@ class SurgeryApp extends CI_Controller
 				}
 			}
 		}
-		echo $RETURNED_STRING;
+		ECHO $RETURNED_STRING;
 	}
 	
 }
