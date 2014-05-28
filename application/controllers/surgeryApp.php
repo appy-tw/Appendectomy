@@ -122,7 +122,7 @@ class SurgeryApp extends CI_Controller
 								{
 									IF ($this->db->affected_rows () == 1)
 									{
-										$sql = "UPDATE ? SET SUCCEED='1' WHERE ?_id=?";
+										$sql = "UPDATE ? SET succeed='1' WHERE ?_id=?";
 										$this->db->query ( $sql, array (
 												$RECORD_TABLE,
 												$RECORD_TABLE,
