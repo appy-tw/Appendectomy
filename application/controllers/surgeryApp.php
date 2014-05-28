@@ -66,9 +66,9 @@ class SurgeryApp extends CI_Controller
 					}
 					
 					$data = array(
-							$MAIN_TABLE.'_id' <= intval ( substr ( $SNO, 5 ) ),
-							'status_changed_to' <= $STATUS,
-							'staff_id' <= $STAFF 
+							$MAIN_TABLE.'_id' => intval ( substr ( $SNO, 5 ) ),
+							'status_changed_to' => $STATUS,
+							'staff_id' => $STAFF 
 					);
 					$this->db->insert($RECORD_TABLE, $data);
 															
