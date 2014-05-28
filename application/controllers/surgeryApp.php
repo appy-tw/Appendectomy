@@ -24,7 +24,7 @@ class SurgeryApp extends CI_Controller
 				$PROCEED = false;
 			} else
 			{
-				$sql = "SELECT staff_id FROM STAFF_INFO WHERE NICKNAME=? AND PASSWORD=PASSWORD(?) AND level=?";
+				$sql = "SELECT staff_id FROM staff_info WHERE NICKNAME=? AND PASSWORD=PASSWORD(?) AND level=?";
 				$QUERY_STRING = $this->db->query ( $sql, array (
 						$NICKNAME,
 						$STFPWD,
