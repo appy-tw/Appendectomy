@@ -9,7 +9,7 @@ class SurgeryApp extends CI_Controller
 		$this->load->database ();
 		$input ['SNO'] = $this->input->get ( 'SNO' );
 
-		
+		echo "1";
 		if ($input ['SNO'] != "")
 		{
 			$SNO = $this->input->get ( 'SNO' );
@@ -72,6 +72,7 @@ class SurgeryApp extends CI_Controller
 							'staff_id' => $STAFF 
 					);
 					$this->db->insert($RECORD_TABLE, $data);
+					echo "2";
 															
 					IF ($QUERY_STRING->num_rows () > 0)
 					{
@@ -104,7 +105,7 @@ class SurgeryApp extends CI_Controller
 											intval ( substr ( $SNO, 5 ) ),
 											$VC 
 									) );
-								}
+								}echo "3";
 							} else
 							{
 								$sql = "UPDATE ? SET current_status=? WHERE ?=? AND validation_code=?";
