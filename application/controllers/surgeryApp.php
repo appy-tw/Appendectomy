@@ -70,9 +70,10 @@ class SurgeryApp extends CI_Controller
 							'status_changed_to' => $STATUS,
 							'staff_id' => $STAFF
 					);
-					
+					echo '1';
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
+						echo '2';
 						$RECORD_ID = $this->db->mysql_insert_id ();
 						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?_id=? AND validation_code=?";
 						$QUERY_STRING = $this->db->query ( $sql, array (
@@ -83,15 +84,18 @@ class SurgeryApp extends CI_Controller
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
 							$DATA = $QUERY_STRING->row_array ();
-							
+							echo '3';
 							IF ($DATA ['id_last_five'] == "")
 							{
+								echo '4';
 								IF ($IDL5 == "")
 								{
+									echo '5';
 									$RETURNED_STRING = "IDL5";
 									$sql = "";
 								} else
 								{
+									echo '6';
 									$sql = "UPDATE ? SET current_status=?,id_last_five=? WHERE ?_id=? AND validation_code=?";
 									$QUERY_STRING = $this->db->query ( $sql, array (
 											$MAIN_TABLE,
@@ -104,6 +108,7 @@ class SurgeryApp extends CI_Controller
 								}
 							} else
 							{
+								echo '7';
 								$sql = "UPDATE ? SET current_status=? WHERE ?_id=? AND validation_code=?";
 								$QUERY_STRING = $this->db->query ( $sql, array (
 										$MAIN_TABLE,
@@ -116,11 +121,14 @@ class SurgeryApp extends CI_Controller
 							
 							IF ($QUERY_STRING != "")
 							{
+								echo '8';
 								$RETURNED_STRING = $DATA ['current_status'];
 								IF ($QUERY_STRING->num_rows () > 0)
 								{
+									echo '9';
 									IF ($this->db->affected_rows () == 1)
 									{
+										echo '10';
 										$sql = "UPDATE ? SET succeed='1' WHERE ?_id=?";
 										$this->db->query ( $sql, array (
 												$RECORD_TABLE,
@@ -137,6 +145,7 @@ class SurgeryApp extends CI_Controller
 										
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
+											echo '11';
 											$DATA = $QUERY_STRING->row_array ();
 											$RETURNED_STRING .= ";" . $DATA ['current_status'] . ";" . $DATA ['last_update'];
 										}
