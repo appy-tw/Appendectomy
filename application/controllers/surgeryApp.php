@@ -96,16 +96,15 @@ class SurgeryApp extends CI_Controller
 									$sql = "";
 								} else
 								{
-									$sql = "UPDATE ? SET current_status=?,id_last_five=? WHERE ?=? AND validation_code=?";
-									$QUERY_STRING = $this->db->query ( $sql, array (
-											$MAIN_TABLE,
-											$STATUS,
-											$IDL5,
-											$MAIN_TABLE."_id",
-											intval ( substr ( $SNO, 5 ) ),
-											$VC 
-									) );
-								}echo "3";
+									$data = array(
+											'current_status' => $STATUS,
+											'id_last_five' => $IDL5
+									);
+									
+									$this->db->where($MAIN_TABLE."_id", intval ( substr ( $SNO, 5 ) ));
+									$this->db->where('validation_code', $VC);
+									$this->db->update($MAIN_TABLE, $data);
+								}
 							} else
 							{
 								$sql = "UPDATE ? SET current_status=? WHERE ?=? AND validation_code=?";
