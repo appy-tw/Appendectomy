@@ -105,18 +105,16 @@ class SurgeryApp extends CI_Controller
 									$this->db->where('validation_code', $VC);
 									$this->db->update($MAIN_TABLE, $data);
 								}
-							} else
-							{
-								$sql = "UPDATE ? SET current_status=? WHERE ?=? AND validation_code=?";
-								$QUERY_STRING = $this->db->query ( $sql, array (
-										$MAIN_TABLE,
-										$STATUS,
-										$MAIN_TABLE._id,
-										intval ( substr ( $SNO, 5 ) ),
-										$VC 
-								) );
+							} else{
+								$data = array(
+										'current_status' => $STATUS,
+								);
+									
+								$this->db->where($MAIN_TABLE."_id", intval ( substr ( $SNO, 5 ) ));
+								$this->db->where('validation_code', $VC);
+								$this->db->update($MAIN_TABLE, $data);
 							}
-							
+							echo '3';
 							IF ($QUERY_STRING != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
@@ -130,6 +128,14 @@ class SurgeryApp extends CI_Controller
 												$RECORD_TABLE."_id",
 												$RECORD_ID 
 										) );
+										$data = array(
+												'current_status' => $STATUS,
+										);
+											
+										$this->db->where($RECORD_TABLE."_id", $RECORD_ID );
+										$this->db->update($RECORD_TABLE, $data);
+										
+										
 										$sql = "SELECT current_status,last_update FROM ? WHERE ?=? AND validation_code=?";
 										$QUERY_STRING = $this->db->query ( $sql, array (
 												$MAIN_TABLE,
@@ -137,7 +143,7 @@ class SurgeryApp extends CI_Controller
 												intval ( substr ( $SNO, 5 ) ),
 												$VC 
 										) );
-										
+										echo "4";
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
 											$DATA = $QUERY_STRING->row_array ();
@@ -146,12 +152,12 @@ class SurgeryApp extends CI_Controller
 									} else
 									{
 										$RETURNED_STRING .= ";NOCHANGE";
-									}
+									}echo "5";
 								} else
 								{
 									$RETURNED_STRING = "更新失敗";
 								}
-							}
+							}echo "6";
 						} else
 						{
 							$RETURNED_STRING = "更新失敗";
