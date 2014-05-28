@@ -76,13 +76,15 @@ class SurgeryApp extends CI_Controller
 						echo '2';
 						$RECORD_ID = $this->db->insert_id ();
 						echo 't';
-						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?=? AND validation_code=?";
-						$QUERY_STRING = $this->db->query ( $sql, array (
-								$MAIN_TABLE,
-								$MAIN_TABLE.'_id',
-								intval ( substr ( $SNO, 5 ) ),
-								$VC 
-						) );
+// 						$sql = "SELECT current_status,id_last_five FROM ? WHERE ?=? AND validation_code=?";
+// 						$QUERY_STRING = $this->db->query ( $sql, array (
+// 								$MAIN_TABLE,
+// 								$MAIN_TABLE.'_id',
+// 								intval ( substr ( $SNO, 5 ) ),
+// 								$VC 
+// 						) );
+						$QUERY_STRING = $this->db->select('current_status,id_last_five')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
+										->where('validation_code',$VC)->get($MAIN_TABLE);
 						echo 'q';
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
