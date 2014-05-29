@@ -80,7 +80,7 @@ class SurgeryApp extends CI_Controller
 										->where('validation_code',$VC)->get($MAIN_TABLE);
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
-							$DATA = $QUERY_STRING->row_array ();
+							$DATA = $QUERY_STRING->row ();
 							IF ($DATA ['id_last_five'] == "")
 							{
 								IF ($IDL5 == "")
@@ -99,8 +99,6 @@ class SurgeryApp extends CI_Controller
 											$MAIN_TABLE.'_id' => intval ( substr ( $SNO, 5 ) ),
 											'validation_code' => $VC
 									);
-									$QUERY_STRING = $this->db->select($data)->
-													where($where)->get($MAIN_TABLE);
 								}
 							} else
 							{
