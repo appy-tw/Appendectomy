@@ -23,6 +23,7 @@ class SurgeryApp extends CI_Controller
 			{
 				$RETURNED_STRING = "STFPWD";
 				$PROCEED = false;
+				echo 'QQ';
 			} else
 			{
 				$sql = "SELECT staff_id FROM staff_info WHERE nickname=? AND password=PASSWORD(?) AND level=?";
@@ -37,6 +38,7 @@ class SurgeryApp extends CI_Controller
 				} else
 				{
 					$PROCEED = FALSE;
+					echo 'TT';
 				}
 			}
 			echo '2';
