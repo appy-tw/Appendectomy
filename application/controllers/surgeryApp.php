@@ -110,9 +110,11 @@ class SurgeryApp extends CI_Controller
 							IF ($data != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
-								IF ($this->db->update($MAIN_TABLE, $data))
+								$QUERY_STRING = $this->db->update($MAIN_TABLE, $data);
+								$affected_rows = $this->db->affected_rows();
+								IF ($QUERY_STRING)
 								{
-									IF ($this->db->affected_rows() > 0)
+									IF ($affected_rows > 0)
 									{																				
 										$data = array(
 												'succeed' => '1'
