@@ -86,7 +86,7 @@ class SurgeryApp extends CI_Controller
 								IF ($IDL5 == "")
 								{
 									$RETURNED_STRING = "IDL5";
-									$QUERY_STRING = "";
+									$data = "";
 								} else
 								{	
 									$data = array(
@@ -96,7 +96,6 @@ class SurgeryApp extends CI_Controller
 									
 									$this->db->where($MAIN_TABLE.'_id', intval ( substr ( $SNO, 5 ) ));
 									$this->db->where('validation_code', $VC);
-									$QUERY_STRING = $this->db->update($MAIN_TABLE, $data);
 								}
 							} else
 							{
@@ -106,13 +105,12 @@ class SurgeryApp extends CI_Controller
 									
 								$this->db->where($MAIN_TABLE.'_id', intval ( substr ( $SNO, 5 ) ));
 								$this->db->where('validation_code', $VC);
-								$QUERY_STRING = $this->db->update($MAIN_TABLE, $data);
 							}
 							
-							IF ($QUERY_STRING != "")
+							IF ($data != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
-								IF ($QUERY_STRING)
+								IF ($this->db->update($MAIN_TABLE, $data))
 								{
 									IF ($this->db->affected_rows() > 0)
 									{																				
