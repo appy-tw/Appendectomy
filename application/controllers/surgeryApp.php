@@ -8,9 +8,10 @@ class SurgeryApp extends CI_Controller
 	{
 		$this->load->database ();
 		$input ['SNO'] = $this->input->get ( 'SNO' );
-		
+		echo '0';
 		if ($input ['SNO'] != "")
 		{
+			echo '1';
 			$SNO = $this->input->get ( 'SNO' );
 			$VC = $this->input->get ( 'VC' );
 			$STATUS = $this->input->get ( 'STATUS' );
@@ -38,6 +39,7 @@ class SurgeryApp extends CI_Controller
 					$PROCEED = FALSE;
 				}
 			}
+			echo '2';
 			if ($PROCEED)
 			{
 				if ($STAFF == "")
@@ -70,7 +72,7 @@ class SurgeryApp extends CI_Controller
 							'status_changed_to' => $STATUS,
 							'staff_id' => $STAFF
 					);
-					
+					echo '3';
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
 						echo '0';
