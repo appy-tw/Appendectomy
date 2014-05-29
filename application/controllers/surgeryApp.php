@@ -116,11 +116,11 @@ class SurgeryApp extends CI_Controller
 								{
 									IF ($this->db->affected_rows () == 1)
 									{																				
-// 										$data = array(
-// 												'succeed' => '1'
-// 										);											
-// 										$this->db->where($RECORD_TABLE.'_id', $RECORD_ID);
-// 										$this->db->update($RECORD_TABLE, $data);
+										$data = array(
+												'succeed' => '1'
+										);											
+										$this->db->where($RECORD_TABLE.'_id', $RECORD_ID);
+										$this->db->update($RECORD_TABLE, $data);
 										
 										$QUERY_STRING = $this->db->select('current_status,last_update')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
 										->where('validation_code',$VC)->get($MAIN_TABLE);
