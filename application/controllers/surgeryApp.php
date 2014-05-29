@@ -73,18 +73,18 @@ class SurgeryApp extends CI_Controller
 					
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
-						echo '1';
+						
 						$RECORD_ID = $this->db->insert_id ();
 						
 						$QUERY_STRING = $this->db->select('current_status,id_last_five')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
 										->where('validation_code',$VC)->get($MAIN_TABLE);
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
-							echo '2';
+							
 							$DATA = $QUERY_STRING->row_array ();
 							IF ($DATA ['id_last_five'] == "")
 							{
-								echo '3';
+								
 								IF ($IDL5 == "")
 								{
 									$RETURNED_STRING = "IDL5";
@@ -104,7 +104,7 @@ class SurgeryApp extends CI_Controller
 								}
 							} else
 							{
-								echo '4';
+								
 								$data = array(
 										'current_status' => $STATUS
 								);
@@ -116,16 +116,16 @@ class SurgeryApp extends CI_Controller
 							}
 							IF ($data != "")
 							{
-								echo '5';
+								
 								$RETURNED_STRING = $DATA ['current_status'];
 								$this->db->where($where);
 								$QUERY_STRING = $this->db->select('current_status')->get($MAIN_TABLE);
 								if($QUERY_STRING->num_rows() == 1)$QUERY_STRING = $QUERY_STRING->row()->current_status;
 								else $QUERY_STRING = "";
 								$this->db->where($where);
-								echo '6';
+								
 								IF ($this->db->update($MAIN_TABLE, $data))
-								{	echo '7';
+								{	
 									$affected_rows = false;
 									$this->db->where($where);
 									$QUERY_UPDATE = $this->db->select('current_status')->get($MAIN_TABLE);
@@ -137,7 +137,7 @@ class SurgeryApp extends CI_Controller
 									}
 									
 									
-									IF ($this->db->affected_rows() > 0)
+									IF ($affected_rows)
 									{																				
 										$data = array(
 												'succeed' => '1'
