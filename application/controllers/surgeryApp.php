@@ -87,6 +87,7 @@ class SurgeryApp extends CI_Controller
 								{
 									$RETURNED_STRING = "IDL5";
 									$data = "";
+									$where = "";
 								} else
 								{	
 									$data = array(
@@ -94,11 +95,12 @@ class SurgeryApp extends CI_Controller
 											'id_last_five' => $IDL5
 									);
 									
-									$this->db->where($MAIN_TABLE.'_id', intval ( substr ( $SNO, 5 ) ));
-									$this->db->where('validation_code', $VC);
-									$QUERY_STRING = $this->db->update($MAIN_TABLE, $data);
-									$affected_rows = $this->db->affected_rows();
-									
+									$where = array(
+											$MAIN_TABLE.'_id' => intval ( substr ( $SNO, 5 ) ),
+											'validation_code' => $VC
+									);
+									$QUERY_STRING = $this->db->select($data)->
+													where($where)->get($MAIN_TABLE);
 								}
 							} else
 							{
@@ -106,19 +108,29 @@ class SurgeryApp extends CI_Controller
 										'current_status' => $STATUS
 								);
 									
-								$this->db->where($MAIN_TABLE.'_id', intval ( substr ( $SNO, 5 ) ));
-								$this->db->where('validation_code', $VC);
-								$QUERY_STRING = $this->db->update($MAIN_TABLE, $data);
-								$affected_rows = $this->db->affected_rows();
+								$where = array(
+										$MAIN_TABLE.'_id' => intval ( substr ( $SNO, 5 ) ),
+										'validation_code' => $VC
+								);
 							}
 							
 							IF ($data != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
+								$QUERY_STRING = $this->db->select($data)->where($where)->get($MAIN_TABLE);
 								
-								IF ($QUERY_STRING)
+								IF ($this->db->update($MAIN_TABLE, $data)->where($where))
 								{	
-									IF ($affected_rows > 0)
+									$affected_rows = false;
+									$QUERY_UPDATE = $this->db->select($data)->where($where)->get($MAIN_TABLE);
+									if($QUERY_STRING && $QUERY_UPDATE){
+										if($QUERY_STRING->num_rows() == 1 && $QUERY_UPDATE->num_rows() == 1){
+											if($QUERY_STRING->row() == $QUERY_UPDATE->row())
+												$affected_rows = true;
+										}
+									}
+									
+									IF ($affected_rows)
 									{																				
 										$data = array(
 												'succeed' => '1'
