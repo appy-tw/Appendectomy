@@ -113,7 +113,7 @@ class SurgeryApp extends CI_Controller
 								IF ($this->db->update($MAIN_TABLE, $data))
 								{
 									$affected_rows = $this->db->affected_rows();
-									echo $affected_rows;
+									
 									IF ($affected_rows > 0)
 									{																				
 										$data = array(
