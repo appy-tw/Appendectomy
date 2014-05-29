@@ -80,7 +80,7 @@ class SurgeryApp extends CI_Controller
 										->where('validation_code',$VC)->get($MAIN_TABLE);
 						IF ($QUERY_STRING->num_rows () == 1)
 						{
-							$DATA = $QUERY_STRING->row ();
+							$DATA = $QUERY_STRING->row_array ();
 							IF ($DATA ['id_last_five'] == "")
 							{
 								IF ($IDL5 == "")
@@ -111,14 +111,12 @@ class SurgeryApp extends CI_Controller
 										'validation_code' => $VC
 								);
 							}
-							
 							IF ($data != "")
 							{
 								$RETURNED_STRING = $DATA ['current_status'];
 // 								$QUERY_STRING = $this->db->select($data)->where($where)->get($MAIN_TABLE);
 // 								if($QUERY_STRING->num_rows() == 1)$QUERY_STRING = $QUERY_STRING->row()->current_status;
 // 								else $QUERY_STRING = "";
-								
 								IF ($this->db->update($MAIN_TABLE, $data)->where($where))
 								{	
 // 									$affected_rows = false;
