@@ -153,15 +153,15 @@ class SurgeryApp extends CI_Controller
 										);											
 										$this->db->where($RECORD_TABLE.'_id', $RECORD_ID);
 										$this->db->update($RECORD_TABLE, $data);
-										
+										echo '9';
 										$QUERY_STRING = $this->db->select('current_status,last_update')->where($MAIN_TABLE.'_id',intval ( substr ( $SNO, 5 ) ))
 										->where('validation_code',$VC)->get($MAIN_TABLE);
-										
+										echo '10';
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
 											$DATA = $QUERY_STRING->row();
 											$RETURNED_STRING .= ";" . $DATA ['current_status'] . ";" . $DATA ['last_update'];
-										}
+										}echo '11';
 									} else
 									{
 										$RETURNED_STRING .= ";NOCHANGE";
