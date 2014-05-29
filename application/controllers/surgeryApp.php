@@ -123,12 +123,12 @@ class SurgeryApp extends CI_Controller
 								{	
 									$affected_rows = false;
 									$QUERY_UPDATE = $this->db->select($data)->where($where)->get($MAIN_TABLE);
-									if($QUERY_STRING && $QUERY_UPDATE){
-										if($QUERY_STRING->num_rows() == 1 && $QUERY_UPDATE->num_rows() == 1){
-											if($QUERY_STRING->row() != $QUERY_UPDATE->row())
-												$affected_rows = true;
-										}
+									
+									if($QUERY_STRING->num_rows() == 1 && $QUERY_UPDATE->num_rows() == 1){
+										if($QUERY_STRING->row() != $QUERY_UPDATE->row())
+											$affected_rows = true;
 									}
+									
 									
 									IF ($affected_rows)
 									{																				
