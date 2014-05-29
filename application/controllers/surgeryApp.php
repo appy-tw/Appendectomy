@@ -122,10 +122,11 @@ class SurgeryApp extends CI_Controller
 								$QUERY_STRING = $this->db->select('current_status')->get($MAIN_TABLE);
 								if($QUERY_STRING->num_rows() == 1)$QUERY_STRING = $QUERY_STRING->row()->current_status;
 								else $QUERY_STRING = "";
+								echo 1;
 								$this->db->where($where);
-								
+								echo 2;
 								IF ($this->db->update($MAIN_TABLE, $data))
-								{	
+								{	echo 3;
 									$affected_rows = false;
 									$this->db->where($where);
 									$QUERY_UPDATE = $this->db->select('current_status')->get($MAIN_TABLE);
