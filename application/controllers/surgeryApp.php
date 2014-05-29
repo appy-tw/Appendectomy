@@ -119,7 +119,7 @@ class SurgeryApp extends CI_Controller
 								echo '5';
 								$RETURNED_STRING = $DATA ['current_status'];
 								$this->db->where($where);
-								$QUERY_STRING = $this->db->select($data)->get($MAIN_TABLE);
+								$QUERY_STRING = $this->db->select('current_status')->get($MAIN_TABLE);
 								if($QUERY_STRING->num_rows() == 1)$QUERY_STRING = $QUERY_STRING->row()->current_status;
 								else $QUERY_STRING = "";
 								$this->db->where($where);
@@ -128,7 +128,7 @@ class SurgeryApp extends CI_Controller
 								{	echo '7';
 									$affected_rows = false;
 									$this->db->where($where);
-									$QUERY_UPDATE = $this->db->select($data)->get($MAIN_TABLE);
+									$QUERY_UPDATE = $this->db->select('current_status')->get($MAIN_TABLE);
 									
 									if($QUERY_STRING != "" && $QUERY_UPDATE->num_rows() == 1){
 										$QUERY_UPDATE = $QUERY_UPDATE->row()->current_status;
