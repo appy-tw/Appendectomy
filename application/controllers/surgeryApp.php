@@ -44,6 +44,7 @@ class SurgeryApp extends CI_Controller
 			{
 				if ($STAFF == "")
 				{
+					echo '3';
 					$sql = "SELECT staff_id FROM staff_info WHERE nickname=?";
 					$QUERY_STRING = $this->db->query ( $sql, array (
 							$NICKNAME 
@@ -55,6 +56,7 @@ class SurgeryApp extends CI_Controller
 				}
 				IF ($STAFF != "")
 				{
+					echo '4';
 					IF ($SNO [4] == 1)
 					{
 						
@@ -72,7 +74,7 @@ class SurgeryApp extends CI_Controller
 							'status_changed_to' => $STATUS,
 							'staff_id' => $STAFF
 					);
-					echo '3';
+					echo '5';
 					IF ($this->db->insert($RECORD_TABLE, $data))
 					{
 						echo '0';
