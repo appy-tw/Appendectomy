@@ -160,7 +160,7 @@ class SurgeryApp extends CI_Controller
 										IF ($QUERY_STRING->num_rows () == 1)
 										{
 											$DATA = $QUERY_STRING->row();
-											$RETURNED_STRING .= ";" . $DATA ['current_status'] . ";" . $DATA ['last_update'];
+											$RETURNED_STRING .= ";" . $DATA->current_status . ";" . $DATA->last_update;
 										}echo '11';
 									} else
 									{
