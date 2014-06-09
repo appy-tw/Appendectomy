@@ -53,7 +53,7 @@ class Email extends CI_Controller
 		}
 		foreach ( $email_data as $email => $value )
 		{
-			echo $email;
+			echo $email."\n";
 		}
 		//echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
