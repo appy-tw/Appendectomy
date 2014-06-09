@@ -55,8 +55,8 @@ class Hospital extends Surgery
 	}
 	public function add_user()
 	{
-		$this->checkLevel(array('admin'));
 		$this->load->helper ( 'url' );
+		$this->checkLevel(array('admin'));
 		$this->load->view ( 'hospital/add_user', array (
 				'trg' => 'hospital/check_add_user' 
 		) );
@@ -65,7 +65,6 @@ class Hospital extends Surgery
 	{
 		$this->checkLevel(array('admin'));
 		$this->load->database ();
-		$this->load->helper ( 'url' );
 		$nickname = $this->input->post ( 'nickname' );
 		$pasword = $this->input->post ( 'password' );
 		$twice = $this->input->post ( 'twice' );
@@ -90,6 +89,8 @@ class Hospital extends Surgery
 	}
 	private function checkLevel($allow)
 	{
+		$this->load->library ( 'session' );
+		$this->load->helper ( 'url' );
 		if (! in_array($this->session->userdata ( 'level' ),$allow))
 		{
 			redirect ( 'doctor/login' );
