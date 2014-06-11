@@ -29,7 +29,7 @@ class Email extends CI_Controller
 			redirect ( 'doctor/login' );
 		}
 		
-		$recorder_sql = 'SELECT proposal_id FROM proposal_change_record WHERE status_changed_to=? AND DATE(changed_time)=DATE(?)';
+		$recorder_sql = 'SELECT DISTINCT proposal_id FROM proposal_change_record WHERE status_changed_to=? AND DATE(changed_time)=DATE(?)';
 		
 		$recorder_query = $this->db->query ( $recorder_sql, array (
 				'received',
@@ -42,18 +42,18 @@ class Email extends CI_Controller
 			$proposal_id = $recorder_query_row->proposal_id;
 			$user_id_query = $this->db->select ( 'user_id' )->where ( 'proposal_id', $proposal_id )->get ( 'proposal' );
 			$user_id = $user_id_query->row ()->user_id;
-			$user_data [$user_id] = 1;
+			$user_data [$user_id] += 1;
 		}
 		$email_data = array ();
 		foreach ( $user_data as $user_id => $value )
 		{
 			$email_query = $this->db->select ( 'email' )->where ( 'user_id', $user_id )->get ( 'user_basic' );
 			$email = $email_query->row ()->email;
-			$email_data [$email] = 1;
+			$email_data [$email] += $value;
 		}
 		foreach ( $email_data as $email => $value )
 		{
-			echo $email.";\n";
+			echo $email.",".$value.";\n";
 		}
 		//echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
