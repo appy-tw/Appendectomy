@@ -7,8 +7,7 @@ class Email extends CI_Controller
 	public function siu1_tioh8()
 	{
 		
-		//$this->checkLevel(array('admin'));
-		
+		// $this->checkLevel(array('admin'));
 		$nickname = $this->input->get ( 'tiunn3', true );
 		
 		$password = $this->input->get ( 'bit8', true );
@@ -42,6 +41,8 @@ class Email extends CI_Controller
 			$proposal_id = $recorder_query_row->proposal_id;
 			$user_id_query = $this->db->select ( 'user_id' )->where ( 'proposal_id', $proposal_id )->get ( 'proposal' );
 			$user_id = $user_id_query->row ()->user_id;
+			if (! isset ( $user_data [$user_id] ))
+				$user_data [$user_id] = 0;
 			$user_data [$user_id] += 1;
 		}
 		$email_data = array ();
@@ -49,24 +50,25 @@ class Email extends CI_Controller
 		{
 			$email_query = $this->db->select ( 'email' )->where ( 'user_id', $user_id )->get ( 'user_basic' );
 			$email = $email_query->row ()->email;
+			if (! isset ( $email_data [$email] ))
+				$email_data [$email] = 0;
 			$email_data [$email] += $value;
 		}
 		foreach ( $email_data as $email => $value )
 		{
-			echo $email.",".$value.";\n";
+			echo $email . "," . $value . ";\n";
 		}
-		//echo json_encode ( $email_data );
+		// echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
 	}
 	private function checkLevel($allow)
 	{
 		$this->load->helper ( 'url' );
 		$this->load->library ( 'session' );
-		if (! in_array($this->session->userdata ( 'level' ),$allow))
+		if (! in_array ( $this->session->userdata ( 'level' ), $allow ))
 		{
 			redirect ( 'doctor/login' );
 		}
-
 	}
 }
 
