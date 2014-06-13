@@ -224,7 +224,8 @@ if (! function_exists ( 'CPRFormat' )) {
 		if ($QRImgPath != "") {
 			// QR Code 影像
 			$add_offset = 105;
-			$pdf->Image ( $QRImgPath, 580, 1 + $add_offset, 98 );
+			//$pdf->Image ( $QRImgPath, 580, 1 + $add_offset, 98 );
+			$pdf->Image ( $QRImgPath, 0, 0);
 			// 刪除 QR Code 影像
 			unlink ( $QRImgPath );
 			$pdf->SetXY ( 580, 130 + $add_offset );
