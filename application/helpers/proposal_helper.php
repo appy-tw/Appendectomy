@@ -213,7 +213,9 @@ if (! function_exists ( 'appyFormat' )) {
 
 if (! function_exists ( 'CPRFormat' )) {
 	function CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {
-		$pdf->AddPage ('LANDSCAPE','',true,false);
+		$pdf->setPageFormat(array(842, 595));
+		$pdf->AddPage ();
+		
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
@@ -225,7 +227,7 @@ if (! function_exists ( 'CPRFormat' )) {
 			// QR Code 影像
 			$add_offset = 105;
 			//$pdf->Image ( $QRImgPath, 580, 1 + $add_offset, 98 );
-			//$pdf->Image ( $QRImgPath, 0, 0);
+			$pdf->Image ( $QRImgPath, 0, 0);
 			// 刪除 QR Code 影像
 			unlink ( $QRImgPath );
 			$pdf->SetXY ( 580, 130 + $add_offset );
