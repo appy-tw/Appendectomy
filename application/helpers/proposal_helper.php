@@ -218,7 +218,8 @@ if (! function_exists ( 'CPRFormat' )) {
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
 				
-		$pdf->Image ( 'static/image/CPRimage/P1.jpg', 0, 0, 842, 595);
+		//$pdf->Image ( 'static/image/CPRimage/P1.jpg', 0, 0, 842, 595);
+		$pdf->Image ( 'static/image/CPRimage/P1.jpg', 0, 0);
 		
 		if ($QRImgPath != "") {
 			// QR Code 影像
@@ -280,7 +281,8 @@ if (! function_exists ( 'CPRFormat' )) {
 		}
 		
 		$pdf->AddPage ('PORTRAIT');		
-		$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0, 595, 842);	
+		//$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0, 595, 842);	
+		$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0);
 		
 	}
 }
