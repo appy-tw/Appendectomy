@@ -29,13 +29,13 @@ if (! function_exists ( 'returnValidation' )) {
 
 if (! function_exists ( 'generatePDF' )) {
 	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {		
-		if($DATA ['district_name'] == "廖正井"){
-			CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
-		}
-		else{
-			appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
-		}
-
+// 		if($DATA ['district_name'] == "廖正井"){
+// 			CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+// 		}
+// 		else{
+// 			appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+// 		}
+		CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 	}
 }
 
