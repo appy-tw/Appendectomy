@@ -218,15 +218,15 @@ if (! function_exists ( 'CPRFormat' )) {
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
 				
-		$pdf->Image ( 'static/image/P1.jpg');
+		$pdf->Image ( 'static/image/P1.jpg', 0, 0, 595);
 		
 		if ($QRImgPath != "") {
 			// QR Code 影像
-			$add_offset = 321;
-			$pdf->Image ( $QRImgPath, 1787, 1 + $add_offset, 302 );
+			$add_offset = 105;
+			$pdf->Image ( $QRImgPath, 580, 1 + $add_offset, 98 );
 			// 刪除 QR Code 影像
 			unlink ( $QRImgPath );
-			$pdf->SetXY ( 10, 28 + $add_offset );
+			$pdf->SetXY ( 580, 130 + $add_offset );
 			$pdf->SetFont ( $CHI_FONT, '', 24 );
 			$pdf->Cell ( 33, 12, $SNo, 0, 1, 'C', false );
 		}
@@ -236,8 +236,8 @@ if (! function_exists ( 'CPRFormat' )) {
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
 		// TODO
-		$pdf->SetXY ( 225, 1110);
-		$pdf->Cell ( 493, 127, $NAME, 1, 0, 'C', false );
+		$pdf->SetXY ( 73, 362);
+		$pdf->Cell ( 161, 41, $NAME, 1, 0, 'C', false );
 		IF ($SEX == "M" || $SEX == "男")
 		$SEX_STRING = "男";
 		elseif ($SEX == "F" || $SEX == "女")
@@ -245,24 +245,24 @@ if (! function_exists ( 'CPRFormat' )) {
 		else
 			$SEX_STRING = "";
 		
-		$pdf->SetXY ( 717, 1110 );
-		$pdf->Cell ( 100, 290, $SEX_STRING, 1, 0, 'C', true );
-		$pdf->Cell ( 230, 290, $BIRTHDAY, 1, 0, 'C', true );
-		$pdf->Cell ( 150, 290, $OCCUPATION, 1, 0, 'C', true );
+		$pdf->SetXY ( 234, 362 );
+		$pdf->Cell ( 32, 94, $SEX_STRING, 1, 0, 'C', true );
+		$pdf->Cell ( 75, 94, $BIRTHDAY, 1, 0, 'C', true );
+		$pdf->Cell ( 49, 94, $OCCUPATION, 1, 0, 'C', true );
 		// $pdf->Cell(1);
 		$pdf->SetFont ( $CHI_FONT, '', 24 );
 		$pdf->SetTextColor ( 0, 0, 0 );
-		$pdf->SetXY ( 225, 1243 );
-		$pdf->Cell ( 50, 160, $IDNo [0], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [1], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [2], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [3], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [4], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [5], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [6], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [7], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [8], 1, 0, 'C', true );
-		$pdf->Cell ( 50, 160, $IDNo [9], 1, 0, 'C', true );
+		$pdf->SetXY ( 73, 405 );
+		$pdf->Cell ( 16, 52, $IDNo [0], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [1], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [2], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [3], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [4], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [5], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [6], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [7], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [8], 1, 0, 'C', true );
+		$pdf->Cell ( 16, 52, $IDNo [9], 1, 0, 'C', true );
 		
 		$pdf->SetFont ( $CHI_FONT, '', 20 );
 		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8" );
@@ -275,12 +275,12 @@ if (! function_exists ( 'CPRFormat' )) {
 		$LINE = 1;
 		$HEIGHT = 20 / $LINE;
 		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++) {
-			$pdf->SetXY ( 1210, 1110 + $form_offset + $LINESEED * $HEIGHT );
-			$pdf->Cell ( 800, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
+			$pdf->SetXY ( 394, 362 + $LINESEED * $HEIGHT );
+			$pdf->Cell ( 260, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
 		}
 		
 		$pdf->AddPage ();		
-		$pdf->Image ( 'static/image/P2.jpg');	
+		$pdf->Image ( 'static/image/P2.jpg', 0, 0, 842);	
 		
 	}
 }
