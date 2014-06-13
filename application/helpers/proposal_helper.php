@@ -2,58 +2,61 @@
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
 
-if ( ! function_exists('dashLine'))
-{
-	function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING)
-	{
+if (! function_exists ( 'dashLine' )) {
+	function dashLine($pdf, $STARTX, $STARTY, $ENDX, $ENDY, $DASHWIDTH, $SPACING) {
 		$pdf->SetLineWidth ( 0.1 );
 		$SKIPWIDTH = $DASHWIDTH + $SPACING;
-		FOR($SEED = 1; $SEED < $ENDX; $SEED = $SEED + $SKIPWIDTH)
-		{
+		FOR($SEED = 1; $SEED < $ENDX; $SEED = $SEED + $SKIPWIDTH) {
 			$pdf->Line ( $STARTX + $SEED, $STARTY, ($STARTX + $DASHWIDTH) + $SEED, $ENDY );
 		}
 	}
 }
 
-if (! function_exists ( 'returnValidation' ))
-{
-	function returnValidation()
-	{
+if (! function_exists ( 'returnValidation' )) {
+	function returnValidation() {
 		// $BASESTRING="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		$BASESTRING = "0123456789";
 		$FINALSTRING = '';
-		FOR($SEED = 0; $SEED < 30; $SEED ++)
-		{
+		FOR($SEED = 0; $SEED < 30; $SEED ++) {
 			$FINALSTRING .= $BASESTRING [RAND ( 0, 9 )];
 		}
 		RETURN $FINALSTRING;
 	}
 }
 
-if (! function_exists ( 'generatePDF' ))
-{
-	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE)
-	{
+if (! function_exists ( 'generatePDF' )) {
+	function generatePDF($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {		
+// 		if($DATA ['district_name'] == "廖正井"){
+// 			CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+// 		}
+// 		else{
+// 			appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+// 		}
+		appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+
+	}
+}
+
+if (! function_exists ( 'appyFormat' )) {
+	function appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {
 		$pdf->AddPage ();
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
 		$pdf->Cell ( 0, 1, '', 0, 1 );
-		
+				
 		$add_offset = 104;
 		$form_offset = 213;
 		$first_line = 104;
 		$second_line = 203;
 		
 		// 說明資訊列===================================
-		IF (isset ( $DATA ['prodescimgpath'] ))
-		{
+		IF (isset ( $DATA ['prodescimgpath'] )) {
 			$pdf->Image ( 'static/image/' . $DATA ['prodescimgpath'], 0, 0, 210 );
-		}
-		else
-		{
+		} else {
 			$pdf->SetXY ( 10, 11 );
 			$pdf->SetFillColor ( 200, 200, 200 );
 			$pdf->Cell ( 150, 50, $DATA ['reason'], 1, 1, 'C', true );
@@ -69,15 +72,15 @@ if (! function_exists ( 'generatePDF' ))
 		$pdf->SetXY ( 175, 5 + $add_offset );
 		$pdf->Cell ( 20, 25, '5元郵票', 1, 1, 'C', false );
 		
-// 		if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
-// 		{
-// 			$pdf->Image ( "static/image/adv_mail.jpg", 0, $add_offset, 210 );
-// 			$pdf->SetXY ( 141.1, 14.7 + $add_offset );
-// 			$pdf->SetFont ( $CHI_FONT, '', 11 );
-// 			$pdf->Cell ( 41.5, 7.4, $DATA ['postoffice'] . "郵局登記證", 0, 0, 'C', false );
-// 			$pdf->SetXY ( 141.1, 22.1 + $add_offset );
-// 			$pdf->Cell ( 41.5, 7.4, $DATA ['adv_no'], 0, 0, 'C', false );
-// 		}
+		// if (isset ( $DATA ['prepaid'] ) && $DATA ['prepaid'] == 1)
+		// {
+		// $pdf->Image ( "static/image/adv_mail.jpg", 0, $add_offset, 210 );
+		// $pdf->SetXY ( 141.1, 14.7 + $add_offset );
+		// $pdf->SetFont ( $CHI_FONT, '', 11 );
+		// $pdf->Cell ( 41.5, 7.4, $DATA ['postoffice'] . "郵局登記證", 0, 0, 'C', false );
+		// $pdf->SetXY ( 141.1, 22.1 + $add_offset );
+		// $pdf->Cell ( 41.5, 7.4, $DATA ['adv_no'], 0, 0, 'C', false );
+		// }
 		
 		$pdf->SetFont ( $CHI_FONT, '', 20 );
 		$pdf->SetXY ( 60, 55 + $add_offset );
@@ -87,8 +90,7 @@ if (! function_exists ( 'generatePDF' ))
 		$pdf->SetXY ( 60, 76 + $add_offset );
 		$pdf->Cell ( 0, 8, $DATA ['receiver'] . '　啟', 0, 0, 'L', false );
 		
-		if ($QRImgPath != "")
-		{
+		if ($QRImgPath != "") {
 			// QR Code 影像
 			$pdf->Image ( $QRImgPath, 10, 1 + $add_offset, 33 );
 			// 刪除 QR Code 影像
@@ -98,13 +100,12 @@ if (! function_exists ( 'generatePDF' ))
 			$pdf->Cell ( 33, 12, $SNo, 0, 1, 'C', false );
 		}
 		// 提議書表單列===================================
-		if ($PHONE != "") 
-		{					
-			$pdf->SetXY(145,$form_offset-11);
-			$pdf->SetFont($CHI_FONT,'',14);
-			$pdf->Cell(190,8,'聯絡電話：'.$PHONE,0,0,'L',false);
+		if ($PHONE != "") {
+			$pdf->SetXY ( 145, $form_offset - 11 );
+			$pdf->SetFont ( $CHI_FONT, '', 14 );
+			$pdf->Cell ( 190, 8, '聯絡電話：' . $PHONE, 0, 0, 'L', false );
 		}
-
+		
 		$pdf->SetXY ( 5, 5 + $form_offset );
 		$pdf->SetFont ( $CHI_FONT, '', 24 );
 		$pdf->Cell ( 205, 8, '公職人員罷免提議人名冊', 0, 0, 'C', false );
@@ -164,7 +165,7 @@ if (! function_exists ( 'generatePDF' ))
 			$SEX_STRING = "女";
 		else
 			$SEX_STRING = "";
-
+		
 		$pdf->Cell ( 8, 20, $SEX_STRING, 1, 0, 'C', true );
 		$pdf->Cell ( 26, 20, $BIRTHDAY, 1, 0, 'C', true );
 		$pdf->Cell ( 20, 20, $OCCUPATION, 1, 0, 'C', true );
@@ -191,18 +192,16 @@ if (! function_exists ( 'generatePDF' ))
 		dashLine ( $pdf, 5, $first_line, 200, $first_line, 2, 2 );
 		dashLine ( $pdf, 5, $second_line, 200, $second_line, 2, 2 );
 		$pdf->SetFont ( $CHI_FONT, '', 12 );
-		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8");
+		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8" );
 		$WORDPERLINE = 14;
 		$LINE = ($ADDLEN - $ADDLEN % $WORDPERLINE) / $WORDPERLINE;
-		IF (($ADDLEN % $WORDPERLINE) > 0)
-		{
+		IF (($ADDLEN % $WORDPERLINE) > 0) {
 			$LINE ++;
 		}
 		IF ($LINE == "" || $LINE == 0)
 			$LINE = 1;
 		$HEIGHT = 20 / $LINE;
-		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++)
-		{
+		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++) {
 			$pdf->SetXY ( 111, 39 + $form_offset + $LINESEED * $HEIGHT );
 			$pdf->Cell ( 62, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
 		}
@@ -211,4 +210,78 @@ if (! function_exists ( 'generatePDF' ))
 		$pdf->SetFont ( $CHI_FONT, '', 10 );
 		$pdf->Cell ( 24, 7, "請以膠帶黏貼", 1, 0, 'C', true );
 	}
-}	
+}
+
+if (! function_exists ( 'CPRFormat' )) {
+	function CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {
+		$pdf->AddPage ();
+		$pdf->SetFont ( $CHI_FONT, '', 14 );
+		$pdf->SetFillColor ( 255, 255, 255 );
+		$pdf->SetTextColor ( 0, 0, 0 );
+				
+		$pdf->Image ( 'static/image/P1.jpg');
+		
+		if ($QRImgPath != "") {
+			// QR Code 影像
+			$add_offset = 321;
+			$pdf->Image ( $QRImgPath, 1787, 1 + $add_offset, 302 );
+			// 刪除 QR Code 影像
+			unlink ( $QRImgPath );
+			$pdf->SetXY ( 10, 28 + $add_offset );
+			$pdf->SetFont ( $CHI_FONT, '', 24 );
+			$pdf->Cell ( 33, 12, $SNo, 0, 1, 'C', false );
+		}
+		// 提議書表單列===================================
+		
+		$pdf->SetFont ( $CHI_FONT, '', 20 );
+		$pdf->SetFillColor ( 255, 255, 255 );
+		$pdf->SetTextColor ( 0, 0, 0 );
+		// TODO
+		$pdf->SetXY ( 225, 1110);
+		$pdf->Cell ( 493, 127, $NAME, 1, 0, 'C', false );
+		IF ($SEX == "M" || $SEX == "男")
+		$SEX_STRING = "男";
+		elseif ($SEX == "F" || $SEX == "女")
+		$SEX_STRING = "女";
+		else
+			$SEX_STRING = "";
+		
+		$pdf->SetXY ( 717, 1110 );
+		$pdf->Cell ( 100, 290, $SEX_STRING, 1, 0, 'C', true );
+		$pdf->Cell ( 230, 290, $BIRTHDAY, 1, 0, 'C', true );
+		$pdf->Cell ( 150, 290, $OCCUPATION, 1, 0, 'C', true );
+		// $pdf->Cell(1);
+		$pdf->SetFont ( $CHI_FONT, '', 24 );
+		$pdf->SetTextColor ( 0, 0, 0 );
+		$pdf->SetXY ( 225, 1243 );
+		$pdf->Cell ( 50, 160, $IDNo [0], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [1], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [2], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [3], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [4], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [5], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [6], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [7], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [8], 1, 0, 'C', true );
+		$pdf->Cell ( 50, 160, $IDNo [9], 1, 0, 'C', true );
+		
+		$pdf->SetFont ( $CHI_FONT, '', 20 );
+		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8" );
+		$WORDPERLINE = 14;
+		$LINE = ($ADDLEN - $ADDLEN % $WORDPERLINE) / $WORDPERLINE;
+		IF (($ADDLEN % $WORDPERLINE) > 0) {
+			$LINE ++;
+		}
+		IF ($LINE == "" || $LINE == 0)
+		$LINE = 1;
+		$HEIGHT = 20 / $LINE;
+		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++) {
+			$pdf->SetXY ( 1210, 1110 + $form_offset + $LINESEED * $HEIGHT );
+			$pdf->Cell ( 800, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
+		}
+		
+		$pdf->AddPage ();		
+		$pdf->Image ( 'static/image/P2.jpg');	
+		
+	}
+}
