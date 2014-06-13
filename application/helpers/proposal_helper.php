@@ -213,7 +213,7 @@ if (! function_exists ( 'appyFormat' )) {
 
 if (! function_exists ( 'CPRFormat' )) {
 	function CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {
-		$pdf->AddPage ();
+		$pdf->AddPage ('LANDSCAPE');
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
