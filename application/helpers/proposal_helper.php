@@ -33,8 +33,7 @@ if (! function_exists ( 'generatePDF' )) {
 			CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 		}
 		else{
-			appyFormat($
-			pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
+			appyFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE);
 		}
 	}
 }
@@ -56,6 +55,7 @@ if (! function_exists ( 'appyFormat' )) {
 		IF (isset ( $DATA ['prodescimgpath'] )) {
 			$pdf->Image ( 'static/image/' . $DATA ['prodescimgpath'], 0, 0, 210 );
 		} else {
+
 			$pdf->SetXY ( 10, 11 );
 			$pdf->SetFillColor ( 200, 200, 200 );
 			$pdf->Cell ( 150, 50, $DATA ['reason'], 1, 1, 'C', true );
@@ -213,34 +213,84 @@ if (! function_exists ( 'appyFormat' )) {
 
 if (! function_exists ( 'CPRFormat' )) {
 	function CPRFormat($pdf, $CHI_FONT, $ENG_FONT, $DATA, $NAME, $IDNo, $SEX, $BIRTHDAY, $OCCUPATION, $REGADD, $QRImgPath, $SNo, $PHONE) {
-		$pdf->AddPage ('LANDSCAPE');
 		
-		$pdf->SetFont ( $CHI_FONT, '', 14 );
-		$pdf->SetFillColor ( 255, 255, 255 );
-		$pdf->SetTextColor ( 0, 0, 0 );
-				
-		//$pdf->Image ( 'static/image/CPRimage/P1.jpg', 0, 0, 842, 595);
-		$pdf->Image ( 'static/image/CPRimage/P1.jpg', 0, 0, 842, 595);
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
+		$pdf->setMargins(20, 10, -1);
+		$pdf->AddPage ('L');
+		
+		$x = 10;
+		$y = 10;
+		$w = 277;
+		//$pdf->Image('static/image/CPRimage/P1.jpg', $x, $y, $w, $h, 'JPG', '', 'T', true, 300, 'C', false, false, '', 'CM', false);
+		$pdf->Image('static/image/CPRimage/P1.jpg', $x, $y, $w);
 		
 		if ($QRImgPath != "") {
 			// QR Code 影像
-			$add_offset = 105;
-			$pdf->Image ( $QRImgPath, 580, 1 + $add_offset, 98 );
-			$pdf->Image ( $QRImgPath, 0, 0);
+			$x = 200;
+			$y = 37;
+			$pdf->Image ( $QRImgPath, $x, $y, 39 );
+	
 			// 刪除 QR Code 影像
 			unlink ( $QRImgPath );
-			$pdf->SetXY ( 580, 130 + $add_offset );
+			$pdf->SetXY ( $x + 3, $y + 32 );
 			$pdf->SetFont ( $CHI_FONT, '', 14 );
 			$pdf->Cell ( 33, 12, $SNo, 0, 1, 'C', false );
 		}
+	
 		// 提議書表單列===================================
+		$pdf->SetFont ( $CHI_FONT, 'U', 16 );
+		$pdf->SetFillColor ( 255, 255, 255 );
+		$pdf->SetTextColor ( 0, 0, 0 );
+		$pdf->SetXY ( 115, 95);
+		$pdf->Cell ( 67, 0, '公職人員罷免提議人名冊', '', 0, 'C', false );
 		
-		$pdf->SetFont ( $CHI_FONT, '', 14 );
+		$form_offset = 100;
+			
+		$pdf->SetXY ( 10, 15 + $form_offset );
+		$pdf->SetFont ( $CHI_FONT, '', 12 );
 		$pdf->SetFillColor ( 255, 255, 255 );
 		$pdf->SetTextColor ( 0, 0, 0 );
 		// TODO
-		$pdf->SetXY ( 73, 362);
-		$pdf->Cell ( 161, 41, $NAME, 0, 0, 'C', false );
+		$pdf->Cell ( 277, 12, $DATA ['district_name'] . '立法委員' . $DATA ['district_legislator'] . '罷免案提議人名冊', 1, 1, 'C', false );
+		
+		$pdf->SetXY ( 10, 27 + $form_offset );
+		$pdf->SetFont ( $CHI_FONT, '', 14 );
+		$pdf->Cell ( 17, 24, '編號', 1, 0, 'C', true );
+		$pdf->Cell ( 60, 12, '姓名', 1, 0, 'C', false );
+		$pdf->Cell ( 10, 24, '', 1, 0, 'C', true );
+		$pdf->Cell ( 36, 24, '', 1, 0, 'C', true );
+		$pdf->Cell ( 28, 24, '職業', 1, 0, 'C', true );
+		$pdf->Cell ( 81, 24, '戶籍地址', 1, 0, 'C', true );
+		$pdf->Cell ( 28, 24, '', 1, 0, 'C', true );
+		$pdf->Cell ( 17, 24, '備註', 1, 0, 'C', true );
+		$pdf->Cell ( 28, 12, '', 0, 1 );
+		// $pdf->Cell(1);
+		$pdf->SetFont ( $CHI_FONT, '', 14 );
+		$pdf->SetTextColor ( 0, 0, 0 );
+		$pdf->SetXY ( 27, 39 + $form_offset );
+		$pdf->Cell ( 60, 12, '身分證字號', 1, 0, 'C', true );
+		$pdf->Cell ( 28, 12, '', 0, 1 );
+		
+		$pdf->SetXY ( 87, 27 + $form_offset );
+		$pdf->Cell ( 10, 12, '性', 0, 0, 'C', false );
+		$pdf->SetXY ( 87, 39 + $form_offset );
+		$pdf->Cell ( 10, 12, '別', 0, 0, 'C', false );
+		
+		$pdf->SetXY ( 242, 27 + $form_offset );
+		$pdf->Cell ( 28, 12, '簽　名', 0, 0, 'C', false );
+		$pdf->SetXY ( 242, 39 + $form_offset );
+		$pdf->Cell ( 28, 12, '或蓋章', 0, 0, 'C', false );
+		
+		$pdf->SetXY ( 97, 27 + $form_offset );
+		$pdf->Cell ( 36, 12, '出　生', 0, 0, 'C', false );
+		$pdf->SetXY ( 97, 39 + $form_offset );
+		$pdf->Cell ( 36, 12, '年月日', 0, 0, 'C', false );
+		
+		$pdf->SetXY ( 10, 51 + $form_offset );
+		
+		$pdf->Cell ( 17, 30, '', 1, 0, 'C', true );
+		$pdf->Cell ( 60, 15, $NAME, 1, 0, 'C', false );
 		IF ($SEX == "M" || $SEX == "男")
 		$SEX_STRING = "男";
 		elseif ($SEX == "F" || $SEX == "女")
@@ -248,25 +298,29 @@ if (! function_exists ( 'CPRFormat' )) {
 		else
 			$SEX_STRING = "";
 		
-		$pdf->SetXY ( 234, 362 );
-		$pdf->Cell ( 32, 94, $SEX_STRING, 0, 0, 'C', true );
-		$pdf->Cell ( 75, 94, $BIRTHDAY, 0, 0, 'C', true );
-		$pdf->Cell ( 49, 94, $OCCUPATION, 0, 0, 'C', true );
+		$pdf->Cell ( 10, 30, $SEX_STRING, 1, 0, 'C', true );
+		$pdf->Cell ( 36, 30, $BIRTHDAY, 1, 0, 'C', true );
+		$pdf->Cell ( 28, 30, $OCCUPATION, 1, 0, 'C', true );
+		$pdf->Cell ( 81, 30, '', 1, 0, 'C', false );
+		$pdf->Cell ( 28, 30, '', 1, 0, 'C', true );
+		$pdf->Cell ( 17, 30, '', 1, 0, 'C', true );
+		$pdf->Cell ( 28, 12, '', 0, 1 );
 		// $pdf->Cell(1);
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
 		$pdf->SetTextColor ( 0, 0, 0 );
-		$pdf->SetXY ( 73, 405 );
-		$pdf->Cell ( 16, 52, $IDNo [0], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [1], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [2], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [3], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [4], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [5], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [6], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [7], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [8], 0, 0, 'C', true );
-		$pdf->Cell ( 16, 52, $IDNo [9], 0, 0, 'C', true );
-	
+		$pdf->SetXY ( 27, 66 + $form_offset );
+		$pdf->Cell ( 6, 15, $IDNo [0], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [1], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [2], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [3], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [4], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [5], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [6], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [7], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [8], 1, 0, 'C', true );
+		$pdf->Cell ( 6, 15, $IDNo [9], 1, 0, 'C', true );
+		//$pdf->Cell ( 20, 12, '', 0, 1 );
+		
 		$pdf->SetFont ( $CHI_FONT, '', 14 );
 		$ADDLEN = MB_STRLEN ( $REGADD, "UTF-8" );
 		$WORDPERLINE = 14;
@@ -276,15 +330,19 @@ if (! function_exists ( 'CPRFormat' )) {
 		}
 		IF ($LINE == "" || $LINE == 0)
 		$LINE = 1;
-		$HEIGHT = 20 / $LINE;
+		$HEIGHT = 30 / $LINE;
 		FOR($LINESEED = 0; $LINESEED < $LINE; $LINESEED ++) {
-			$pdf->SetXY ( 394, 362 + $LINESEED * $HEIGHT );
-			$pdf->Cell ( 260, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
+			$pdf->SetXY ( 161, 51 + $form_offset + $LINESEED * $HEIGHT );
+			$pdf->Cell ( 81, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
 		}
 		
 		$pdf->AddPage ('PORTRAIT');		
-		//$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0, 595, 842);	
-		$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0);
+		//$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0, 595, 842);
+		$x = 0;
+		$y = 0;
+		$w = 210;
+		$h = 297;
+		$pdf->Image('static/image/CPRimage/P2.jpg', $x, $y, $w, $h, 'JPG', '', 'M', false, 300, 'C', false, false, '', 'CM', false, true);
 		
 	}
 }
