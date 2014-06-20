@@ -336,13 +336,14 @@ if (! function_exists ( 'CPRFormat' )) {
 			$pdf->Cell ( 81, $HEIGHT, MB_SUBSTR ( $REGADD, $LINESEED * $WORDPERLINE, $WORDPERLINE, "UTF-8" ), 'C', false );
 		}
 		
+		$pdf->setMargins(0, 10, -1);
 		$pdf->AddPage ('PORTRAIT');		
 		//$pdf->Image ( 'static/image/CPRimage/P2.jpg', 0, 0, 595, 842);
 		$x = 0;
-		$y = 0;
+		$y = 93;
 		$w = 210;
-		$h = 297;
-		$pdf->Image('static/image/CPRimage/P2.jpg', $x, $y, $w, $h, 'JPG', '', 'M', false, 300, 'C', false, false, '', 'CM', false, true);
+		$h = 100;
+		$pdf->Image('static/image/CPRimage/P2.jpg', $x, $y, $w, $h, 'JPG', '', 'M', false, 200, 'C', false, false, '', 'CM', false, true);
 		
 	}
 }
