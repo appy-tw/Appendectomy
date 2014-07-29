@@ -12,7 +12,8 @@ class Email extends CI_Controller
 		
 		$password = $this->input->get ( 'bit8', true );
 		$jit8 = $this->input->get ( 'jit8', true );
-		
+		$count = $this->input->get ( 'count', true );	
+	
 		$this->load->database ();
 		
 		$sql = "SELECT * FROM staff_info WHERE nickname = ? AND password = PASSWORD(?) AND level=?";
@@ -56,7 +57,10 @@ class Email extends CI_Controller
 		}
 		foreach ( $email_data as $email => $value )
 		{
-			echo $email . "," . $value . ";\n";
+			if ($count === FALSE)
+				echo $email . ",\n";
+			else
+				echo $email . "," . $value . ";\n";
 		}
 		// echo json_encode ( $email_data );
 		// $this->load->view ( 'email/show' );
